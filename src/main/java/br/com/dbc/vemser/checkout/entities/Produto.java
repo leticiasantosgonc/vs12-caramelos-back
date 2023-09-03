@@ -20,7 +20,8 @@ import java.math.BigDecimal;
 public class Produto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PRODUTO_GENERATOR")
+    @SequenceGenerator(name = "SEQ_PRODUTO_GENERATOR", sequenceName = "SEQ_PRODUTO", allocationSize = 1)
     @Column(name = "ID_PRODUTO")
     private Integer idProduto;
     @Column(name = "NOME")
