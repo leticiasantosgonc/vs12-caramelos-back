@@ -25,6 +25,10 @@ public class LancheInDTO {
     @Schema(description = "Descrição do lanche", example = "É definitivamente um cachorro quente", required = true)
     private String descricao;
 
+    @NotBlank(message = "O campo imagem não pode estar vazio")
+    @Size(max = 1000000, message = "A string de Base64 não pode ter mais de 1MB")
+    private String imagem;
+
     @NotNull(message = "O campo quantidade não pode estar nulo")
     @Positive(message = "O número deve ser positivo")
     @Schema(description = "Quantidade do lanche", example = "10", required = true)

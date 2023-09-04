@@ -25,8 +25,6 @@ public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final ObjectMapper objectMapper;
 
-
-    //CRUD BEBIDA
     public BebidaOutDTO createBebida(BebidaInDTO bebidaInDTO){
         Produto produto = objectMapper.convertValue(bebidaInDTO, Produto.class);
         produto.setTipoProduto(TipoProduto.BEBIDA);
