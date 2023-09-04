@@ -35,12 +35,16 @@ public class Produto {
     private Integer quantidade;
 
     @Column(name = "MARCA")
+    @Enumerated(EnumType.STRING)
     private MarcaProduto marca;
     @Column(name = "TAMANHO")
+    @Enumerated(EnumType.STRING)
     private TamanhoProduto tamanhoProduto;
     @Column(name = "TIPO")
+    @Enumerated(EnumType.STRING)
     private TipoProduto tipoProduto;
     @Column(name = "VEGETARIANO")
+    @Enumerated(EnumType.STRING)
     private DietaProduto dietaProduto;
 
     @Column(name = "PRECO")
