@@ -1,14 +1,10 @@
 package br.com.dbc.vemser.checkout.controller;
 
 
-import br.com.dbc.vemser.checkout.dtos.BebidaInDTO;
-import br.com.dbc.vemser.checkout.dtos.BebidaOutDTO;
+import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
-
-import br.com.dbc.vemser.checkout.dtos.LancheInDTO;
-import br.com.dbc.vemser.checkout.dtos.LancheOutDTO;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,5 +86,30 @@ public class ProdutoController {
         produtoService.deleteBebidaById(idBebida);
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/listar-sobremesas")
+    public ResponseEntity<List<SobremesaOutDTO>> findAllSobremesas(){
+        return new ResponseEntity<>(produtoService.findAllByTipo(),HttpStatus.OK);
+    }
+    @GetMapping("/sobremesa/{idSobremesa}")
+    public ResponseEntity<SobremesaOutDTO>findSobremesaById(@PathVariable @Positive Integer idSobremesa) throws Exception{
+        return new ResponseEntity<>(produtoService.findSobremesaByid(idSobremesa),HttpStatus.OK);
+    }
+    @PostMapping("/sobremesa/criar-sobremesa")
+    public ResponseEntity<SobremesaOutDTO>saveSobremesa(@RequestBody @Valid SobremesaInDTO sobremesa){
+        return new ResponseEntity<>(produtoService.saveSobremesa(sobremesa), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/atualizar-sobremesa-id/{idSobremesa}")
+    public ResponseEntity<SobremesaOutDTO> updateSobremesa(@RequestBody @Valid SobremesaInDTO sobremesaAtualizada,
+                                                           @PathVariable @Positive Integer idSobremesa)throws Exception{
+        return new ResponseEntity<>(produtoService.updateSobremesa(sobremesaAtualizada,idSobremesa),HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/sobremesa/{idSobremesa}")
+    public ResponseEntity<Void> deleteSobremesa(@PathVariable @Positive Integer idSobremesa){
+        produtoService.delete(idSobremesa);
+        return ResponseEntity.ok().build();
+    }
+
 
 }
