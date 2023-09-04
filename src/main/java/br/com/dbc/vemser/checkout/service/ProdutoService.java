@@ -51,6 +51,7 @@ public class ProdutoService {
         } else {
             throw new Exception("O produto não é uma bebida");
         }
+
     }
 
     public BebidaOutDTO updateBebida(Integer idBebida, BebidaOutDTO bebidaEntrada) throws Exception{
