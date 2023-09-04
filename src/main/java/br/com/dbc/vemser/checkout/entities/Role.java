@@ -26,4 +26,6 @@ public class Role {
 //    @JsonIgnore
 //    @ManyToMany(mappedBy = "ROLES")
 //    private Set<Usuario> usuarios;
+
+    public String getAuthority(){return nome;}
 }
