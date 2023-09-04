@@ -65,15 +65,15 @@ public class ProdutoController {
 
 
     //rotas bebida
-    @GetMapping("/listar-bebidas")
-    public List<Produto> findAllBebidas() {
+    @GetMapping("/listar/bebida")
+    public List<BebidaOutDTO> findAllBebidas() {
         return produtoService.findAllBebidas();
     }
     @GetMapping("/bebida/{idBebida}")
     public ResponseEntity<BebidaOutDTO> findBebidaById(@PathVariable ("idBebida") @Positive Integer idBebida) throws Exception {
         return new ResponseEntity<>(produtoService.findBebidaById(idBebida), HttpStatus.OK);
     }
-    @PostMapping("/bebida/criar-bebida")
+    @PostMapping("/criar/bebida")
     public ResponseEntity<BebidaOutDTO>createBebida(@RequestBody @Valid BebidaInDTO bebidaInDTO){
         return new ResponseEntity<>(produtoService.createBebida(bebidaInDTO), HttpStatus.CREATED);
     }
