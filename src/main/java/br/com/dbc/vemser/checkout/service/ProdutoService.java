@@ -38,14 +38,11 @@ public class ProdutoService {
         return bebidaOutDTO;
     }
 
-    public List<Produto> findAllBebidas() {
-        List<Produto> produtos = produtoRepository.findAll();
-
-        List<Produto> bebidas = produtos.stream()
-                .filter(produto -> "BEBIDA".equalsIgnoreCase(String.valueOf(produto.getTipoProduto())))
+    public List<BebidaOutDTO> findAllBebidas() {
+        return produtoRepository.findByTipoProduto(TipoProduto.BEBIDA)
+                .stream()
+                .map(produto -> objectMapper.convertValue(produto,BebidaOutDTO.class))
                 .collect(Collectors.toList());
-
-        return bebidas;
     }
 
     public BebidaOutDTO findBebidaById(Integer idBebida) throws Exception{
