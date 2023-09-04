@@ -1,19 +1,15 @@
 package br.com.dbc.vemser.checkout.controller;
 
-<<<<<<< HEAD
+
 import br.com.dbc.vemser.checkout.dtos.BebidaInDTO;
 import br.com.dbc.vemser.checkout.dtos.BebidaOutDTO;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
-=======
+
 import br.com.dbc.vemser.checkout.dtos.LancheInDTO;
 import br.com.dbc.vemser.checkout.dtos.LancheOutDTO;
-import br.com.dbc.vemser.checkout.entities.Produto;
-import br.com.dbc.vemser.checkout.service.ProdutoService;
-import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
->>>>>>> d53b921bd787f3cfa39669c550686a1e9a0fd3f6
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -77,19 +73,19 @@ public class ProdutoController {
     public List<Produto> findAllBebidas() {
         return produtoService.findAllBebidas();
     }
-    @GetMapping("/{idBebida}")
+    @GetMapping("/bebida/{idBebida}")
     public ResponseEntity<BebidaOutDTO> findBebidaById(@PathVariable ("idBebida") @Positive Integer idBebida) throws Exception {
         return new ResponseEntity<>(produtoService.findBebidaById(idBebida), HttpStatus.OK);
     }
-    @PostMapping("/criar-bebida")
+    @PostMapping("/bebida/criar-bebida")
     public ResponseEntity<BebidaOutDTO>createBebida(@RequestBody @Valid BebidaInDTO bebidaInDTO){
         return new ResponseEntity<>(produtoService.createBebida(bebidaInDTO), HttpStatus.CREATED);
     }
-    @PutMapping("/{idBebida}")
+    @PutMapping("/bebida/{idBebida}")
     public ResponseEntity<BebidaOutDTO> updateBebida(@PathVariable("idBebida") @Positive Integer idBebida, @RequestBody @Valid BebidaOutDTO bebidaEntrada) throws Exception {
         return new ResponseEntity<>(produtoService.updateBebida(idBebida, bebidaEntrada), HttpStatus.OK);
     }
-    @DeleteMapping("/{idBebida}")
+    @DeleteMapping("/bebida/{idBebida}")
     public ResponseEntity<Void> delete(@PathVariable("idBebida") @Positive Integer idBebida) throws Exception {
         produtoService.deleteBebidaById(idBebida);
         return ResponseEntity.ok().build();

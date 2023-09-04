@@ -32,6 +32,13 @@ public class BebidaInDTO {
     private Integer quantidade;
 
     @NotNull(message = "O campo não dever ser vazio e/ou nulo e/ou branco")
+    @DecimalMin(value = "0.01", inclusive = false, message = "O preço deve ser maior do que zero")
+    @DecimalMax(value = "999.99", message = "O preço não pode ser maior do que 999.99")
+    @Digits(integer = 3, fraction = 2, message = "O preço deve ter no máximo três dígitos inteiros e dois dígitos decimais")
+    @Schema(description = "Preço da bebida", required = true, example = "5.90")
+    private BigDecimal preco;
+
+    @NotNull(message = "O campo não dever ser vazio e/ou nulo e/ou branco")
     @Enumerated(EnumType.STRING)
     @Schema(description = "Tipo do produto", required = true, example = "BEBIDA")
     private TipoProduto tipoProduto;
@@ -45,12 +52,4 @@ public class BebidaInDTO {
     @Enumerated(EnumType.STRING)
     @Schema(description = "Tamanho da bebida", required = true, example = "MEDIO")
     private TamanhoProduto tamanhoProduto;
-
-
-    @NotNull(message = "O campo não dever ser vazio e/ou nulo e/ou branco")
-    @DecimalMin(value = "0.01", inclusive = false, message = "O preço deve ser maior do que zero")
-    @DecimalMax(value = "999.99", message = "O preço não pode ser maior do que 999.99")
-    @Digits(integer = 3, fraction = 2, message = "O preço deve ter no máximo três dígitos inteiros e dois dígitos decimais")
-    @Schema(description = "Preço da bebida", required = true, example = "5.90")
-    private BigDecimal preco;
 }
