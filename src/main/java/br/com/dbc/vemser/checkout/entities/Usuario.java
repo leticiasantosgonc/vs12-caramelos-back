@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.checkout.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,16 +26,19 @@ public class Usuario implements UserDetails {
     @SequenceGenerator(name = "SEQ_USUARIO_GENERATOR", sequenceName = "SEQ_USUARIO", allocationSize = 1)
     @Column(name = "ID_USUARIO")
     private Integer idUsuario;
-    @Column(name = "USUARIO")
+    @Column(name = "LOGIN")
     private String usuario;
     @Column(name = "SENHA")
     private String senha;
 
+    /*
+    @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
     private void addRole(Role role) {
         this.roles.add(role);
     }
+     */
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
