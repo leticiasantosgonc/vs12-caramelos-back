@@ -1,11 +1,8 @@
 package br.com.dbc.vemser.checkout.service;
 
 
-import br.com.dbc.vemser.checkout.dtos.BebidaInDTO;
-import br.com.dbc.vemser.checkout.dtos.BebidaOutDTO;
+import br.com.dbc.vemser.checkout.dtos.*;
 
-import br.com.dbc.vemser.checkout.dtos.LancheInDTO;
-import br.com.dbc.vemser.checkout.dtos.LancheOutDTO;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.enums.TipoProduto;
 import br.com.dbc.vemser.checkout.repository.ProdutoRepository;
@@ -18,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -155,6 +153,60 @@ public class ProdutoService {
 
     public List<Produto> findAll() {
         return produtoRepository.findAll();
+    }
+    public SobremesaOutDTO saveSobremesa(SobremesaInDTO sobremesa){
+        Produto produto = objectMapper.convertValue(sobremesa, Produto.class);
+        produto.setImagem("teste");
+        produto.setTipoProduto(TipoProduto.SOBREMESA);
+        SobremesaOutDTO sobremesaOutDTO = objectMapper.convertValue(produtoRepository.save(produto),SobremesaOutDTO.class);
+        return sobremesaOutDTO;
+    }
+
+    public SobremesaOutDTO findSobremesaByid(Integer idProduto) throws Exception{
+        Produto produtoRetornado = findById(idProduto);
+        isSobremesa(produtoRetornado);
+
+        return objectMapper.convertValue(produtoRetornado,SobremesaOutDTO.class);
+
+    }
+
+    public SobremesaOutDTO updateSobremesa(SobremesaInDTO sobremesaAtualizada, Integer idSobremesa)throws Exception{
+        Produto produto = findById(idSobremesa);
+        isSobremesa(produto);
+        Produto produtoAtualizado = objectMapper.convertValue(sobremesaAtualizada,Produto.class);
+        produtoAtualizado.setIdProduto(produto.getIdProduto());
+        produtoAtualizado.setTipoProduto(produto.getTipoProduto());
+
+        SobremesaOutDTO sobremesaOutDTO = objectMapper.convertValue(produtoRepository.save(produtoAtualizado),SobremesaOutDTO.class);
+
+        return sobremesaOutDTO;
+    }
+
+    public void delete(Integer idProduto){
+        Optional<Produto> produtoAchado = produtoRepository.findById(idProduto);
+        Produto produtoConvertido = objectMapper.convertValue(produtoAchado,Produto.class);
+
+        if(produtoConvertido.getTipoProduto()==TipoProduto.SOBREMESA){
+            produtoRepository.delete(produtoConvertido);
+        }
+    }
+
+    public List<SobremesaOutDTO> findAllByTipo(){
+        return produtoRepository.findByTipoProduto(TipoProduto.SOBREMESA)
+                .stream()
+                .map(produto -> objectMapper.convertValue(produto,SobremesaOutDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public Produto findById(Integer idProduto) throws Exception{
+        return produtoRepository.findById(idProduto).orElseThrow(() -> new Exception("Produto não encontrado"));
+    }
+
+    public boolean isSobremesa(Produto produto) throws Exception{
+        if(produto.getTipoProduto() != TipoProduto.SOBREMESA){
+            throw new Exception("Ação não permitida");
+        }
+        return true;
     }
 
 }
