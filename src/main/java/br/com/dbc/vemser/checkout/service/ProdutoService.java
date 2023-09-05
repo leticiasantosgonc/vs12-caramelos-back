@@ -16,7 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.sql.rowset.serial.SerialClob;
+import java.sql.Clob;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import java.util.Optional;
@@ -32,6 +35,7 @@ public class ProdutoService {
     public BebidaOutDTO createBebida(BebidaInDTO bebidaInDTO){
         Produto produto = objectMapper.convertValue(bebidaInDTO, Produto.class);
         produto.setTipoProduto(TipoProduto.BEBIDA);
+        //produto.setImagem(stringToClob(bebidaInDTO.getImagem()));
         Produto novoProduto = produtoRepository.save(produto);
 
         BebidaOutDTO bebidaOutDTO = objectMapper.convertValue(novoProduto, BebidaOutDTO.class);
@@ -92,6 +96,7 @@ public class ProdutoService {
     public LancheOutDTO createLanche(LancheInDTO lancheInDTO) {
         Produto produtoParaPersistir = objectMapper.convertValue(lancheInDTO, Produto.class);
         produtoParaPersistir.setTipoProduto(TipoProduto.LANCHE);
+        //produtoParaPersistir.setImagem(stringToClob(lancheInDTO.getImagem()));
         Produto produtoPersistido = produtoRepository.save(produtoParaPersistir);
 
         return objectMapper.convertValue(produtoPersistido, LancheOutDTO.class);
@@ -157,6 +162,7 @@ public class ProdutoService {
     public SobremesaOutDTO saveSobremesa(SobremesaInDTO sobremesa) {
         Produto produto = objectMapper.convertValue(sobremesa, Produto.class);
         produto.setTipoProduto(TipoProduto.SOBREMESA);
+        //produto.setImagem(stringToClob(sobremesa.getImagem()));
         SobremesaOutDTO sobremesaOutDTO = objectMapper.convertValue(produtoRepository.save(produto),SobremesaOutDTO.class);
         return sobremesaOutDTO;
     }
@@ -290,6 +296,18 @@ public class ProdutoService {
 
     public SobremesaOutDTO converterProdutoParaSobremesaOutDTO(Produto produto) {
         return objectMapper.convertValue(produto, SobremesaOutDTO.class);
+    }
+
+    public static Clob stringToClob(String str) {
+        if (null == str) {
+            return null;
+        } else {
+            try {
+                return new SerialClob(str.toCharArray());
+            } catch (Exception e) {
+                return null;
+            }
+        }
     }
 
 }

@@ -8,4 +8,5 @@ public class BebidaOutDTO extends BebidaInDTO{
 
     @Schema(description = "ID da bebida")
     private Integer idProduto;
+
 }

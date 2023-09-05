@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.sql.Clob;
 import java.util.List;
 
 @Data

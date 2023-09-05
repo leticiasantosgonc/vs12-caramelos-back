@@ -11,6 +11,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.sql.Clob;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,13 +25,14 @@ public class Produto {
     @SequenceGenerator(name = "SEQ_PRODUTO_GENERATOR", sequenceName = "SEQ_PRODUTO", allocationSize = 1)
     @Column(name = "ID_PRODUTO")
     private Integer idProduto;
+
     @Column(name = "NOME")
     private String nome;
     @Column(name = "DESCRICAO")
     private String descricao;
+    @Lob
     @Column(name = "IMAGEM")
     private String imagem;
-
     @Column(name = "QUANTIDADE")
     private Integer quantidade;
 

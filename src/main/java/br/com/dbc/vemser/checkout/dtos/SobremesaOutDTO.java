@@ -15,4 +15,5 @@ public class SobremesaOutDTO extends SobremesaInDTO {
 
     @Schema(description = "Id do produto")
     private Integer idProduto;
+
 }
