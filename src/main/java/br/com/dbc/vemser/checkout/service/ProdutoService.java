@@ -35,7 +35,6 @@ public class ProdutoService {
     public BebidaOutDTO createBebida(BebidaInDTO bebidaInDTO){
         Produto produto = objectMapper.convertValue(bebidaInDTO, Produto.class);
         produto.setTipoProduto(TipoProduto.BEBIDA);
-        //produto.setImagem(stringToClob(bebidaInDTO.getImagem()));
         Produto novoProduto = produtoRepository.save(produto);
 
         BebidaOutDTO bebidaOutDTO = objectMapper.convertValue(novoProduto, BebidaOutDTO.class);
@@ -69,6 +68,7 @@ public class ProdutoService {
         if(produtoRetornado.getTipoProduto().equals(TipoProduto.BEBIDA)){
             produtoRetornado.setNome(bebidaEntrada.getNome());
             produtoRetornado.setDescricao(bebidaEntrada.getDescricao());
+            produtoRetornado.setImagem(bebidaEntrada.getImagem());
             produtoRetornado.setQuantidade(bebidaEntrada.getQuantidade());
             produtoRetornado.setPreco(bebidaEntrada.getPreco());
             produtoRetornado.setTipoProduto(TipoProduto.BEBIDA);
@@ -136,6 +136,7 @@ public class ProdutoService {
             produtoParaPersistir.setIdProduto(produtoEncontrado.getIdProduto());
             produtoParaPersistir.setNome(lancheInDTO.getNome());
             produtoParaPersistir.setDescricao(lancheInDTO.getDescricao());
+            produtoParaPersistir.setImagem(lancheInDTO.getImagem());
             produtoParaPersistir.setQuantidade(lancheInDTO.getQuantidade());
             produtoParaPersistir.setTamanhoProduto(lancheInDTO.getTamanhoProduto());
             produtoParaPersistir.setDietaProduto(lancheInDTO.getDietaProduto());
@@ -162,7 +163,6 @@ public class ProdutoService {
     public SobremesaOutDTO saveSobremesa(SobremesaInDTO sobremesa) {
         Produto produto = objectMapper.convertValue(sobremesa, Produto.class);
         produto.setTipoProduto(TipoProduto.SOBREMESA);
-        //produto.setImagem(stringToClob(sobremesa.getImagem()));
         SobremesaOutDTO sobremesaOutDTO = objectMapper.convertValue(produtoRepository.save(produto),SobremesaOutDTO.class);
         return sobremesaOutDTO;
     }
@@ -180,6 +180,7 @@ public class ProdutoService {
         isSobremesa(produto);
         Produto produtoAtualizado = objectMapper.convertValue(sobremesaAtualizada,Produto.class);
         produtoAtualizado.setIdProduto(produto.getIdProduto());
+        produtoAtualizado.setImagem(sobremesaAtualizada.getImagem());
         produtoAtualizado.setTipoProduto(produto.getTipoProduto());
 
         SobremesaOutDTO sobremesaOutDTO = objectMapper.convertValue(produtoRepository.save(produtoAtualizado),SobremesaOutDTO.class);
