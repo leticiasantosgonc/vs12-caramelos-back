@@ -25,8 +25,6 @@ public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final ObjectMapper objectMapper;
 
-
-    //CRUD BEBIDA
     public BebidaOutDTO createBebida(BebidaInDTO bebidaInDTO){
         Produto produto = objectMapper.convertValue(bebidaInDTO, Produto.class);
         produto.setTipoProduto(TipoProduto.BEBIDA);
@@ -36,14 +34,11 @@ public class ProdutoService {
         return bebidaOutDTO;
     }
 
-    public List<Produto> findAllBebidas() {
-        List<Produto> produtos = produtoRepository.findAll();
-
-        List<Produto> bebidas = produtos.stream()
-                .filter(produto -> "BEBIDA".equalsIgnoreCase(String.valueOf(produto.getTipoProduto())))
+    public List<BebidaOutDTO> findAllBebidas() {
+        return produtoRepository.findByTipoProduto(TipoProduto.BEBIDA)
+                .stream()
+                .map(produto -> objectMapper.convertValue(produto,BebidaOutDTO.class))
                 .collect(Collectors.toList());
-
-        return bebidas;
     }
 
     public BebidaOutDTO findBebidaById(Integer idBebida) throws Exception{
@@ -56,6 +51,7 @@ public class ProdutoService {
         } else {
             throw new Exception("O produto não é uma bebida");
         }
+
     }
 
     public BebidaOutDTO updateBebida(Integer idBebida, BebidaOutDTO bebidaEntrada) throws Exception{
@@ -81,14 +77,11 @@ public class ProdutoService {
         }
     }
 
-    public void deleteBebidaById(Integer idBebida) throws Exception{
-        Produto produtoRetornado = produtoRepository.findById(idBebida)
-                .orElseThrow(() -> new Exception("Bebida não encontrada"));
+    public void deleteBebidaById(Integer idBebida){
+        Produto produtoRetornado = produtoRepository.findById(idBebida).get();
 
         if (produtoRetornado.getTipoProduto().equals(TipoProduto.BEBIDA)){
             produtoRepository.deleteById(idBebida);
-        }else {
-            throw new Exception("O produto não é uma bebida");
         }
     }
 
@@ -142,9 +135,7 @@ public class ProdutoService {
     }
 
     public void deleteLancheById(Integer idLanche) throws Exception {
-        Produto produto = produtoRepository
-                .findById(idLanche)
-                .orElseThrow(() -> new Exception("Lanche com id " + idLanche + " não encontrado"));
+        Produto produto = produtoRepository.findById(idLanche).get();
 
         if (produto.getTipoProduto().equals(TipoProduto.LANCHE)) {
             produtoRepository.deleteById(idLanche);

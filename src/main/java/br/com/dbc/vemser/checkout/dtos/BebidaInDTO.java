@@ -25,7 +25,9 @@ public class BebidaInDTO {
     @Schema(description = "Descrição da bebida", required = true, example = "Refrigerante")
     private String descricao;
 
-//    private String imagem;
+    @NotBlank(message = "O campo imagem não pode estar vazio")
+    @Size(max = 1000000, message = "A string de Base64 não pode ter mais de 1MB")
+    private String imagem;
 
     @Positive(message = "A quantidade precisa ser positiva")
     @Schema(description = "Quantidade de bebida", required = true, example = "50 copos")

@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.checkout.controller;
 
 
+import br.com.dbc.vemser.checkout.docs.ProdutoControllerDoc;
 import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.service.ProdutoService;
@@ -19,11 +20,11 @@ import java.util.List;
 @RequestMapping("/produto")
 @RequiredArgsConstructor
 @Validated
-public class ProdutoController {
+public class ProdutoController implements ProdutoControllerDoc {
 
     private final ProdutoService produtoService;
 
-    @PostMapping
+    @PostMapping("/criar/lanche")
     public ResponseEntity<LancheOutDTO> createLanche(@RequestBody @Valid LancheInDTO lancheInDTO) {
         LancheOutDTO lancheOutDTO = produtoService.createLanche(lancheInDTO);
 
@@ -37,43 +38,37 @@ public class ProdutoController {
         return new ResponseEntity<>(lancheOutDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/lanches")
+    @GetMapping("/listar/lanches")
     public ResponseEntity<List<LancheOutDTO>> findAllLanches() {
         List<LancheOutDTO> lancheOutDTOList = produtoService.findAllLanches();
 
         return new ResponseEntity<>(lancheOutDTOList, HttpStatus.OK);
     }
 
-    @PutMapping("/{idLanche}")
+    @PutMapping("/lanche/{idLanche}")
     public ResponseEntity<LancheOutDTO> updateLancheById(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws Exception {
         LancheOutDTO lancheOutDTO = produtoService.updateLancheById(idLanche, lancheInDTO);
 
         return new ResponseEntity<>(lancheOutDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{idLanche}")
+    @DeleteMapping("/lanche/{idLanche}")
     public ResponseEntity<Void> deleteById(@PathVariable @Positive Integer idLanche) throws Exception {
         produtoService.deleteLancheById(idLanche);
 
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
-    public List<Produto> findAll() {
-        return produtoService.findAll();
-    }
-
-
     //rotas bebida
-    @GetMapping("/listar-bebidas")
-    public List<Produto> findAllBebidas() {
+    @GetMapping("/listar/bebida")
+    public List<BebidaOutDTO> findAllBebidas() {
         return produtoService.findAllBebidas();
     }
     @GetMapping("/bebida/{idBebida}")
     public ResponseEntity<BebidaOutDTO> findBebidaById(@PathVariable ("idBebida") @Positive Integer idBebida) throws Exception {
         return new ResponseEntity<>(produtoService.findBebidaById(idBebida), HttpStatus.OK);
     }
-    @PostMapping("/bebida/criar-bebida")
+    @PostMapping("/criar/bebida")
     public ResponseEntity<BebidaOutDTO>createBebida(@RequestBody @Valid BebidaInDTO bebidaInDTO){
         return new ResponseEntity<>(produtoService.createBebida(bebidaInDTO), HttpStatus.CREATED);
     }
@@ -94,12 +89,12 @@ public class ProdutoController {
     public ResponseEntity<SobremesaOutDTO>findSobremesaById(@PathVariable @Positive Integer idSobremesa) throws Exception{
         return new ResponseEntity<>(produtoService.findSobremesaByid(idSobremesa),HttpStatus.OK);
     }
-    @PostMapping("/sobremesa/criar-sobremesa")
+    @PostMapping("/criar/sobremesa")
     public ResponseEntity<SobremesaOutDTO>saveSobremesa(@RequestBody @Valid SobremesaInDTO sobremesa){
         return new ResponseEntity<>(produtoService.saveSobremesa(sobremesa), HttpStatus.CREATED);
     }
 
-    @PutMapping("/atualizar-sobremesa-id/{idSobremesa}")
+    @PutMapping("/sobremesa/{idSobremesa}")
     public ResponseEntity<SobremesaOutDTO> updateSobremesa(@RequestBody @Valid SobremesaInDTO sobremesaAtualizada,
                                                            @PathVariable @Positive Integer idSobremesa)throws Exception{
         return new ResponseEntity<>(produtoService.updateSobremesa(sobremesaAtualizada,idSobremesa),HttpStatus.ACCEPTED);

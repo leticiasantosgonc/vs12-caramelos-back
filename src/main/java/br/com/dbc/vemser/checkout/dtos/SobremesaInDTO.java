@@ -22,6 +22,10 @@ public class SobremesaInDTO {
     @Size(min = 3, max = 500,message = "O campo deve possuir no mínimo 3 e maximo 500 caracteres")
     private String descricao;
 
+    @NotBlank(message = "O campo imagem não pode estar vazio")
+    @Size(max = 1000000, message = "A string de Base64 não pode ter mais de 1MB")
+    private String imagem;
+
     @Schema(description = "Quantidade a ser inserida do produto", example = "10")
     @Positive(message = "O campo deve ser positivo")
     private Integer quantidade;
