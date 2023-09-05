@@ -54,4 +54,5 @@ public class BebidaInDTO {
     @Enumerated(EnumType.STRING)
     @Schema(description = "Tamanho da bebida", required = true, example = "MEDIO")
     private TamanhoProduto tamanhoProduto;
+
 }

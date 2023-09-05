@@ -54,7 +54,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @PutMapping("/lanche/{idLanche}")
-    public ResponseEntity<LancheOutDTO> updateLancheById(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws Exception;
+    public ResponseEntity<LancheOutDTO> updateLanche(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws Exception;
 
 
     @Operation(summary ="Deletar um lanche", description = "Deve deletar um lanche por Id")
@@ -66,7 +66,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @DeleteMapping("/lanche/{idLanche}")
-    public ResponseEntity<Void> deleteById(@PathVariable @Positive Integer idLanche) throws Exception;
+    public ResponseEntity<Void> deleteLancheById(@PathVariable @Positive Integer idLanche) throws Exception;
 
     @Operation(summary = "Buscar todas as bebidas",description = "Deve listar todos os lanches")
     @ApiResponses(
@@ -99,7 +99,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @PostMapping("/criar/bebida")
-    public ResponseEntity<BebidaOutDTO>createBebida(@RequestBody @Valid BebidaInDTO bebidaInDTO);
+    public ResponseEntity<BebidaOutDTO> createBebida(@RequestBody @Valid BebidaInDTO bebidaInDTO);
 
     @Operation(summary ="Atualizar uma bebida", description = "Deve atualizar uma bebida")
     @ApiResponses(
@@ -121,7 +121,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @DeleteMapping("/bebida/{idBebida}")
-    public ResponseEntity<Void> delete(@PathVariable("idBebida") @Positive Integer idBebida) throws Exception;
+    public ResponseEntity<Void> deleteBebidaById(@PathVariable("idBebida") @Positive Integer idBebida) throws Exception;
 
     @Operation(summary ="Buscar todas as sobremesas", description = "Deve buscar todas as sobremesas")
     @ApiResponses(
@@ -143,7 +143,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @GetMapping("/sobremesa/{idSobremesa}")
-    public ResponseEntity<SobremesaOutDTO>findSobremesaById(@PathVariable @Positive Integer idSobremesa) throws Exception;
+    public ResponseEntity<SobremesaOutDTO> findSobremesaById(@PathVariable @Positive Integer idSobremesa) throws Exception;
 
     @Operation(summary ="Criar uma sobremesa", description = "Deve criar uma sobremesa")
     @ApiResponses(
@@ -154,7 +154,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @PostMapping("/criar/sobremesa")
-    public ResponseEntity<SobremesaOutDTO>saveSobremesa(@RequestBody @Valid SobremesaInDTO sobremesa);
+    public ResponseEntity<SobremesaOutDTO> saveSobremesa(@RequestBody @Valid SobremesaInDTO sobremesa);
 
     @Operation(summary ="Atualizar uma sobremesa", description = "Deve atualizar uma sobremesa")
     @ApiResponses(
