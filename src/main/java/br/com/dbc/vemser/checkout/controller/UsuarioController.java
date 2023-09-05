@@ -12,15 +12,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
     @GetMapping
-    public List<Usuario> findAll(){
-        return usuarioService.findAll();
+    public List<AdminOutDTO> findAllUsuarios() {
+        List<AdminOutDTO> admins = usuarioService.findAll();
+        return admins;
     }
     @PostMapping("/cadastrar/admin")
     public ResponseEntity<AdminOutDTO> createAdmin(@RequestBody AdminInDTO usuario) throws Exception{
