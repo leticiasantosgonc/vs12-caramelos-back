@@ -1,21 +1,18 @@
 package br.com.dbc.vemser.checkout.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity(name = "ROLE")
-public class Role {
-
+public class Role implements GrantedAuthority {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column (name = "ID_ROLE")
     private Integer idRole;
@@ -23,9 +20,16 @@ public class Role {
     @Column(name = "NOME")
     private String nome;
 
-//    @JsonIgnore
-//    @ManyToMany(mappedBy = "ROLES")
-//    private Set<Usuario> usuarios;
+    @ManyToMany
+    @JoinTable(
+            name = "USUARIO_ROLE",
+            joinColumns = @JoinColumn(name = "ID_ROLE"),
+            inverseJoinColumns = @JoinColumn(name = "ID_USUARIO")
+    )
+    private Set<Usuario> usuarios = new HashSet<>();
 
-    public String getAuthority(){return nome;}
+    @Override
+    public String getAuthority() {
+        return nome;
+    }
 }

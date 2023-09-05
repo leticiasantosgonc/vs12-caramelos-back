@@ -31,14 +31,18 @@ public class Usuario implements UserDetails {
     @Column(name = "SENHA")
     private String senha;
 
-    /*
     @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "USUARIO_ROLE",
+            joinColumns = @JoinColumn(name = "ID_USUARIO"),
+            inverseJoinColumns = @JoinColumn(name = "ID_ROLE)")
+    )
     private Set<Role> roles = new HashSet<>();
 
-    private void addRole(Role role) {
+    public void addCargo(Role role) {
         this.roles.add(role);
     }
-     */
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
