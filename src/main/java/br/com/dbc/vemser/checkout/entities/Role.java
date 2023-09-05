@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.checkout.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -20,12 +21,8 @@ public class Role implements GrantedAuthority {
     @Column(name = "NOME")
     private String nome;
 
-    @ManyToMany
-    @JoinTable(
-            name = "USUARIO_ROLE",
-            joinColumns = @JoinColumn(name = "ID_ROLE"),
-            inverseJoinColumns = @JoinColumn(name = "ID_USUARIO")
-    )
+    @JsonIgnore
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Usuario> usuarios = new HashSet<>();
 
     @Override

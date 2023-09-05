@@ -24,23 +24,17 @@ public class Usuario implements UserDetails {
     @SequenceGenerator(name = "SEQ_USUARIO_GENERATOR", sequenceName = "SEQ_USUARIO", allocationSize = 1)
     @Column(name = "ID_USUARIO")
     private Integer idUsuario;
+
     @Column(name = "LOGIN")
-    private String usuario;
+    private String login;
+
     @Column(name = "SENHA")
     private String senha;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "USUARIO_ROLE",
-            joinColumns = @JoinColumn(name = "ID_USUARIO"),
-            inverseJoinColumns = @JoinColumn(name = "ID_ROLE)")
-    )
-    private Set<Role> roles = new HashSet<>();
 
-    public void addCargo(Role role) {
-        this.roles.add(role);
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_role", referencedColumnName = "id_role")
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -54,7 +48,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getUsername() {
-        return usuario;
+        return login;
     }
 
     @Override

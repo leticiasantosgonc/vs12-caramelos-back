@@ -29,9 +29,7 @@ public class TokenService {
         Date now = new Date();
         Date exp = new Date(now.getTime() + Long.parseLong(expiration));
 
-        List<String> roles = usuario.getRoles().stream()
-                .map(Role::getAuthority)
-                .toList();
+        Role roles = usuario.getRole();
 
         return TOKEN_PREFIX + " " +
                 Jwts.builder()

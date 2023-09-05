@@ -30,14 +30,14 @@ public class UsuarioService {
     }
 
     public Optional<Usuario> findByLogin(String login) {
-        return usuarioRepository.findByUsuario(login);
+        return usuarioRepository.findByLogin(login);
     }
     public AdminOutDTO createAdmin(AdminInDTO usuario) throws Exception{
             Role role = roleRepository.findById(1)
                     .orElseThrow(() -> new Exception("A role não existe"));
             Usuario novoAdmin = objectMapper.convertValue(usuario,Usuario.class);
             novoAdmin.setSenha(passwordEncoder.encode(usuario.getSenha()));
-            novoAdmin.addCargo(role);
+            novoAdmin.setRole(role);
             Usuario adminRetornado = usuarioRepository.save(novoAdmin);
             return objectMapper.convertValue(adminRetornado,AdminOutDTO.class);
     }
