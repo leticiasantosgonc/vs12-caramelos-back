@@ -32,6 +32,7 @@ public class UsuarioService {
             AdminOutDTO adminsDTO = new AdminOutDTO();
             adminsDTO.setIdUsuario(usuario.getIdUsuario());
             adminsDTO.setLogin(usuario.getLogin());
+            adminsDTO.setRole(usuario.getRole());
 
             admins.add(adminsDTO);
         }
