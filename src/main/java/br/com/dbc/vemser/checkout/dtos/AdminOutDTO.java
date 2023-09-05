@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class AdminOutDTO extends AdminInDTO {
     private Integer idUsuario;
+    private String login;
 }

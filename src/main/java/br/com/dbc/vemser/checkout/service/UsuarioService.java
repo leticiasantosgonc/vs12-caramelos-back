@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,19 +32,19 @@ public class UsuarioService {
         return usuarioRepository.findByUsuario(login);
     }
     public AdminOutDTO createAdmin(AdminInDTO usuario) throws Exception{
-//        try {
-            Usuario novoAdmin = new Usuario();
-            Role role = roleRepository.findById(1).get();
-            novoAdmin.setUsuario(usuario.getLogin());
-            novoAdmin.setSenha(passwordEncoder.encode(usuario.getSenha()));
-            novoAdmin.setRoles(new HashSet<>());
-            novoAdmin.getRoles().add(role);
-            Usuario adminRetornar = usuarioRepository.save(novoAdmin);
-            AdminOutDTO adminDTO= objectMapper.convertValue(adminRetornar, AdminOutDTO.class);
-            return adminDTO;
-//        } catch (Exception e){
-//            throw new Exception("Não foi possível cadastrar administrador");
-//        }
+            Optional<Role> role = roleRepository.findById(1);
+
+            Role roleConvert = objectMapper.convertValue(role,Role.class);
+
+            Usuario usuarioEntity = objectMapper.convertValue(usuario,Usuario.class);
+
+            usuarioEntity.setSenha(passwordEncoder.encode(usuario.getSenha()));
+
+            usuarioEntity.addCargo(roleConvert);
+
+            Usuario usuarioRetornado = usuarioRepository.save(usuarioEntity);
+
+            return objectMapper.convertValue(usuarioRetornado,AdminOutDTO.class);
     }
 
 }
