@@ -31,7 +31,7 @@ public class ProdutoController implements ProdutoControllerDoc {
         return new ResponseEntity<>(lancheOutDTO, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{idLanche}")
+    @GetMapping("/lanche/{idLanche}")
     public ResponseEntity<LancheOutDTO> findLancheById(@PathVariable @Positive Integer idLanche) throws Exception {
         LancheOutDTO lancheOutDTO = produtoService.findLancheById(idLanche);
 

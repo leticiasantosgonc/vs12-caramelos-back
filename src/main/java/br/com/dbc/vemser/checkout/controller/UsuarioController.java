@@ -26,5 +26,14 @@ public class UsuarioController {
     public ResponseEntity<AdminOutDTO> createAdmin(@RequestBody AdminInDTO usuario) throws Exception{
         return new ResponseEntity<>(usuarioService.createAdmin(usuario), HttpStatus.OK);
     }
+    @PutMapping("/alterar-senha/{idUsuario}")
+    public ResponseEntity<AdminOutDTO> updateSenha(@PathVariable Integer idUsuario, @RequestBody String senha) throws Exception {
+        return new ResponseEntity<>(usuarioService.updateSenha(idUsuario, senha), HttpStatus.OK);
+    }
+    @DeleteMapping("/{idUsuario}")
+    public ResponseEntity<Void> deleteAdmin(@PathVariable Integer idUsuario) {
+        usuarioService.deleteAdmin(idUsuario);
+        return ResponseEntity.ok().build();
+    }
 
 }

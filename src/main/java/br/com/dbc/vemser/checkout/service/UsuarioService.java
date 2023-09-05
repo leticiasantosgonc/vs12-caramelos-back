@@ -9,6 +9,7 @@ import br.com.dbc.vemser.checkout.repository.RoleRepository;
 import br.com.dbc.vemser.checkout.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.expression.ExpressionException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,19 +33,29 @@ public class UsuarioService {
         return usuarioRepository.findByUsuario(login);
     }
     public AdminOutDTO createAdmin(AdminInDTO usuario) throws Exception{
-            Optional<Role> role = roleRepository.findById(1);
+            Role role = roleRepository.findById(1)
+                    .orElseThrow(() -> new Exception("A role não existe"));
+            Usuario novoAdmin = objectMapper.convertValue(usuario,Usuario.class);
+            novoAdmin.setSenha(passwordEncoder.encode(usuario.getSenha()));
+            novoAdmin.addCargo(role);
+            Usuario adminRetornado = usuarioRepository.save(novoAdmin);
+            return objectMapper.convertValue(adminRetornado,AdminOutDTO.class);
+    }
 
-            Role roleConvert = objectMapper.convertValue(role,Role.class);
+    public AdminOutDTO updateSenha(Integer idUsuario, String senha) throws Exception{
+        Usuario usuarioAtualizar = usuarioRepository.findById(idUsuario).get();
+        usuarioAtualizar.setSenha(passwordEncoder.encode(senha));
 
-            Usuario usuarioEntity = objectMapper.convertValue(usuario,Usuario.class);
+        Usuario adminRetornar = usuarioRepository.save(usuarioAtualizar);
+        AdminOutDTO adminDTO= objectMapper.convertValue(adminRetornar, AdminOutDTO.class);
+        return adminDTO;
+    }
 
-            usuarioEntity.setSenha(passwordEncoder.encode(usuario.getSenha()));
-
-            usuarioEntity.addCargo(roleConvert);
-
-            Usuario usuarioRetornado = usuarioRepository.save(usuarioEntity);
-
-            return objectMapper.convertValue(usuarioRetornado,AdminOutDTO.class);
+    public void deleteAdmin(Integer idUsuario){
+        Optional<Usuario> usuario = usuarioRepository.findById(idUsuario);
+        if(usuario.isPresent()){
+            usuarioRepository.delete(usuario.get());
+        }
     }
 
 }
