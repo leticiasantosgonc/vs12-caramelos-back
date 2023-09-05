@@ -10,6 +10,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -107,11 +111,13 @@ public class ProdutoService {
     }
 
     public LancheOutDTO findLancheById(Integer idLanche) throws Exception {
-        Produto produtoEncontrado = produtoRepository
-                .findById(idLanche)
-                .orElseThrow(() -> new Exception("Lanche com id " + idLanche + " não encontrado"));
+        Produto produtoEncontrado = findById(idLanche);
 
-        return objectMapper.convertValue(produtoEncontrado, LancheOutDTO.class);
+        if (produtoEncontrado.getTipoProduto().equals(TipoProduto.LANCHE)) {
+            return objectMapper.convertValue(produtoEncontrado, LancheOutDTO.class);
+        } else {
+            throw new Exception("O produto não é um lanche");
+        }
     }
 
     public LancheOutDTO updateLancheById(Integer idLanche, LancheInDTO lancheInDTO) throws Exception {
@@ -119,19 +125,22 @@ public class ProdutoService {
                 .findById(idLanche)
                 .orElseThrow(() -> new Exception("Lanche com id " + idLanche + " não encontrado"));
 
-        Produto produtoParaPersistir = new Produto();
-        produtoParaPersistir.setTipoProduto(TipoProduto.LANCHE);
-        produtoParaPersistir.setIdProduto(produtoEncontrado.getIdProduto());
-        produtoParaPersistir.setNome(lancheInDTO.getNome());
-        produtoParaPersistir.setDescricao(lancheInDTO.getDescricao());
-        produtoParaPersistir.setQuantidade(lancheInDTO.getQuantidade());
-        produtoParaPersistir.setTamanhoProduto(lancheInDTO.getTamanhoProduto());
-        produtoParaPersistir.setDietaProduto(lancheInDTO.getDietaProduto());
-        produtoParaPersistir.setPreco(lancheInDTO.getPreco());
+        if (produtoEncontrado.getTipoProduto().equals(TipoProduto.LANCHE)) {
+            Produto produtoParaPersistir = new Produto();
+            produtoParaPersistir.setTipoProduto(TipoProduto.LANCHE);
+            produtoParaPersistir.setIdProduto(produtoEncontrado.getIdProduto());
+            produtoParaPersistir.setNome(lancheInDTO.getNome());
+            produtoParaPersistir.setDescricao(lancheInDTO.getDescricao());
+            produtoParaPersistir.setQuantidade(lancheInDTO.getQuantidade());
+            produtoParaPersistir.setTamanhoProduto(lancheInDTO.getTamanhoProduto());
+            produtoParaPersistir.setDietaProduto(lancheInDTO.getDietaProduto());
+            produtoParaPersistir.setPreco(lancheInDTO.getPreco());
+            Produto produtoPersistido = produtoRepository.save(produtoParaPersistir);
 
-        Produto produtoPersistido = produtoRepository.save(produtoParaPersistir);
-
-        return objectMapper.convertValue(produtoPersistido, LancheOutDTO.class);
+            return objectMapper.convertValue(produtoPersistido, LancheOutDTO.class);
+        } else {
+            throw new Exception("Ação não permitida");
+        }
     }
 
     public void deleteLancheById(Integer idLanche) throws Exception {
@@ -145,15 +154,14 @@ public class ProdutoService {
     public List<Produto> findAll() {
         return produtoRepository.findAll();
     }
-    public SobremesaOutDTO saveSobremesa(SobremesaInDTO sobremesa){
+    public SobremesaOutDTO saveSobremesa(SobremesaInDTO sobremesa) {
         Produto produto = objectMapper.convertValue(sobremesa, Produto.class);
-        produto.setImagem("teste");
         produto.setTipoProduto(TipoProduto.SOBREMESA);
         SobremesaOutDTO sobremesaOutDTO = objectMapper.convertValue(produtoRepository.save(produto),SobremesaOutDTO.class);
         return sobremesaOutDTO;
     }
 
-    public SobremesaOutDTO findSobremesaByid(Integer idProduto) throws Exception{
+    public SobremesaOutDTO findSobremesaByid(Integer idProduto) throws Exception {
         Produto produtoRetornado = findById(idProduto);
         isSobremesa(produtoRetornado);
 
@@ -161,7 +169,7 @@ public class ProdutoService {
 
     }
 
-    public SobremesaOutDTO updateSobremesa(SobremesaInDTO sobremesaAtualizada, Integer idSobremesa)throws Exception{
+    public SobremesaOutDTO updateSobremesa(SobremesaInDTO sobremesaAtualizada, Integer idSobremesa) throws Exception {
         Produto produto = findById(idSobremesa);
         isSobremesa(produto);
         Produto produtoAtualizado = objectMapper.convertValue(sobremesaAtualizada,Produto.class);
@@ -177,27 +185,111 @@ public class ProdutoService {
         Optional<Produto> produtoAchado = produtoRepository.findById(idProduto);
         Produto produtoConvertido = objectMapper.convertValue(produtoAchado,Produto.class);
 
-        if(produtoConvertido.getTipoProduto()==TipoProduto.SOBREMESA){
+        if (produtoConvertido.getTipoProduto()==TipoProduto.SOBREMESA) {
             produtoRepository.delete(produtoConvertido);
         }
     }
 
-    public List<SobremesaOutDTO> findAllByTipo(){
+    public List<SobremesaOutDTO> findAllSobremesas() {
         return produtoRepository.findByTipoProduto(TipoProduto.SOBREMESA)
                 .stream()
                 .map(produto -> objectMapper.convertValue(produto,SobremesaOutDTO.class))
                 .collect(Collectors.toList());
     }
 
-    public Produto findById(Integer idProduto) throws Exception{
+    public Produto findById(Integer idProduto) throws Exception {
         return produtoRepository.findById(idProduto).orElseThrow(() -> new Exception("Produto não encontrado"));
     }
 
-    public boolean isSobremesa(Produto produto) throws Exception{
+    public boolean isSobremesa(Produto produto) throws Exception {
         if(produto.getTipoProduto() != TipoProduto.SOBREMESA){
             throw new Exception("Ação não permitida");
         }
         return true;
+    }
+
+    public Page<LancheOutDTO> findLanchesOrdenadosPorNome(Pageable pageable) {
+        List<LancheOutDTO> lancheOutDTOList = produtoRepository
+                .findAll(Sort.by("nome"))
+                .stream()
+                .filter(produto -> produto.getTipoProduto().equals(TipoProduto.LANCHE))
+                .map(this::converterProdutoParaLancheOutDTO)
+                .toList();
+        int quantidade = lancheOutDTOList.size();
+
+        return new PageImpl<>(lancheOutDTOList, pageable, quantidade);
+    }
+
+    public Page<BebidaOutDTO> findBebidasOrdenadasPorNome(Pageable pageable) {
+        List<BebidaOutDTO> bebidaOutDTOList = produtoRepository
+                .findAll(Sort.by("nome"))
+                .stream()
+                .filter(produto -> produto.getTipoProduto().equals(TipoProduto.BEBIDA))
+                .map(this::converterProdutoParaBebidaOutDTO)
+                .toList();
+        int quantidade = bebidaOutDTOList.size();
+
+        return new PageImpl<>(bebidaOutDTOList, pageable, quantidade);
+    }
+
+    public Page<SobremesaOutDTO> findSobremesasOrdenadasPorNome(Pageable pageable) {
+        List<SobremesaOutDTO> sobremesaOutDTOList = produtoRepository
+                .findAll(Sort.by("nome"))
+                .stream()
+                .filter(produto -> produto.getTipoProduto().equals(TipoProduto.BEBIDA))
+                .map(this::converterProdutoParaSobremesaOutDTO)
+                .toList();
+        int quantidade = sobremesaOutDTOList.size();
+
+        return new PageImpl<>(sobremesaOutDTOList, pageable, quantidade);
+    }
+
+    public Page<LancheOutDTO> findLanchesOrdenadosPorPreco(Pageable pageable) {
+        List<LancheOutDTO> lancheOutDTOList = produtoRepository
+                .findAll(Sort.by("preco"))
+                .stream()
+                .filter(produto -> produto.getTipoProduto().equals(TipoProduto.LANCHE))
+                .map(this::converterProdutoParaLancheOutDTO)
+                .toList();
+        int quantidade = lancheOutDTOList.size();
+
+        return new PageImpl<>(lancheOutDTOList, pageable, quantidade);
+    }
+
+    public Page<BebidaOutDTO> findBebidasOrdenadasPorPreco(Pageable pageable) {
+        List<BebidaOutDTO> bebidaOutDTOList = produtoRepository
+                .findAll(Sort.by("preco"))
+                .stream()
+                .filter(produto -> produto.getTipoProduto().equals(TipoProduto.BEBIDA))
+                .map(this::converterProdutoParaBebidaOutDTO)
+                .toList();
+        int quantidade = bebidaOutDTOList.size();
+
+        return new PageImpl<>(bebidaOutDTOList, pageable, quantidade);
+    }
+
+    public Page<SobremesaOutDTO> findSobremesasOrdenadasPorPreco(Pageable pageable) {
+        List<SobremesaOutDTO> sobremesaOutDTOList = produtoRepository
+                .findAll(Sort.by("preco"))
+                .stream()
+                .filter(produto -> produto.getTipoProduto().equals(TipoProduto.SOBREMESA))
+                .map(this::converterProdutoParaSobremesaOutDTO)
+                .toList();
+        int quantidade = sobremesaOutDTOList.size();
+
+        return new PageImpl<>(sobremesaOutDTOList, pageable, quantidade);
+    }
+
+    public LancheOutDTO converterProdutoParaLancheOutDTO(Produto produto) {
+        return objectMapper.convertValue(produto, LancheOutDTO.class);
+    }
+
+    public BebidaOutDTO converterProdutoParaBebidaOutDTO(Produto produto) {
+        return objectMapper.convertValue(produto, BebidaOutDTO.class);
+    }
+
+    public SobremesaOutDTO converterProdutoParaSobremesaOutDTO(Produto produto) {
+        return objectMapper.convertValue(produto, SobremesaOutDTO.class);
     }
 
 }
