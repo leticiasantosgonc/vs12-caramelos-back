@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.checkout.controller;
 
 
+import br.com.dbc.vemser.checkout.docs.ProdutoControllerDoc;
 import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.service.ProdutoService;
@@ -19,7 +20,7 @@ import java.util.List;
 @RequestMapping("/produto")
 @RequiredArgsConstructor
 @Validated
-public class ProdutoController {
+public class ProdutoController implements ProdutoControllerDoc {
 
     private final ProdutoService produtoService;
 
