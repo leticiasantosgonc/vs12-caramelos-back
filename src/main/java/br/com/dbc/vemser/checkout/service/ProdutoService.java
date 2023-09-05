@@ -77,14 +77,11 @@ public class ProdutoService {
         }
     }
 
-    public void deleteBebidaById(Integer idBebida) throws Exception{
-        Produto produtoRetornado = produtoRepository.findById(idBebida)
-                .orElseThrow(() -> new Exception("Bebida não encontrada"));
+    public void deleteBebidaById(Integer idBebida){
+        Produto produtoRetornado = produtoRepository.findById(idBebida).get();
 
         if (produtoRetornado.getTipoProduto().equals(TipoProduto.BEBIDA)){
             produtoRepository.deleteById(idBebida);
-        }else {
-            throw new Exception("O produto não é uma bebida");
         }
     }
 
@@ -138,9 +135,7 @@ public class ProdutoService {
     }
 
     public void deleteLancheById(Integer idLanche) throws Exception {
-        Produto produto = produtoRepository
-                .findById(idLanche)
-                .orElseThrow(() -> new Exception("Lanche com id " + idLanche + " não encontrado"));
+        Produto produto = produtoRepository.findById(idLanche).get();
 
         if (produto.getTipoProduto().equals(TipoProduto.LANCHE)) {
             produtoRepository.deleteById(idLanche);
