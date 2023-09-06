@@ -53,15 +53,18 @@ public class UsuarioService {
             return objectMapper.convertValue(adminRetornado,AdminOutDTO.class);
     }
 
-    public AdminOutDTO updateSenha(Integer idUsuario, String senha) throws RegraDeNegocioException{
+    public AdminOutDTO updateSenha(Integer idUsuario, AdminInDTO usuarioAtualizado) throws RegraDeNegocioException{
         Usuario usuarioAtualizar = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RegraDeNegocioException("Usuario não existe"));
-        usuarioAtualizar.setSenha(passwordEncoder.encode(senha));
+
+        usuarioAtualizar.setSenha(passwordEncoder.encode(usuarioAtualizado.getSenha()));
+        usuarioAtualizar.setLogin(usuarioAtualizado.getLogin());
 
         Usuario adminRetornar = usuarioRepository.save(usuarioAtualizar);
         AdminOutDTO adminDTO= new AdminOutDTO();
         adminDTO.setIdUsuario(adminRetornar.getIdUsuario());
         adminDTO.setLogin(adminRetornar.getLogin());
+        adminDTO.setRole(adminRetornar.getRole());
         return adminDTO;
     }
 

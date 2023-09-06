@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.checkout.docs;
 
 import br.com.dbc.vemser.checkout.dtos.*;
+import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -179,5 +180,82 @@ public interface ProdutoControllerDoc {
     )
     @DeleteMapping("/sobremesa/{idSobremesa}")
     public ResponseEntity<Void> deleteSobremesa(@PathVariable @Positive Integer idSobremesa);
+
+    @Operation(summary ="Busca a disponibilidade do produto", description = "Deve buscar a quantidade de produto pelo Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
+                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+            }
+    )
+    @PutMapping("/disponibilidade/{idProduto}")
+    public ResponseEntity<Integer> getQuantidadeProdutoPorId(@PathVariable @Positive Integer idProduto) throws RegraDeNegocioException;
+
+    @Operation(summary ="Atualizar quantidade de produto", description = "Deve atualizar a quantidade de produto pelo Id do produto")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
+                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+            }
+    )
+    @PutMapping("/atualizar-quantidade/{idProduto}")
+    public ResponseEntity<Produto> updateQuantidadeProduto(@RequestBody @Positive Integer quantidade,
+                                                           @PathVariable @Positive Integer idProduto) throws RegraDeNegocioException;
+
+    @Operation(summary ="Criar um novo acompanhamento", description = "Deve criar um novo acompanhamento")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
+                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+            }
+    )
+    @PostMapping("/criar/acompanhamento")
+    public ResponseEntity<AcompanhamentoOutDTO> createAcompanhamento(@RequestBody @Valid AcompanhamentoInDTO acompanhamentoInDTO);
+
+    @Operation(summary ="Buscar todos os acompanhamentos", description = "Deve buscar todos os acompanhamentos")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
+                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+            }
+    )
+    @GetMapping("/listar/acompanhamentos")
+    public List<AcompanhamentoOutDTO> findAllAcompanhamentos();
+
+    @Operation(summary ="Buscar acompanhamento pelo Id", description = "Deve buscar um acompanhamento pelo Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
+                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+            }
+    )
+    @GetMapping("/acompanhamento/{idAcompanhamento}")
+    public ResponseEntity<AcompanhamentoOutDTO> findAcompanhamentoById(@PathVariable ("idAcompanhamento") @Positive Integer idAcompanhamento) throws RegraDeNegocioException;
+    @Operation(summary ="Atualizar um acompanhamento", description = "Deve atualizar um acompanhamento pelo Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
+                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+            }
+    )
+    @PutMapping("/acompanhamento/{idAcompanhamento}")
+    public ResponseEntity<AcompanhamentoOutDTO> updateAcompanhamento(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento, @RequestBody @Valid AcompanhamentoOutDTO acompanhamentoEntrada) throws RegraDeNegocioException;
+
+    @Operation(summary ="Deletar acompanhamento", description = "Deve deletar um acompanhamento pelo Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
+                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+            }
+    )
+   @DeleteMapping("/acompanhamento/{idAcompanhamento}")
+    public ResponseEntity<Void> deleteAcompanhamentoById(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento);
 
 }
