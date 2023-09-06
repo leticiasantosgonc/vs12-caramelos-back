@@ -33,6 +33,66 @@ public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final ObjectMapper objectMapper;
 
+    public AcompanhamentoOutDTO createAcompanhamento(AcompanhamentoInDTO acompanhamentoInDTO){
+        Produto produto = objectMapper.convertValue(acompanhamentoInDTO, Produto.class);
+        produto.setTipoProduto(TipoProduto.ACOMPANHAMENTO);
+        Produto novoProduto = produtoRepository.save(produto);
+
+        AcompanhamentoOutDTO acompanhamentoOutDTO = objectMapper.convertValue(novoProduto, AcompanhamentoOutDTO.class);
+        return acompanhamentoOutDTO;
+    }
+
+    public List<AcompanhamentoOutDTO> findAllAcompanhamento() {
+        return produtoRepository.findByTipoProduto(TipoProduto.ACOMPANHAMENTO)
+                .stream()
+                .map(produto -> objectMapper.convertValue(produto,AcompanhamentoOutDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public AcompanhamentoOutDTO findAcompanhamentoById(Integer idAcompanhamento) throws RegraDeNegocioException {
+        Produto produtoRetornado = produtoRepository.findById(idAcompanhamento)
+                .orElseThrow(() -> new RegraDeNegocioException ("Acompanhamento não encontrada"));
+
+        if(produtoRetornado.getTipoProduto().equals(TipoProduto.ACOMPANHAMENTO)){
+            AcompanhamentoOutDTO acompanhamentoOutDTO = objectMapper.convertValue(produtoRetornado, AcompanhamentoOutDTO.class);
+            return acompanhamentoOutDTO;
+        } else {
+            throw new RegraDeNegocioException("O produto não é um acompanhamento");
+        }
+
+    }
+    public AcompanhamentoOutDTO updateAcompanhamento(Integer idAcompanhamento, AcompanhamentoOutDTO acompanhamentoEntrada) throws RegraDeNegocioException{
+        Produto produtoRetornado = produtoRepository.findById(idAcompanhamento)
+                .orElseThrow(() -> new RegraDeNegocioException("Acompanhamento não encontrado"));
+
+        if(produtoRetornado.getTipoProduto().equals(TipoProduto.ACOMPANHAMENTO)){
+            produtoRetornado.setNome(acompanhamentoEntrada.getNome());
+            produtoRetornado.setDescricao(acompanhamentoEntrada.getDescricao());
+            produtoRetornado.setImagem(acompanhamentoEntrada.getImagem());
+            produtoRetornado.setQuantidade(acompanhamentoEntrada.getQuantidade());
+            produtoRetornado.setPreco(acompanhamentoEntrada.getPreco());
+            produtoRetornado.setTamanhoProduto(acompanhamentoEntrada.getTamanhoProduto());
+            produtoRetornado.setDietaProduto(acompanhamentoEntrada.getDietaProduto());
+            produtoRetornado.setTipoProduto(TipoProduto.ACOMPANHAMENTO);
+            produtoRetornado.setIdProduto(idAcompanhamento);
+
+            Produto produtoAtualizado = produtoRepository.save(produtoRetornado);
+            AcompanhamentoOutDTO acompanhamentoOutDTO = objectMapper.convertValue(produtoAtualizado, AcompanhamentoOutDTO.class);
+
+            return acompanhamentoOutDTO;
+
+        } else {
+            throw new RegraDeNegocioException("O produto não é um acompanhamento");
+        }
+    }
+
+    public void deleteAcompanhamentoById(Integer idAcompanhamento){
+        Produto produtoRetornado = produtoRepository.findById(idAcompanhamento).get();
+
+        if (produtoRetornado.getTipoProduto().equals(TipoProduto.ACOMPANHAMENTO)){
+            produtoRepository.deleteById(idAcompanhamento);
+        }
+    }
     public BebidaOutDTO createBebida(BebidaInDTO bebidaInDTO){
         Produto produto = objectMapper.convertValue(bebidaInDTO, Produto.class);
         produto.setTipoProduto(TipoProduto.BEBIDA);
@@ -367,5 +427,4 @@ public class ProdutoService {
             throw new RegraDeNegocioException("Ação não permitida");
         }
     }
-
 }
