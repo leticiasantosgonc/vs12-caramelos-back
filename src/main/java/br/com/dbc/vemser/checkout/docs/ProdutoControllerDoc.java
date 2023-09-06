@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.checkout.docs;
 
 import br.com.dbc.vemser.checkout.dtos.*;
+import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -32,7 +33,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @GetMapping("/{idLanche}")
-    public ResponseEntity<LancheOutDTO> findLancheById(@PathVariable @Positive Integer idLanche) throws Exception;
+    public ResponseEntity<LancheOutDTO> findLancheById(@PathVariable @Positive Integer idLanche) throws RegraDeNegocioException;
 
     @Operation(summary = "Buscar todos os lanches", description = "Deve retornar uma lista com todos os lanches")
     @ApiResponses(
@@ -54,7 +55,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @PutMapping("/lanche/{idLanche}")
-    public ResponseEntity<LancheOutDTO> updateLanche(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws Exception;
+    public ResponseEntity<LancheOutDTO> updateLancheById(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws RegraDeNegocioException;
 
 
     @Operation(summary ="Deletar um lanche", description = "Deve deletar um lanche por Id")
@@ -66,7 +67,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @DeleteMapping("/lanche/{idLanche}")
-    public ResponseEntity<Void> deleteLancheById(@PathVariable @Positive Integer idLanche) throws Exception;
+    public ResponseEntity<Void> deleteLancheById(@PathVariable @Positive Integer idLanche) throws RegraDeNegocioException;
 
     @Operation(summary = "Buscar todas as bebidas",description = "Deve listar todos os lanches")
     @ApiResponses(
@@ -88,7 +89,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @GetMapping("/bebida/{idBebida}")
-    public ResponseEntity<BebidaOutDTO> findBebidaById(@PathVariable ("idBebida") @Positive Integer idBebida) throws Exception;
+    public ResponseEntity<BebidaOutDTO> findBebidaById(@PathVariable ("idBebida") @Positive Integer idBebida) throws RegraDeNegocioException;
 
     @Operation(summary = "Criar uma bebida", description = "Deve criar uma bebida")
     @ApiResponses(
@@ -110,7 +111,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @PutMapping("/bebida/{idBebida}")
-    public ResponseEntity<BebidaOutDTO> updateBebida(@PathVariable("idBebida") @Positive Integer idBebida, @RequestBody @Valid BebidaOutDTO bebidaEntrada) throws Exception;
+    public ResponseEntity<BebidaOutDTO> updateBebida(@PathVariable("idBebida") @Positive Integer idBebida, @RequestBody @Valid BebidaOutDTO bebidaEntrada) throws RegraDeNegocioException;
 
     @Operation(summary ="Deletar uma bebida", description = "Deve deletar uma bebida")
     @ApiResponses(
@@ -121,7 +122,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @DeleteMapping("/bebida/{idBebida}")
-    public ResponseEntity<Void> deleteBebidaById(@PathVariable("idBebida") @Positive Integer idBebida) throws Exception;
+    public ResponseEntity<Void> deleteBebidaById(@PathVariable("idBebida") @Positive Integer idBebida) throws RegraDeNegocioException;
 
     @Operation(summary ="Buscar todas as sobremesas", description = "Deve buscar todas as sobremesas")
     @ApiResponses(
@@ -143,7 +144,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @GetMapping("/sobremesa/{idSobremesa}")
-    public ResponseEntity<SobremesaOutDTO> findSobremesaById(@PathVariable @Positive Integer idSobremesa) throws Exception;
+    public ResponseEntity<SobremesaOutDTO> findSobremesaById(@PathVariable @Positive Integer idSobremesa) throws RegraDeNegocioException;
 
     @Operation(summary ="Criar uma sobremesa", description = "Deve criar uma sobremesa")
     @ApiResponses(
@@ -166,7 +167,7 @@ public interface ProdutoControllerDoc {
     )
     @PutMapping("/sobremesa/{idSobremesa}")
     public ResponseEntity<SobremesaOutDTO> updateSobremesa(@RequestBody @Valid SobremesaInDTO sobremesaAtualizada,
-                                                           @PathVariable @Positive Integer idSobremesa)throws Exception;
+                                                           @PathVariable @Positive Integer idSobremesa)throws RegraDeNegocioException;
 
     @Operation(summary ="Deletar uma sobremesa", description = "Deve deletar uma sobremesa")
     @ApiResponses(

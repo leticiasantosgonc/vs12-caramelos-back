@@ -124,7 +124,7 @@ public class ProdutoService {
         if (produtoEncontrado.getTipoProduto().equals(TipoProduto.LANCHE)) {
             return objectMapper.convertValue(produtoEncontrado, LancheOutDTO.class);
         } else {
-            throw new Exception("O produto não é um lanche");
+            throw new RegraDeNegocioException("O produto não é um lanche");
         }
     }
 
@@ -148,7 +148,7 @@ public class ProdutoService {
 
             return objectMapper.convertValue(produtoPersistido, LancheOutDTO.class);
         } else {
-            throw new Exception("Ação não permitida");
+            throw new RegraDeNegocioException("Ação não permitida");
         }
     }
 
