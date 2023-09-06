@@ -179,4 +179,31 @@ public class ProdutoController implements ProdutoControllerDoc {
         return new ResponseEntity<>(produtoService.updateQuantidadeProduto(idProduto, quantidade), HttpStatus.OK);
     }
 
+    @PostMapping("/criar/acompanhamento")
+    public ResponseEntity<AcompanhamentoOutDTO> createAcompanhamento(@RequestBody @Valid AcompanhamentoInDTO acompanhamentoInDTO) {
+        AcompanhamentoOutDTO acompanhamentoOutDTO = produtoService.createAcompanhamento(acompanhamentoInDTO);
+        return new ResponseEntity<>(acompanhamentoOutDTO, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/listar/acompanhamentos")
+    public List<AcompanhamentoOutDTO> findAllAcompanhamentos() {
+        return produtoService.findAllAcompanhamento();
+    }
+
+    @GetMapping("/acompanhamento/{idAcompanhamento}")
+    public ResponseEntity<AcompanhamentoOutDTO> findAcompanhamentoById(@PathVariable ("idAcompanhamento") @Positive Integer idAcompanhamento) throws RegraDeNegocioException{
+        return new ResponseEntity<>(produtoService.findAcompanhamentoById(idAcompanhamento), HttpStatus.OK);
+    }
+
+    @PutMapping("/acompanhamento/{idAcompanhamento}")
+    public ResponseEntity<AcompanhamentoOutDTO> updateAcompanhamento(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento, @RequestBody @Valid AcompanhamentoOutDTO acompanhamentoEntrada) throws RegraDeNegocioException {
+        return new ResponseEntity<>(produtoService.updateAcompanhamento(idAcompanhamento, acompanhamentoEntrada), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/acompanhamento/{idAcompanhamento}")
+    public ResponseEntity<Void> deleteAcompanhamentoById(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento){
+        produtoService.deleteAcompanhamentoById(idAcompanhamento);
+        return ResponseEntity.ok().build();
+    }
+
 }
