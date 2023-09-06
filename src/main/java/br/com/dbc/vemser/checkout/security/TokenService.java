@@ -50,8 +50,8 @@ public class TokenService {
                     .getBody();
             String user = body.get(Claims.ID, String.class);
             if (user != null) {
-                List<String> cargos = body.get(ROLES_CLAIM, List.class);
-                List<SimpleGrantedAuthority> authorities = cargos.stream()
+                Role cargos = body.get(ROLES_CLAIM, Role.class);
+                SimpleGrantedAuthority authorities = (SimpleGrantedAuthority) cargos.stream()
                         .map(SimpleGrantedAuthority::new)
                         .toList();
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
