@@ -4,6 +4,7 @@ package br.com.dbc.vemser.checkout.controller;
 import br.com.dbc.vemser.checkout.docs.ProdutoControllerDoc;
 import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Produto;
+import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +33,7 @@ public class ProdutoController implements ProdutoControllerDoc {
     }
 
     @GetMapping("/lanche/{idLanche}")
-    public ResponseEntity<LancheOutDTO> findLancheById(@PathVariable @Positive Integer idLanche) throws Exception {
+    public ResponseEntity<LancheOutDTO> findLancheById(@PathVariable @Positive Integer idLanche) throws RegraDeNegocioException {
         LancheOutDTO lancheOutDTO = produtoService.findLancheById(idLanche);
 
         return new ResponseEntity<>(lancheOutDTO, HttpStatus.OK);
@@ -46,14 +47,14 @@ public class ProdutoController implements ProdutoControllerDoc {
     }
 
     @PutMapping("/lanche/{idLanche}")
-    public ResponseEntity<LancheOutDTO> updateLancheById(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws Exception {
+    public ResponseEntity<LancheOutDTO> updateLancheById(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws RegraDeNegocioException {
         LancheOutDTO lancheOutDTO = produtoService.updateLancheById(idLanche, lancheInDTO);
 
         return new ResponseEntity<>(lancheOutDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/lanche/{idLanche}")
-    public ResponseEntity<Void> deleteById(@PathVariable @Positive Integer idLanche) throws Exception {
+    public ResponseEntity<Void> deleteById(@PathVariable @Positive Integer idLanche){
         produtoService.deleteLancheById(idLanche);
 
         return ResponseEntity.ok().build();
@@ -65,7 +66,7 @@ public class ProdutoController implements ProdutoControllerDoc {
         return produtoService.findAllBebidas();
     }
     @GetMapping("/bebida/{idBebida}")
-    public ResponseEntity<BebidaOutDTO> findBebidaById(@PathVariable ("idBebida") @Positive Integer idBebida) throws Exception {
+    public ResponseEntity<BebidaOutDTO> findBebidaById(@PathVariable ("idBebida") @Positive Integer idBebida) throws RegraDeNegocioException{
         return new ResponseEntity<>(produtoService.findBebidaById(idBebida), HttpStatus.OK);
     }
     @PostMapping("/criar/bebida")
@@ -73,11 +74,11 @@ public class ProdutoController implements ProdutoControllerDoc {
         return new ResponseEntity<>(produtoService.createBebida(bebidaInDTO), HttpStatus.CREATED);
     }
     @PutMapping("/bebida/{idBebida}")
-    public ResponseEntity<BebidaOutDTO> updateBebida(@PathVariable("idBebida") @Positive Integer idBebida, @RequestBody @Valid BebidaOutDTO bebidaEntrada) throws Exception {
+    public ResponseEntity<BebidaOutDTO> updateBebida(@PathVariable("idBebida") @Positive Integer idBebida, @RequestBody @Valid BebidaOutDTO bebidaEntrada) throws RegraDeNegocioException {
         return new ResponseEntity<>(produtoService.updateBebida(idBebida, bebidaEntrada), HttpStatus.OK);
     }
     @DeleteMapping("/bebida/{idBebida}")
-    public ResponseEntity<Void> delete(@PathVariable("idBebida") @Positive Integer idBebida) throws Exception {
+    public ResponseEntity<Void> delete(@PathVariable("idBebida") @Positive Integer idBebida) {
         produtoService.deleteBebidaById(idBebida);
         return ResponseEntity.ok().build();
     }
@@ -86,7 +87,7 @@ public class ProdutoController implements ProdutoControllerDoc {
         return new ResponseEntity<>(produtoService.findAllByTipo(),HttpStatus.OK);
     }
     @GetMapping("/sobremesa/{idSobremesa}")
-    public ResponseEntity<SobremesaOutDTO>findSobremesaById(@PathVariable @Positive Integer idSobremesa) throws Exception{
+    public ResponseEntity<SobremesaOutDTO>findSobremesaById(@PathVariable @Positive Integer idSobremesa) throws RegraDeNegocioException{
         return new ResponseEntity<>(produtoService.findSobremesaByid(idSobremesa),HttpStatus.OK);
     }
     @PostMapping("/criar/sobremesa")
@@ -96,7 +97,7 @@ public class ProdutoController implements ProdutoControllerDoc {
 
     @PutMapping("/sobremesa/{idSobremesa}")
     public ResponseEntity<SobremesaOutDTO> updateSobremesa(@RequestBody @Valid SobremesaInDTO sobremesaAtualizada,
-                                                           @PathVariable @Positive Integer idSobremesa)throws Exception{
+                                                           @PathVariable @Positive Integer idSobremesa)throws RegraDeNegocioException{
         return new ResponseEntity<>(produtoService.updateSobremesa(sobremesaAtualizada,idSobremesa),HttpStatus.ACCEPTED);
     }
 

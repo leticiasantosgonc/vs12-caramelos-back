@@ -4,6 +4,7 @@ import br.com.dbc.vemser.checkout.dtos.AdminInDTO;
 import br.com.dbc.vemser.checkout.dtos.AdminOutDTO;
 import br.com.dbc.vemser.checkout.entities.Role;
 import br.com.dbc.vemser.checkout.entities.Usuario;
+import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.repository.RoleRepository;
 import br.com.dbc.vemser.checkout.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,9 +42,9 @@ public class UsuarioService {
     public Optional<Usuario> findByLogin(String login) {
         return usuarioRepository.findByLogin(login);
     }
-    public AdminOutDTO createAdmin(AdminInDTO usuario) throws Exception{
+    public AdminOutDTO createAdmin(AdminInDTO usuario) throws RegraDeNegocioException {
             Role role = roleRepository.findById(1)
-                    .orElseThrow(() -> new Exception("A role não existe"));
+                    .orElseThrow(() -> new RegraDeNegocioException("A role não existe"));
             Usuario novoAdmin = objectMapper.convertValue(usuario,Usuario.class);
             novoAdmin.setSenha(passwordEncoder.encode(usuario.getSenha()));
             novoAdmin.setRole(role);
@@ -51,9 +52,9 @@ public class UsuarioService {
             return objectMapper.convertValue(adminRetornado,AdminOutDTO.class);
     }
 
-    public AdminOutDTO updateSenha(Integer idUsuario, String senha) throws Exception{
+    public AdminOutDTO updateSenha(Integer idUsuario, String senha) throws RegraDeNegocioException{
         Usuario usuarioAtualizar = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new Exception("Usuario não existe"));
+                .orElseThrow(() -> new RegraDeNegocioException("Usuario não existe"));
         usuarioAtualizar.setSenha(passwordEncoder.encode(senha));
 
         Usuario adminRetornar = usuarioRepository.save(usuarioAtualizar);
