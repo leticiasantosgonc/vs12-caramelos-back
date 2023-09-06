@@ -55,7 +55,7 @@ public interface ProdutoControllerDoc {
             }
     )
     @PutMapping("/lanche/{idLanche}")
-    public ResponseEntity<LancheOutDTO> updateLancheById(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws RegraDeNegocioException;
+    public ResponseEntity<LancheOutDTO> updateLanche(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws RegraDeNegocioException;
 
 
     @Operation(summary ="Deletar um lanche", description = "Deve deletar um lanche por Id")

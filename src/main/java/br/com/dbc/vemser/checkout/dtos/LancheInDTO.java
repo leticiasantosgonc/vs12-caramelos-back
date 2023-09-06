@@ -3,6 +3,7 @@ package br.com.dbc.vemser.checkout.dtos;
 import br.com.dbc.vemser.checkout.enums.DietaProduto;
 import br.com.dbc.vemser.checkout.enums.TamanhoProduto;
 import br.com.dbc.vemser.checkout.enums.TipoProduto;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;

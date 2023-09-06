@@ -2,22 +2,30 @@ package br.com.dbc.vemser.checkout.dtos;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class ComboOutDTO {
 
-    private Integer quantidade;
+    private Integer quantidadeDisponivel;
     private List<LancheOutDTO> lanches = new ArrayList<>();
     private List<BebidaOutDTO> bebidas = new ArrayList<>();
+    private BigDecimal precoTotal = calcularPreco();
 
-    public void addLanche(LancheOutDTO lanche) {
-        this.lanches.add(lanche);
-    }
+    private BigDecimal calcularPreco() {
+        BigDecimal valorTotal = BigDecimal.ZERO;
 
-    public void addBebida(BebidaOutDTO bebida) {
-        this.bebidas.add(bebida);
+        for (LancheOutDTO lanche : lanches) {
+            valorTotal.add(lanche.getPreco());
+        }
+
+        for (BebidaOutDTO bebida : bebidas) {
+            valorTotal.add(bebida.getPreco());
+        }
+
+        return valorTotal;
     }
 
 }

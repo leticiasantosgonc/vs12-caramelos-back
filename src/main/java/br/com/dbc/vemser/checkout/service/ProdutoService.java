@@ -3,6 +3,7 @@ package br.com.dbc.vemser.checkout.service;
 
 import br.com.dbc.vemser.checkout.dtos.*;
 
+import br.com.dbc.vemser.checkout.entities.Combo;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.enums.TipoProduto;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
@@ -312,37 +313,6 @@ public class ProdutoService {
                 return null;
             }
         }
-    }
-
-    public List<ComboOutDTO> findCombos() {
-        List<ComboOutDTO> combos = new ArrayList<>();
-        List<LancheOutDTO> lanches = findAllLanches();
-        List<BebidaOutDTO> bebidas = findAllBebidas();
-
-        int tamanhoLanches = lanches.size();
-        int tamanhoBebidas = bebidas.size();
-
-        if (tamanhoLanches >= tamanhoBebidas) {
-            for (int i = 0; i < tamanhoBebidas; i++) {
-                ComboOutDTO comboOutDTO = new ComboOutDTO();
-                comboOutDTO.addLanche(lanches.get(i));
-                comboOutDTO.addBebida(bebidas.get(i));
-                combos.add(comboOutDTO);
-            }
-        } else {
-            for (int i = 0; i < tamanhoLanches; i++) {
-                ComboOutDTO comboOutDTO = new ComboOutDTO();
-                comboOutDTO.addLanche(lanches.get(i));
-                comboOutDTO.addBebida(bebidas.get(i));
-                combos.add(comboOutDTO);
-            }
-        }
-
-        return combos;
-    }
-
-    public List<ComboOutDTO> findComboById(Integer idCombo) {
-        return null;
     }
 
 }
