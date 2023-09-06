@@ -5,6 +5,7 @@ import br.com.dbc.vemser.checkout.docs.ProdutoControllerDoc;
 import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.checkout.service.ComboService;
 import br.com.dbc.vemser.checkout.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +29,7 @@ import java.util.List;
 public class ProdutoController implements ProdutoControllerDoc {
 
     private final ProdutoService produtoService;
+    private final ComboService comboService;
 
     @PostMapping("/criar/lanche")
     public ResponseEntity<LancheOutDTO> createLanche(@RequestBody @Valid LancheInDTO lancheInDTO) {
@@ -51,7 +53,7 @@ public class ProdutoController implements ProdutoControllerDoc {
     }
 
     @PutMapping("/lanche/{idLanche}")
-    public ResponseEntity<LancheOutDTO> updateLancheById(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws RegraDeNegocioException {
+    public ResponseEntity<LancheOutDTO> updateLanche(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws RegraDeNegocioException {
         LancheOutDTO lancheOutDTO = produtoService.updateLancheById(idLanche, lancheInDTO);
 
         return new ResponseEntity<>(lancheOutDTO, HttpStatus.OK);
@@ -159,13 +161,13 @@ public class ProdutoController implements ProdutoControllerDoc {
     }
 
     @GetMapping("/listar/combos")
-    public ResponseEntity<List<ComboOutDTO>> findCombos() {
-        return new ResponseEntity<>(produtoService.findCombos(), HttpStatus.OK);
+    public ResponseEntity<List<ComboOutDTO>> findAllCombos() {
+        return new ResponseEntity<>(comboService.findAllCombos(), HttpStatus.OK);
     }
 
     @GetMapping("listar/combos/{idCombo}")
-    public ResponseEntity<List<ComboOutDTO>> findComboById(@PathVariable Integer idCombo) {
-        return new ResponseEntity<>(produtoService.findComboById(idCombo), HttpStatus.OK);
+    public ResponseEntity<ComboOutDTO> findComboById(@PathVariable Integer idCombo) throws RegraDeNegocioException {
+        return new ResponseEntity<>(comboService.findComboById(idCombo), HttpStatus.OK);
     }
 
     @PutMapping("/disponibilidade/{idProduto}")
