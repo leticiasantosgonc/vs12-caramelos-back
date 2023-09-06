@@ -11,6 +11,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.sql.Clob;
 
 @Data
 public class LancheInDTO {

@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.sql.Clob;
 import java.util.List;
 
 @Data
@@ -42,11 +43,6 @@ public class BebidaInDTO {
 
     @NotNull(message = "O campo não dever ser vazio e/ou nulo e/ou branco")
     @Enumerated(EnumType.STRING)
-    @Schema(description = "Tipo do produto", required = true, example = "BEBIDA")
-    private TipoProduto tipoProduto;
-
-    @NotNull(message = "O campo não dever ser vazio e/ou nulo e/ou branco")
-    @Enumerated(EnumType.STRING)
     @Schema(description = "Marca da bebida", required = true, example = "PEPSI")
     private MarcaProduto marca;
 
@@ -54,4 +50,5 @@ public class BebidaInDTO {
     @Enumerated(EnumType.STRING)
     @Schema(description = "Tamanho da bebida", required = true, example = "MEDIO")
     private TamanhoProduto tamanhoProduto;
+
 }
