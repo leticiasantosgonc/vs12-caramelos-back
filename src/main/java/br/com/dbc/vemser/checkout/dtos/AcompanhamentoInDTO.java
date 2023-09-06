@@ -7,10 +7,12 @@ import lombok.Data;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 @Data
+@Valid
 public class AcompanhamentoInDTO {
     @NotBlank(message = "O campo nome não pode estar vazio")
     @Size(min = 1, max = 100)
