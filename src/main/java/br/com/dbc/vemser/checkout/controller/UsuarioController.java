@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.plaf.synth.Region;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
@@ -31,8 +33,9 @@ public class UsuarioController implements UsuarioControllerDoc {
         return new ResponseEntity<>(usuarioService.createAdmin(usuario), HttpStatus.OK);
     }
     @PutMapping("/alterar-senha/{idUsuario}")
-    public ResponseEntity<AdminOutDTO> updateSenha(@PathVariable Integer idUsuario, @RequestBody String senha) throws RegraDeNegocioException {
-        return new ResponseEntity<>(usuarioService.updateSenha(idUsuario, senha), HttpStatus.OK);
+    public ResponseEntity<AdminOutDTO> updateSenha(@PathVariable Integer idUsuario,
+                                                   @RequestBody @Valid AdminInDTO usuarioAtualizadado) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.updateSenha(idUsuario, usuarioAtualizadado), HttpStatus.OK);
     }
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Void> deleteAdmin(@PathVariable Integer idUsuario) {

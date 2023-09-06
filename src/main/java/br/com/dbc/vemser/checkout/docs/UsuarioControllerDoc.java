@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 public interface UsuarioControllerDoc {
@@ -43,7 +44,7 @@ public interface UsuarioControllerDoc {
             }
     )
     @PutMapping("/alterar-senha/{idUsuario}")
-    public ResponseEntity<AdminOutDTO> updateSenha(@PathVariable Integer idUsuario, @RequestBody String senha) throws RegraDeNegocioException;
+    public ResponseEntity<AdminOutDTO> updateSenha(@PathVariable Integer idUsuario, @RequestBody @Valid AdminInDTO usuarioAtualizado) throws RegraDeNegocioException;
 
     @Operation(summary = "Deletar uma administrador", description = "Deve deletar um administrador")
     @ApiResponses(
