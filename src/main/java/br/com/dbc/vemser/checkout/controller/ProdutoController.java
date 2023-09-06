@@ -119,42 +119,42 @@ public class ProdutoController implements ProdutoControllerDoc {
     }
 
     @GetMapping("/listar/lanches-ordenados-por-nome")
-    public Page<LancheOutDTO> findLanchesOrdenadosPorNome(Integer numeroDePaginas, Integer quantidadeDeRegistrosPorPagina) {
+    public Page<LancheOutDTO> findLanchesOrdenadosPorNome(@RequestParam(defaultValue= "0") Integer numeroDePaginas, @RequestParam(defaultValue= "10")  Integer quantidadeDeRegistrosPorPagina) {
         Pageable pageable = PageRequest.of(numeroDePaginas, quantidadeDeRegistrosPorPagina, Sort.by("nome"));
 
         return produtoService.findLanchesOrdenadosPorNome(pageable);
     }
 
     @GetMapping("/listar/bebidas-ordenadas-por-nome")
-    public Page<BebidaOutDTO> findBebidasOrdenadasPorNome(Integer numeroDePaginas, Integer quantidadeDeRegistros) {
+    public Page<BebidaOutDTO> findBebidasOrdenadasPorNome(@RequestParam(defaultValue= "0") Integer numeroDePaginas, @RequestParam(defaultValue= "10") Integer quantidadeDeRegistros) {
         Pageable pageable = PageRequest.of(numeroDePaginas, quantidadeDeRegistros, Sort.by("nome"));
 
         return produtoService.findBebidasOrdenadasPorNome(pageable);
     }
 
     @GetMapping("/listar/sobremesas-ordenadas-por-nome")
-    public Page<SobremesaOutDTO> findSobremesasOrdenadasPorNome(Integer numeroDePaginas, Integer quantidadeDeRegistros) {
+    public Page<SobremesaOutDTO> findSobremesasOrdenadasPorNome(@RequestParam(defaultValue= "0") Integer numeroDePaginas, @RequestParam(defaultValue= "10") Integer quantidadeDeRegistros) {
         Pageable pageable = PageRequest.of(numeroDePaginas, quantidadeDeRegistros, Sort.by("nome"));
 
         return produtoService.findSobremesasOrdenadasPorNome(pageable);
     }
 
     @GetMapping("/listar/lanches-ordenados-por-preco")
-    public Page<LancheOutDTO> findLanchesOrdenadosPorPreco(Integer numeroDePaginas, Integer quantidadeDeRegistrosPorPagina) {
+    public Page<LancheOutDTO> findLanchesOrdenadosPorPreco(@RequestParam(defaultValue= "0") Integer numeroDePaginas, @RequestParam(defaultValue= "10") Integer quantidadeDeRegistrosPorPagina) {
         Pageable pageable = PageRequest.of(numeroDePaginas, quantidadeDeRegistrosPorPagina, Sort.by("preco"));
 
         return produtoService.findLanchesOrdenadosPorPreco(pageable);
     }
 
     @GetMapping("/listar/bebidas-ordenadas-por-preco")
-    public Page<BebidaOutDTO> findBebidasOrdenadasPorPreco(Integer numeroDePaginas, Integer quantidadeDeRegistros) {
+    public Page<BebidaOutDTO> findBebidasOrdenadasPorPreco(@RequestParam(defaultValue= "0") Integer numeroDePaginas, @RequestParam(defaultValue= "10") Integer quantidadeDeRegistros) {
         Pageable pageable = PageRequest.of(numeroDePaginas, quantidadeDeRegistros, Sort.by("preco"));
 
         return produtoService.findBebidasOrdenadasPorPreco(pageable);
     }
 
     @GetMapping("/listar/sobremesas-ordenadas-por-preco")
-    public Page<SobremesaOutDTO> findSobremesasOrdenadasPorPreco(Integer numeroDePaginas, Integer quantidadeDeRegistros) {
+    public Page<SobremesaOutDTO> findSobremesasOrdenadasPorPreco(@RequestParam(defaultValue= "0") Integer numeroDePaginas, @RequestParam(defaultValue= "10") Integer quantidadeDeRegistros) {
         Pageable pageable = PageRequest.of(numeroDePaginas, quantidadeDeRegistros, Sort.by("preco"));
 
         return produtoService.findSobremesasOrdenadasPorPreco(pageable);
