@@ -58,9 +58,8 @@ public class ProdutoController implements ProdutoControllerDoc {
     }
 
     @DeleteMapping("/lanche/{idLanche}")
-    public ResponseEntity<Void> deleteLancheById(@PathVariable @Positive Integer idLanche) throws Exception {
+    public ResponseEntity<Void> deleteLancheById(@PathVariable @Positive Integer idLanche) {
         produtoService.deleteLancheById(idLanche);
-
         return ResponseEntity.ok().build();
     }
 
@@ -85,7 +84,7 @@ public class ProdutoController implements ProdutoControllerDoc {
     }
 
     @DeleteMapping("/bebida/{idBebida}")
-    public ResponseEntity<Void> deleteBebidaById(@PathVariable("idBebida") @Positive Integer idBebida) throws Exception {
+    public ResponseEntity<Void> deleteBebidaById(@PathVariable("idBebida") @Positive Integer idBebida){
         produtoService.deleteBebidaById(idBebida);
         return ResponseEntity.ok().build();
     }
