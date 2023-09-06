@@ -23,7 +23,6 @@ import javax.validation.Valid;
 public class AuthController {
     public final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
-    private final UsuarioService usuarioService;
 
     @PostMapping
     public String auth(@RequestBody @Valid AdminInDTO loginDTO) throws RegraDeNegocioException {
