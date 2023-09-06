@@ -5,9 +5,9 @@ import br.com.dbc.vemser.checkout.dtos.*;
 
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.enums.TipoProduto;
+import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.repository.ProdutoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.lang.module.ResolutionException;
 import javax.sql.rowset.serial.SerialClob;
 import java.sql.Clob;
 import java.util.ArrayList;
@@ -48,22 +49,22 @@ public class ProdutoService {
                 .collect(Collectors.toList());
     }
 
-    public BebidaOutDTO findBebidaById(Integer idBebida) throws Exception{
+    public BebidaOutDTO findBebidaById(Integer idBebida) throws RegraDeNegocioException {
         Produto produtoRetornado = produtoRepository.findById(idBebida)
-                .orElseThrow(() -> new Exception("Bebida não encontrada"));
+                .orElseThrow(() -> new RegraDeNegocioException ("Bebida não encontrada"));
 
         if(produtoRetornado.getTipoProduto().equals(TipoProduto.BEBIDA)){
             BebidaOutDTO bebidaOutDTO = objectMapper.convertValue(produtoRetornado, BebidaOutDTO.class);
             return bebidaOutDTO;
         } else {
-            throw new Exception("O produto não é uma bebida");
+            throw new RegraDeNegocioException("O produto não é uma bebida");
         }
 
     }
 
-    public BebidaOutDTO updateBebida(Integer idBebida, BebidaOutDTO bebidaEntrada) throws Exception{
+    public BebidaOutDTO updateBebida(Integer idBebida, BebidaOutDTO bebidaEntrada) throws RegraDeNegocioException{
         Produto produtoRetornado = produtoRepository.findById(idBebida)
-                .orElseThrow(() -> new Exception("Bebida não encontrada"));
+                .orElseThrow(() -> new RegraDeNegocioException("Bebida não encontrada"));
 
         if(produtoRetornado.getTipoProduto().equals(TipoProduto.BEBIDA)){
             produtoRetornado.setNome(bebidaEntrada.getNome());
@@ -81,7 +82,7 @@ public class ProdutoService {
             return bebidaOutDTO;
 
         } else {
-            throw new Exception("O produto não é uma bebida");
+            throw new RegraDeNegocioException("O produto não é uma bebida");
         }
     }
 
@@ -115,8 +116,10 @@ public class ProdutoService {
         return lancheOutDTOList;
     }
 
-    public LancheOutDTO findLancheById(Integer idLanche) throws Exception {
-        Produto produtoEncontrado = findById(idLanche);
+    public LancheOutDTO findLancheById(Integer idLanche) throws RegraDeNegocioException {
+        Produto produtoEncontrado = produtoRepository
+                .findById(idLanche)
+                .orElseThrow(() -> new RegraDeNegocioException("Lanche com id " + idLanche + " não encontrado"));
 
         if (produtoEncontrado.getTipoProduto().equals(TipoProduto.LANCHE)) {
             return objectMapper.convertValue(produtoEncontrado, LancheOutDTO.class);
@@ -125,10 +128,10 @@ public class ProdutoService {
         }
     }
 
-    public LancheOutDTO updateLancheById(Integer idLanche, LancheInDTO lancheInDTO) throws Exception {
+    public LancheOutDTO updateLancheById(Integer idLanche, LancheInDTO lancheInDTO) throws RegraDeNegocioException {
         Produto produtoEncontrado = produtoRepository
                 .findById(idLanche)
-                .orElseThrow(() -> new Exception("Lanche com id " + idLanche + " não encontrado"));
+                .orElseThrow(() -> new RegraDeNegocioException("Lanche com id " + idLanche + " não encontrado"));
 
         if (produtoEncontrado.getTipoProduto().equals(TipoProduto.LANCHE)) {
             Produto produtoParaPersistir = new Produto();
@@ -149,7 +152,7 @@ public class ProdutoService {
         }
     }
 
-    public void deleteLancheById(Integer idLanche) throws Exception {
+    public void deleteLancheById(Integer idLanche){
         Produto produto = produtoRepository.findById(idLanche).get();
 
         if (produto.getTipoProduto().equals(TipoProduto.LANCHE)) {
@@ -167,7 +170,7 @@ public class ProdutoService {
         return sobremesaOutDTO;
     }
 
-    public SobremesaOutDTO findSobremesaByid(Integer idProduto) throws Exception {
+    public SobremesaOutDTO findSobremesaByid(Integer idProduto) throws RegraDeNegocioException{
         Produto produtoRetornado = findById(idProduto);
         isSobremesa(produtoRetornado);
 
@@ -175,7 +178,7 @@ public class ProdutoService {
 
     }
 
-    public SobremesaOutDTO updateSobremesa(SobremesaInDTO sobremesaAtualizada, Integer idSobremesa) throws Exception {
+    public SobremesaOutDTO updateSobremesa(SobremesaInDTO sobremesaAtualizada, Integer idSobremesa)throws RegraDeNegocioException{
         Produto produto = findById(idSobremesa);
         isSobremesa(produto);
         Produto produtoAtualizado = objectMapper.convertValue(sobremesaAtualizada,Produto.class);
@@ -204,13 +207,13 @@ public class ProdutoService {
                 .collect(Collectors.toList());
     }
 
-    public Produto findById(Integer idProduto) throws Exception {
-        return produtoRepository.findById(idProduto).orElseThrow(() -> new Exception("Produto não encontrado"));
+    public Produto findById(Integer idProduto) throws RegraDeNegocioException {
+        return produtoRepository.findById(idProduto).orElseThrow(() -> new RegraDeNegocioException("Produto não encontrado"));
     }
 
-    public boolean isSobremesa(Produto produto) throws Exception {
+    public boolean isSobremesa(Produto produto) throws RegraDeNegocioException {
         if(produto.getTipoProduto() != TipoProduto.SOBREMESA){
-            throw new Exception("Ação não permitida");
+            throw new RegraDeNegocioException("Ação não permitida");
         }
         return true;
     }
