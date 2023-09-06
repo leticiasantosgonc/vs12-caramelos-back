@@ -33,6 +33,7 @@ public class Produto {
     @Lob
     @Column(name = "IMAGEM")
     private String imagem;
+
     @Column(name = "QUANTIDADE")
     private Integer quantidade;
 
