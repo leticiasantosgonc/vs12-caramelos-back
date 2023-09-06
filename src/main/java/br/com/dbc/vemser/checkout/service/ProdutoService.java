@@ -345,4 +345,27 @@ public class ProdutoService {
         return null;
     }
 
+    public Integer getQuantidadeProduto(Integer idProduto) throws RegraDeNegocioException {
+        Produto produto = produtoRepository.findById(idProduto)
+                .orElseThrow(() -> new RegraDeNegocioException("Produto não encontrado"));
+        if (produto != null) {
+            return produto.getQuantidade();
+        }else {
+            throw new RegraDeNegocioException("Ação não permitida");
+        }
+    }
+
+    public Produto updateQuantidadeProduto(Integer idProduto, Integer novaQuantidade) throws RegraDeNegocioException {
+        Optional<Produto> produtoProcurar = produtoRepository.findById(idProduto);
+
+        if (produtoProcurar.isPresent()) {
+            Produto produto = produtoProcurar.get();
+            produto.setQuantidade(novaQuantidade);
+            produtoRepository.save(produto);
+            return produto;
+        } else {
+            throw new RegraDeNegocioException("Ação não permitida");
+        }
+    }
+
 }

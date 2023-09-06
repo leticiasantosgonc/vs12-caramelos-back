@@ -51,7 +51,7 @@ public class ProdutoController implements ProdutoControllerDoc {
     }
 
     @PutMapping("/lanche/{idLanche}")
-    public ResponseEntity<LancheOutDTO> updateLanche(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws RegraDeNegocioException {
+    public ResponseEntity<LancheOutDTO> updateLancheById(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws RegraDeNegocioException {
         LancheOutDTO lancheOutDTO = produtoService.updateLancheById(idLanche, lancheInDTO);
 
         return new ResponseEntity<>(lancheOutDTO, HttpStatus.OK);
@@ -166,6 +166,17 @@ public class ProdutoController implements ProdutoControllerDoc {
     @GetMapping("listar/combos/{idCombo}")
     public ResponseEntity<List<ComboOutDTO>> findComboById(@PathVariable Integer idCombo) {
         return new ResponseEntity<>(produtoService.findComboById(idCombo), HttpStatus.OK);
+    }
+
+    @PutMapping("/disponibilidade/{idProduto}")
+    public ResponseEntity<Integer> getQuantidadeProdutoPorId(@PathVariable @Positive Integer idProduto) throws RegraDeNegocioException {
+        return new ResponseEntity<>(produtoService.getQuantidadeProduto(idProduto), HttpStatus.OK);
+    }
+
+    @PutMapping("/atualizar-quantidade/{idProduto}")
+    public ResponseEntity<Produto> updateQuantidadeProduto(@RequestBody @Positive Integer quantidade,
+                                                           @PathVariable @Positive Integer idProduto) throws RegraDeNegocioException {
+        return new ResponseEntity<>(produtoService.updateQuantidadeProduto(idProduto, quantidade), HttpStatus.OK);
     }
 
 }
