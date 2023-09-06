@@ -51,7 +51,7 @@ public class ProdutoController implements ProdutoControllerDoc {
     }
 
     @PutMapping("/lanche/{idLanche}")
-    public ResponseEntity<LancheOutDTO> updateLancheById(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws RegraDeNegocioException {
+    public ResponseEntity<LancheOutDTO> updateLanche(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws RegraDeNegocioException {
         LancheOutDTO lancheOutDTO = produtoService.updateLancheById(idLanche, lancheInDTO);
 
         return new ResponseEntity<>(lancheOutDTO, HttpStatus.OK);
@@ -157,6 +157,16 @@ public class ProdutoController implements ProdutoControllerDoc {
         Pageable pageable = PageRequest.of(numeroDePaginas, quantidadeDeRegistros, Sort.by("preco"));
 
         return produtoService.findSobremesasOrdenadasPorPreco(pageable);
+    }
+
+    @GetMapping("/listar/combos")
+    public ResponseEntity<List<ComboOutDTO>> findCombos() {
+        return new ResponseEntity<>(produtoService.findCombos(), HttpStatus.OK);
+    }
+
+    @GetMapping("listar/combos/{idCombo}")
+    public ResponseEntity<List<ComboOutDTO>> findComboById(@PathVariable Integer idCombo) {
+        return new ResponseEntity<>(produtoService.findComboById(idCombo), HttpStatus.OK);
     }
 
 }

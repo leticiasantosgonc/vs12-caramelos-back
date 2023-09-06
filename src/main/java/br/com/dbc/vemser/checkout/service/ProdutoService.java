@@ -124,7 +124,7 @@ public class ProdutoService {
         if (produtoEncontrado.getTipoProduto().equals(TipoProduto.LANCHE)) {
             return objectMapper.convertValue(produtoEncontrado, LancheOutDTO.class);
         } else {
-            throw new Exception("O produto não é um lanche");
+            throw new RegraDeNegocioException("O produto não é um lanche");
         }
     }
 
@@ -148,7 +148,7 @@ public class ProdutoService {
 
             return objectMapper.convertValue(produtoPersistido, LancheOutDTO.class);
         } else {
-            throw new Exception("Ação não permitida");
+            throw new RegraDeNegocioException("Ação não permitida");
         }
     }
 
@@ -312,6 +312,37 @@ public class ProdutoService {
                 return null;
             }
         }
+    }
+
+    public List<ComboOutDTO> findCombos() {
+        List<ComboOutDTO> combos = new ArrayList<>();
+        List<LancheOutDTO> lanches = findAllLanches();
+        List<BebidaOutDTO> bebidas = findAllBebidas();
+
+        int tamanhoLanches = lanches.size();
+        int tamanhoBebidas = bebidas.size();
+
+        if (tamanhoLanches >= tamanhoBebidas) {
+            for (int i = 0; i < tamanhoBebidas; i++) {
+                ComboOutDTO comboOutDTO = new ComboOutDTO();
+                comboOutDTO.addLanche(lanches.get(i));
+                comboOutDTO.addBebida(bebidas.get(i));
+                combos.add(comboOutDTO);
+            }
+        } else {
+            for (int i = 0; i < tamanhoLanches; i++) {
+                ComboOutDTO comboOutDTO = new ComboOutDTO();
+                comboOutDTO.addLanche(lanches.get(i));
+                comboOutDTO.addBebida(bebidas.get(i));
+                combos.add(comboOutDTO);
+            }
+        }
+
+        return combos;
+    }
+
+    public List<ComboOutDTO> findComboById(Integer idCombo) {
+        return null;
     }
 
 }
