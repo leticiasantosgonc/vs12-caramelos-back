@@ -33,7 +33,7 @@ public class UsuarioController implements UsuarioControllerDoc {
         return new ResponseEntity<>(usuarioService.createAdmin(usuario), HttpStatus.OK);
     }
     @PutMapping("/alterar-senha/{idUsuario}")
-    public ResponseEntity<AdminOutDTO> updateSenha(@PathVariable Integer idUsuario,
+    public ResponseEntity<AdminOutDTO> update(@PathVariable Integer idUsuario,
                                                    @RequestBody @Valid AdminInDTO usuarioAtualizadado) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.updateSenha(idUsuario, usuarioAtualizadado), HttpStatus.OK);
     }

@@ -44,7 +44,7 @@ public interface UsuarioControllerDoc {
             }
     )
     @PutMapping("/alterar-senha/{idUsuario}")
-    public ResponseEntity<AdminOutDTO> updateSenha(@PathVariable Integer idUsuario, @RequestBody @Valid AdminInDTO usuarioAtualizado) throws RegraDeNegocioException;
+    public ResponseEntity<AdminOutDTO> update(@PathVariable Integer idUsuario, @RequestBody @Valid AdminInDTO usuarioAtualizado) throws RegraDeNegocioException;
 
     @Operation(summary = "Deletar uma administrador", description = "Deve deletar um administrador")
     @ApiResponses(
