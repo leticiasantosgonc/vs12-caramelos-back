@@ -18,8 +18,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "201", description = "Lanche criado com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @PostMapping("/criar/lanche")
@@ -29,7 +31,9 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
@@ -40,8 +44,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "foi gerada uma excessão")
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @GetMapping("/listar/lanches")
@@ -51,8 +57,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @PutMapping("/lanche/{idLanche}")
@@ -63,8 +71,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @DeleteMapping("/lanche/{idLanche}")
@@ -74,8 +84,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description ="Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @GetMapping("/listar/bebida")
@@ -85,8 +97,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @GetMapping("/bebida/{idBebida}")
@@ -96,8 +110,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "201", description = "Bebida criada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @PostMapping("/criar/bebida")
@@ -107,8 +123,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @PutMapping("/bebida/{idBebida}")
@@ -118,8 +136,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @DeleteMapping("/bebida/{idBebida}")
@@ -129,8 +149,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @GetMapping("/listar-sobremesas")
@@ -140,8 +162,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @GetMapping("/sobremesa/{idSobremesa}")
@@ -151,8 +175,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @PostMapping("/criar/sobremesa")
@@ -162,8 +188,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @PutMapping("/sobremesa/{idSobremesa}")
@@ -174,8 +202,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @DeleteMapping("/sobremesa/{idSobremesa}")
@@ -185,8 +215,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @PutMapping("/disponibilidade/{idProduto}")
@@ -196,8 +228,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @PutMapping("/atualizar-quantidade/{idProduto}")
@@ -208,8 +242,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @PostMapping("/criar/acompanhamento")
@@ -219,8 +255,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @GetMapping("/listar/acompanhamentos")
@@ -230,8 +268,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @GetMapping("/acompanhamento/{idAcompanhamento}")
@@ -240,8 +280,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @PutMapping("/acompanhamento/{idAcompanhamento}")
@@ -251,8 +293,10 @@ public interface ProdutoControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
-                    @ApiResponse(responseCode = "403",description = "Você não tem permissão para acessar esse recurso"),
-                    @ApiResponse(responseCode = "500", description = "Uma excessão foi gerada")
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
    @DeleteMapping("/acompanhamento/{idAcompanhamento}")
