@@ -302,4 +302,55 @@ public interface ProdutoControllerDoc {
    @DeleteMapping("/acompanhamento/{idAcompanhamento}")
     public ResponseEntity<Void> deleteAcompanhamentoById(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento);
 
+    @Operation(summary ="Criar um combo", description = "Deve criar um combo")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
+            }
+    )
+    @PostMapping("/criar/combo")
+    public ResponseEntity<ComboOutDTO> createCombo(@RequestBody @Valid ComboInDTO comboInDTO);
+
+    @Operation(summary ="Buscar todos os combos", description = "Deve todos os combos")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
+            }
+    )
+    @GetMapping("/listar/combo")
+    public List<ComboOutDTO> findAllCombos();
+
+    @Operation(summary ="Atualizar um combo", description = "Deve atualizar um combo pelo Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
+            }
+    )
+    @PutMapping("/combo/{idCombo}")
+    public ResponseEntity<ComboOutDTO> updateCombo(@PathVariable("idCombo") @Positive Integer idCombo, @RequestBody @Valid ComboOutDTO comboEntrada) throws RegraDeNegocioException;
+
+    @Operation(summary ="Deletar um combo", description = "Deve deletar um combo pelo Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
+            }
+    )
+    @DeleteMapping("/combo/{idCombo}")
+    public ResponseEntity<Void> deleteComboById(@PathVariable("idCombo") @Positive Integer idCombo);
 }

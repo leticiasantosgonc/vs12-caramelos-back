@@ -1,13 +1,14 @@
-package br.com.dbc.vemser.checkout;
+// package br.com.dbc.vemser.checkout;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+
+/*@SpringBootTest
 class CheckoutApplicationTests {
-/*
+
 	@Test
 	void contextLoads() {
 	}
-*/
-}
+
+}*/
