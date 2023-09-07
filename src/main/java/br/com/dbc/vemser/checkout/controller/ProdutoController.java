@@ -4,6 +4,8 @@ package br.com.dbc.vemser.checkout.controller;
 import br.com.dbc.vemser.checkout.docs.ProdutoControllerDoc;
 import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Produto;
+import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.checkout.service.ComboService;
 import br.com.dbc.vemser.checkout.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +29,7 @@ import java.util.List;
 public class ProdutoController implements ProdutoControllerDoc {
 
     private final ProdutoService produtoService;
+    private final ComboService comboService;
 
     @PostMapping("/criar/lanche")
     public ResponseEntity<LancheOutDTO> createLanche(@RequestBody @Valid LancheInDTO lancheInDTO) {
@@ -35,8 +38,8 @@ public class ProdutoController implements ProdutoControllerDoc {
         return new ResponseEntity<>(lancheOutDTO, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{idLanche}")
-    public ResponseEntity<LancheOutDTO> findLancheById(@PathVariable @Positive Integer idLanche) throws Exception {
+    @GetMapping("/lanche/{idLanche}")
+    public ResponseEntity<LancheOutDTO> findLancheById(@PathVariable @Positive Integer idLanche) throws RegraDeNegocioException {
         LancheOutDTO lancheOutDTO = produtoService.findLancheById(idLanche);
 
         return new ResponseEntity<>(lancheOutDTO, HttpStatus.OK);
@@ -50,16 +53,15 @@ public class ProdutoController implements ProdutoControllerDoc {
     }
 
     @PutMapping("/lanche/{idLanche}")
-    public ResponseEntity<LancheOutDTO> updateLanche(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws Exception {
+    public ResponseEntity<LancheOutDTO> updateLanche(@PathVariable @Positive Integer idLanche, @RequestBody @Valid LancheInDTO lancheInDTO) throws RegraDeNegocioException {
         LancheOutDTO lancheOutDTO = produtoService.updateLancheById(idLanche, lancheInDTO);
 
         return new ResponseEntity<>(lancheOutDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/lanche/{idLanche}")
-    public ResponseEntity<Void> deleteLancheById(@PathVariable @Positive Integer idLanche) throws Exception {
+    public ResponseEntity<Void> deleteLancheById(@PathVariable @Positive Integer idLanche) {
         produtoService.deleteLancheById(idLanche);
-
         return ResponseEntity.ok().build();
     }
 
@@ -74,17 +76,17 @@ public class ProdutoController implements ProdutoControllerDoc {
     }
 
     @GetMapping("/bebida/{idBebida}")
-    public ResponseEntity<BebidaOutDTO> findBebidaById(@PathVariable ("idBebida") @Positive Integer idBebida) throws Exception {
+    public ResponseEntity<BebidaOutDTO> findBebidaById(@PathVariable ("idBebida") @Positive Integer idBebida) throws RegraDeNegocioException{
         return new ResponseEntity<>(produtoService.findBebidaById(idBebida), HttpStatus.OK);
     }
 
     @PutMapping("/bebida/{idBebida}")
-    public ResponseEntity<BebidaOutDTO> updateBebida(@PathVariable("idBebida") @Positive Integer idBebida, @RequestBody @Valid BebidaOutDTO bebidaEntrada) throws Exception {
+    public ResponseEntity<BebidaOutDTO> updateBebida(@PathVariable("idBebida") @Positive Integer idBebida, @RequestBody @Valid BebidaOutDTO bebidaEntrada) throws RegraDeNegocioException {
         return new ResponseEntity<>(produtoService.updateBebida(idBebida, bebidaEntrada), HttpStatus.OK);
     }
 
     @DeleteMapping("/bebida/{idBebida}")
-    public ResponseEntity<Void> deleteBebidaById(@PathVariable("idBebida") @Positive Integer idBebida) throws Exception {
+    public ResponseEntity<Void> deleteBebidaById(@PathVariable("idBebida") @Positive Integer idBebida){
         produtoService.deleteBebidaById(idBebida);
         return ResponseEntity.ok().build();
     }
@@ -100,13 +102,13 @@ public class ProdutoController implements ProdutoControllerDoc {
     }
 
     @GetMapping("/sobremesa/{idSobremesa}")
-    public ResponseEntity<SobremesaOutDTO> findSobremesaById(@PathVariable @Positive Integer idSobremesa) throws Exception {
+    public ResponseEntity<SobremesaOutDTO>findSobremesaById(@PathVariable @Positive Integer idSobremesa) throws RegraDeNegocioException {
         return new ResponseEntity<>(produtoService.findSobremesaByid(idSobremesa),HttpStatus.OK);
     }
 
     @PutMapping("/sobremesa/{idSobremesa}")
     public ResponseEntity<SobremesaOutDTO> updateSobremesa(@RequestBody @Valid SobremesaInDTO sobremesaAtualizada,
-                                                           @PathVariable @Positive Integer idSobremesa) throws Exception {
+                                                           @PathVariable @Positive Integer idSobremesa) throws RegraDeNegocioException {
         return new ResponseEntity<>(produtoService.updateSobremesa(sobremesaAtualizada,idSobremesa),HttpStatus.ACCEPTED);
     }
 
@@ -117,45 +119,93 @@ public class ProdutoController implements ProdutoControllerDoc {
     }
 
     @GetMapping("/listar/lanches-ordenados-por-nome")
-    public Page<LancheOutDTO> findLanchesOrdenadosPorNome(Integer numeroDePaginas, Integer quantidadeDeRegistrosPorPagina) {
+    public Page<LancheOutDTO> findLanchesOrdenadosPorNome(@RequestParam(defaultValue= "0") Integer numeroDePaginas, @RequestParam(defaultValue= "10")  Integer quantidadeDeRegistrosPorPagina) {
         Pageable pageable = PageRequest.of(numeroDePaginas, quantidadeDeRegistrosPorPagina, Sort.by("nome"));
 
         return produtoService.findLanchesOrdenadosPorNome(pageable);
     }
 
     @GetMapping("/listar/bebidas-ordenadas-por-nome")
-    public Page<BebidaOutDTO> findBebidasOrdenadasPorNome(Integer numeroDePaginas, Integer quantidadeDeRegistros) {
+    public Page<BebidaOutDTO> findBebidasOrdenadasPorNome(@RequestParam(defaultValue= "0") Integer numeroDePaginas, @RequestParam(defaultValue= "10") Integer quantidadeDeRegistros) {
         Pageable pageable = PageRequest.of(numeroDePaginas, quantidadeDeRegistros, Sort.by("nome"));
 
         return produtoService.findBebidasOrdenadasPorNome(pageable);
     }
 
     @GetMapping("/listar/sobremesas-ordenadas-por-nome")
-    public Page<SobremesaOutDTO> findSobremesasOrdenadasPorNome(Integer numeroDePaginas, Integer quantidadeDeRegistros) {
+    public Page<SobremesaOutDTO> findSobremesasOrdenadasPorNome(@RequestParam(defaultValue= "0") Integer numeroDePaginas, @RequestParam(defaultValue= "10") Integer quantidadeDeRegistros) {
         Pageable pageable = PageRequest.of(numeroDePaginas, quantidadeDeRegistros, Sort.by("nome"));
 
         return produtoService.findSobremesasOrdenadasPorNome(pageable);
     }
 
     @GetMapping("/listar/lanches-ordenados-por-preco")
-    public Page<LancheOutDTO> findLanchesOrdenadosPorPreco(Integer numeroDePaginas, Integer quantidadeDeRegistrosPorPagina) {
+    public Page<LancheOutDTO> findLanchesOrdenadosPorPreco(@RequestParam(defaultValue= "0") Integer numeroDePaginas, @RequestParam(defaultValue= "10") Integer quantidadeDeRegistrosPorPagina) {
         Pageable pageable = PageRequest.of(numeroDePaginas, quantidadeDeRegistrosPorPagina, Sort.by("preco"));
 
         return produtoService.findLanchesOrdenadosPorPreco(pageable);
     }
 
     @GetMapping("/listar/bebidas-ordenadas-por-preco")
-    public Page<BebidaOutDTO> findBebidasOrdenadasPorPreco(Integer numeroDePaginas, Integer quantidadeDeRegistros) {
+    public Page<BebidaOutDTO> findBebidasOrdenadasPorPreco(@RequestParam(defaultValue= "0") Integer numeroDePaginas, @RequestParam(defaultValue= "10") Integer quantidadeDeRegistros) {
         Pageable pageable = PageRequest.of(numeroDePaginas, quantidadeDeRegistros, Sort.by("preco"));
 
         return produtoService.findBebidasOrdenadasPorPreco(pageable);
     }
 
     @GetMapping("/listar/sobremesas-ordenadas-por-preco")
-    public Page<SobremesaOutDTO> findSobremesasOrdenadasPorPreco(Integer numeroDePaginas, Integer quantidadeDeRegistros) {
+    public Page<SobremesaOutDTO> findSobremesasOrdenadasPorPreco(@RequestParam(defaultValue= "0") Integer numeroDePaginas, @RequestParam(defaultValue= "10") Integer quantidadeDeRegistros) {
         Pageable pageable = PageRequest.of(numeroDePaginas, quantidadeDeRegistros, Sort.by("preco"));
 
         return produtoService.findSobremesasOrdenadasPorPreco(pageable);
+    }
+
+    @GetMapping("/listar/combos")
+    public ResponseEntity<List<ComboOutDTO>> findAllCombos() {
+        return new ResponseEntity<>(comboService.findAllCombos(), HttpStatus.OK);
+    }
+
+    @GetMapping("listar/combos/{idCombo}")
+    public ResponseEntity<ComboOutDTO> findComboById(@PathVariable Integer idCombo) throws RegraDeNegocioException {
+        return new ResponseEntity<>(comboService.findComboById(idCombo), HttpStatus.OK);
+    }
+
+    @PutMapping("/disponibilidade/{idProduto}")
+    public ResponseEntity<Integer> getQuantidadeProdutoPorId(@PathVariable @Positive Integer idProduto) throws RegraDeNegocioException {
+        return new ResponseEntity<>(produtoService.getQuantidadeProduto(idProduto), HttpStatus.OK);
+    }
+
+    @PutMapping("/atualizar-quantidade/{idProduto}")
+    public ResponseEntity<Produto> updateQuantidadeProduto(@RequestBody @Positive Integer quantidade,
+                                                           @PathVariable @Positive Integer idProduto) throws RegraDeNegocioException {
+        return new ResponseEntity<>(produtoService.updateQuantidadeProduto(idProduto, quantidade), HttpStatus.OK);
+    }
+
+    @PostMapping("/criar/acompanhamento")
+    public ResponseEntity<AcompanhamentoOutDTO> createAcompanhamento(@RequestBody @Valid AcompanhamentoInDTO acompanhamentoInDTO) {
+        AcompanhamentoOutDTO acompanhamentoOutDTO = produtoService.createAcompanhamento(acompanhamentoInDTO);
+        return new ResponseEntity<>(acompanhamentoOutDTO, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/listar/acompanhamentos")
+    public List<AcompanhamentoOutDTO> findAllAcompanhamentos() {
+        return produtoService.findAllAcompanhamento();
+    }
+
+    @GetMapping("/acompanhamento/{idAcompanhamento}")
+    public ResponseEntity<AcompanhamentoOutDTO> findAcompanhamentoById(@PathVariable ("idAcompanhamento") @Positive Integer idAcompanhamento) throws RegraDeNegocioException{
+        return new ResponseEntity<>(produtoService.findAcompanhamentoById(idAcompanhamento), HttpStatus.OK);
+    }
+
+    @PutMapping("/acompanhamento/{idAcompanhamento}")
+    public ResponseEntity<AcompanhamentoOutDTO> updateAcompanhamento(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento, @RequestBody @Valid AcompanhamentoOutDTO acompanhamentoEntrada) throws RegraDeNegocioException {
+        return new ResponseEntity<>(produtoService.updateAcompanhamento(idAcompanhamento, acompanhamentoEntrada), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/acompanhamento/{idAcompanhamento}")
+    public ResponseEntity<Void> deleteAcompanhamentoById(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento){
+        produtoService.deleteAcompanhamentoById(idAcompanhamento);
+        return ResponseEntity.ok().build();
     }
 
 }

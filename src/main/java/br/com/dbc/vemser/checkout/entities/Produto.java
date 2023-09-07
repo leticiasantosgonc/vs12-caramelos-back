@@ -4,6 +4,7 @@ import br.com.dbc.vemser.checkout.enums.MarcaProduto;
 import br.com.dbc.vemser.checkout.enums.TamanhoProduto;
 import br.com.dbc.vemser.checkout.enums.TipoProduto;
 import br.com.dbc.vemser.checkout.enums.DietaProduto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,8 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.sql.Clob;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,10 +27,12 @@ public class Produto {
     @SequenceGenerator(name = "SEQ_PRODUTO_GENERATOR", sequenceName = "SEQ_PRODUTO", allocationSize = 1)
     @Column(name = "ID_PRODUTO")
     private Integer idProduto;
+
     @Column(name = "NOME")
     private String nome;
     @Column(name = "DESCRICAO")
     private String descricao;
+    @Lob
     @Column(name = "IMAGEM")
     private String imagem;
 
@@ -49,5 +54,14 @@ public class Produto {
 
     @Column(name = "PRECO")
     private BigDecimal preco;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "COMBO_PRODUTO",
+            joinColumns = @JoinColumn(name = "ID_PRODUTO"),
+            inverseJoinColumns = @JoinColumn(name = "ID_COMBO")
+    )
+    private List<Combo> combos;
 
 }

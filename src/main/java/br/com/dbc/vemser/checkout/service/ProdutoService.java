@@ -3,11 +3,12 @@ package br.com.dbc.vemser.checkout.service;
 
 import br.com.dbc.vemser.checkout.dtos.*;
 
+import br.com.dbc.vemser.checkout.entities.Combo;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.enums.TipoProduto;
+import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.repository.ProdutoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,7 +17,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.lang.module.ResolutionException;
+import javax.sql.rowset.serial.SerialClob;
+import java.sql.Clob;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import java.util.Optional;
@@ -29,6 +34,66 @@ public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final ObjectMapper objectMapper;
 
+    public AcompanhamentoOutDTO createAcompanhamento(AcompanhamentoInDTO acompanhamentoInDTO){
+        Produto produto = objectMapper.convertValue(acompanhamentoInDTO, Produto.class);
+        produto.setTipoProduto(TipoProduto.ACOMPANHAMENTO);
+        Produto novoProduto = produtoRepository.save(produto);
+
+        AcompanhamentoOutDTO acompanhamentoOutDTO = objectMapper.convertValue(novoProduto, AcompanhamentoOutDTO.class);
+        return acompanhamentoOutDTO;
+    }
+
+    public List<AcompanhamentoOutDTO> findAllAcompanhamento() {
+        return produtoRepository.findByTipoProduto(TipoProduto.ACOMPANHAMENTO)
+                .stream()
+                .map(produto -> objectMapper.convertValue(produto,AcompanhamentoOutDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public AcompanhamentoOutDTO findAcompanhamentoById(Integer idAcompanhamento) throws RegraDeNegocioException {
+        Produto produtoRetornado = produtoRepository.findById(idAcompanhamento)
+                .orElseThrow(() -> new RegraDeNegocioException ("Acompanhamento não encontrada"));
+
+        if(produtoRetornado.getTipoProduto().equals(TipoProduto.ACOMPANHAMENTO)){
+            AcompanhamentoOutDTO acompanhamentoOutDTO = objectMapper.convertValue(produtoRetornado, AcompanhamentoOutDTO.class);
+            return acompanhamentoOutDTO;
+        } else {
+            throw new RegraDeNegocioException("O produto não é um acompanhamento");
+        }
+
+    }
+    public AcompanhamentoOutDTO updateAcompanhamento(Integer idAcompanhamento, AcompanhamentoOutDTO acompanhamentoEntrada) throws RegraDeNegocioException{
+        Produto produtoRetornado = produtoRepository.findById(idAcompanhamento)
+                .orElseThrow(() -> new RegraDeNegocioException("Acompanhamento não encontrado"));
+
+        if(produtoRetornado.getTipoProduto().equals(TipoProduto.ACOMPANHAMENTO)){
+            produtoRetornado.setNome(acompanhamentoEntrada.getNome());
+            produtoRetornado.setDescricao(acompanhamentoEntrada.getDescricao());
+            produtoRetornado.setImagem(acompanhamentoEntrada.getImagem());
+            produtoRetornado.setQuantidade(acompanhamentoEntrada.getQuantidade());
+            produtoRetornado.setPreco(acompanhamentoEntrada.getPreco());
+            produtoRetornado.setTamanhoProduto(acompanhamentoEntrada.getTamanhoProduto());
+            produtoRetornado.setDietaProduto(acompanhamentoEntrada.getDietaProduto());
+            produtoRetornado.setTipoProduto(TipoProduto.ACOMPANHAMENTO);
+            produtoRetornado.setIdProduto(idAcompanhamento);
+
+            Produto produtoAtualizado = produtoRepository.save(produtoRetornado);
+            AcompanhamentoOutDTO acompanhamentoOutDTO = objectMapper.convertValue(produtoAtualizado, AcompanhamentoOutDTO.class);
+
+            return acompanhamentoOutDTO;
+
+        } else {
+            throw new RegraDeNegocioException("O produto não é um acompanhamento");
+        }
+    }
+
+    public void deleteAcompanhamentoById(Integer idAcompanhamento){
+        Produto produtoRetornado = produtoRepository.findById(idAcompanhamento).get();
+
+        if (produtoRetornado.getTipoProduto().equals(TipoProduto.ACOMPANHAMENTO)){
+            produtoRepository.deleteById(idAcompanhamento);
+        }
+    }
     public BebidaOutDTO createBebida(BebidaInDTO bebidaInDTO){
         Produto produto = objectMapper.convertValue(bebidaInDTO, Produto.class);
         produto.setTipoProduto(TipoProduto.BEBIDA);
@@ -45,26 +110,27 @@ public class ProdutoService {
                 .collect(Collectors.toList());
     }
 
-    public BebidaOutDTO findBebidaById(Integer idBebida) throws Exception{
+    public BebidaOutDTO findBebidaById(Integer idBebida) throws RegraDeNegocioException {
         Produto produtoRetornado = produtoRepository.findById(idBebida)
-                .orElseThrow(() -> new Exception("Bebida não encontrada"));
+                .orElseThrow(() -> new RegraDeNegocioException ("Bebida não encontrada"));
 
         if(produtoRetornado.getTipoProduto().equals(TipoProduto.BEBIDA)){
             BebidaOutDTO bebidaOutDTO = objectMapper.convertValue(produtoRetornado, BebidaOutDTO.class);
             return bebidaOutDTO;
         } else {
-            throw new Exception("O produto não é uma bebida");
+            throw new RegraDeNegocioException("O produto não é uma bebida");
         }
 
     }
 
-    public BebidaOutDTO updateBebida(Integer idBebida, BebidaOutDTO bebidaEntrada) throws Exception{
+    public BebidaOutDTO updateBebida(Integer idBebida, BebidaOutDTO bebidaEntrada) throws RegraDeNegocioException{
         Produto produtoRetornado = produtoRepository.findById(idBebida)
-                .orElseThrow(() -> new Exception("Bebida não encontrada"));
+                .orElseThrow(() -> new RegraDeNegocioException("Bebida não encontrada"));
 
         if(produtoRetornado.getTipoProduto().equals(TipoProduto.BEBIDA)){
             produtoRetornado.setNome(bebidaEntrada.getNome());
             produtoRetornado.setDescricao(bebidaEntrada.getDescricao());
+            produtoRetornado.setImagem(bebidaEntrada.getImagem());
             produtoRetornado.setQuantidade(bebidaEntrada.getQuantidade());
             produtoRetornado.setPreco(bebidaEntrada.getPreco());
             produtoRetornado.setTipoProduto(TipoProduto.BEBIDA);
@@ -77,7 +143,7 @@ public class ProdutoService {
             return bebidaOutDTO;
 
         } else {
-            throw new Exception("O produto não é uma bebida");
+            throw new RegraDeNegocioException("O produto não é uma bebida");
         }
     }
 
@@ -92,6 +158,7 @@ public class ProdutoService {
     public LancheOutDTO createLanche(LancheInDTO lancheInDTO) {
         Produto produtoParaPersistir = objectMapper.convertValue(lancheInDTO, Produto.class);
         produtoParaPersistir.setTipoProduto(TipoProduto.LANCHE);
+        //produtoParaPersistir.setImagem(stringToClob(lancheInDTO.getImagem()));
         Produto produtoPersistido = produtoRepository.save(produtoParaPersistir);
 
         return objectMapper.convertValue(produtoPersistido, LancheOutDTO.class);
@@ -110,20 +177,22 @@ public class ProdutoService {
         return lancheOutDTOList;
     }
 
-    public LancheOutDTO findLancheById(Integer idLanche) throws Exception {
-        Produto produtoEncontrado = findById(idLanche);
+    public LancheOutDTO findLancheById(Integer idLanche) throws RegraDeNegocioException {
+        Produto produtoEncontrado = produtoRepository
+                .findById(idLanche)
+                .orElseThrow(() -> new RegraDeNegocioException("Lanche com id " + idLanche + " não encontrado"));
 
         if (produtoEncontrado.getTipoProduto().equals(TipoProduto.LANCHE)) {
             return objectMapper.convertValue(produtoEncontrado, LancheOutDTO.class);
         } else {
-            throw new Exception("O produto não é um lanche");
+            throw new RegraDeNegocioException("O produto não é um lanche");
         }
     }
 
-    public LancheOutDTO updateLancheById(Integer idLanche, LancheInDTO lancheInDTO) throws Exception {
+    public LancheOutDTO updateLancheById(Integer idLanche, LancheInDTO lancheInDTO) throws RegraDeNegocioException {
         Produto produtoEncontrado = produtoRepository
                 .findById(idLanche)
-                .orElseThrow(() -> new Exception("Lanche com id " + idLanche + " não encontrado"));
+                .orElseThrow(() -> new RegraDeNegocioException("Lanche com id " + idLanche + " não encontrado"));
 
         if (produtoEncontrado.getTipoProduto().equals(TipoProduto.LANCHE)) {
             Produto produtoParaPersistir = new Produto();
@@ -131,6 +200,7 @@ public class ProdutoService {
             produtoParaPersistir.setIdProduto(produtoEncontrado.getIdProduto());
             produtoParaPersistir.setNome(lancheInDTO.getNome());
             produtoParaPersistir.setDescricao(lancheInDTO.getDescricao());
+            produtoParaPersistir.setImagem(lancheInDTO.getImagem());
             produtoParaPersistir.setQuantidade(lancheInDTO.getQuantidade());
             produtoParaPersistir.setTamanhoProduto(lancheInDTO.getTamanhoProduto());
             produtoParaPersistir.setDietaProduto(lancheInDTO.getDietaProduto());
@@ -139,11 +209,11 @@ public class ProdutoService {
 
             return objectMapper.convertValue(produtoPersistido, LancheOutDTO.class);
         } else {
-            throw new Exception("Ação não permitida");
+            throw new RegraDeNegocioException("Ação não permitida");
         }
     }
 
-    public void deleteLancheById(Integer idLanche) throws Exception {
+    public void deleteLancheById(Integer idLanche){
         Produto produto = produtoRepository.findById(idLanche).get();
 
         if (produto.getTipoProduto().equals(TipoProduto.LANCHE)) {
@@ -161,7 +231,7 @@ public class ProdutoService {
         return sobremesaOutDTO;
     }
 
-    public SobremesaOutDTO findSobremesaByid(Integer idProduto) throws Exception {
+    public SobremesaOutDTO findSobremesaByid(Integer idProduto) throws RegraDeNegocioException{
         Produto produtoRetornado = findById(idProduto);
         isSobremesa(produtoRetornado);
 
@@ -169,11 +239,12 @@ public class ProdutoService {
 
     }
 
-    public SobremesaOutDTO updateSobremesa(SobremesaInDTO sobremesaAtualizada, Integer idSobremesa) throws Exception {
+    public SobremesaOutDTO updateSobremesa(SobremesaInDTO sobremesaAtualizada, Integer idSobremesa)throws RegraDeNegocioException{
         Produto produto = findById(idSobremesa);
         isSobremesa(produto);
         Produto produtoAtualizado = objectMapper.convertValue(sobremesaAtualizada,Produto.class);
         produtoAtualizado.setIdProduto(produto.getIdProduto());
+        produtoAtualizado.setImagem(sobremesaAtualizada.getImagem());
         produtoAtualizado.setTipoProduto(produto.getTipoProduto());
 
         SobremesaOutDTO sobremesaOutDTO = objectMapper.convertValue(produtoRepository.save(produtoAtualizado),SobremesaOutDTO.class);
@@ -197,13 +268,13 @@ public class ProdutoService {
                 .collect(Collectors.toList());
     }
 
-    public Produto findById(Integer idProduto) throws Exception {
-        return produtoRepository.findById(idProduto).orElseThrow(() -> new Exception("Produto não encontrado"));
+    public Produto findById(Integer idProduto) throws RegraDeNegocioException {
+        return produtoRepository.findById(idProduto).orElseThrow(() -> new RegraDeNegocioException("Produto não encontrado"));
     }
 
-    public boolean isSobremesa(Produto produto) throws Exception {
+    public boolean isSobremesa(Produto produto) throws RegraDeNegocioException {
         if(produto.getTipoProduto() != TipoProduto.SOBREMESA){
-            throw new Exception("Ação não permitida");
+            throw new RegraDeNegocioException("Ação não permitida");
         }
         return true;
     }
@@ -290,6 +361,41 @@ public class ProdutoService {
 
     public SobremesaOutDTO converterProdutoParaSobremesaOutDTO(Produto produto) {
         return objectMapper.convertValue(produto, SobremesaOutDTO.class);
+    }
+
+    public static Clob stringToClob(String str) {
+        if (null == str) {
+            return null;
+        } else {
+            try {
+                return new SerialClob(str.toCharArray());
+            } catch (Exception e) {
+                return null;
+            }
+        }
+    }
+
+    public Integer getQuantidadeProduto(Integer idProduto) throws RegraDeNegocioException {
+        Produto produto = produtoRepository.findById(idProduto)
+                .orElseThrow(() -> new RegraDeNegocioException("Produto não encontrado"));
+        if (produto != null) {
+            return produto.getQuantidade();
+        }else {
+            throw new RegraDeNegocioException("Ação não permitida");
+        }
+    }
+
+    public Produto updateQuantidadeProduto(Integer idProduto, Integer novaQuantidade) throws RegraDeNegocioException {
+        Optional<Produto> produtoProcurar = produtoRepository.findById(idProduto);
+
+        if (produtoProcurar.isPresent()) {
+            Produto produto = produtoProcurar.get();
+            produto.setQuantidade(novaQuantidade);
+            produtoRepository.save(produto);
+            return produto;
+        } else {
+            throw new RegraDeNegocioException("Ação não permitida");
+        }
     }
 
 }

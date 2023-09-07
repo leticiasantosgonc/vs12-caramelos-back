@@ -10,8 +10,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -21,7 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-//    private final TokenService tokenService;
+    private final TokenService tokenService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,9 +30,17 @@ public class SecurityConfiguration {
                 .and()
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->  authz
-                        .anyRequest().permitAll()
+                        .antMatchers("/auth","/").permitAll()
+                        .antMatchers(HttpMethod.GET,"/produto/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/combo/**").permitAll()
+                        .antMatchers("/admin/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/produto/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.PUT, "/produto/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.POST, "/produto/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.POST, "/combo/**").hasRole("ADMIN")
+                        .anyRequest().denyAll()
                 );
-        //http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -64,6 +72,6 @@ public class SecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return new StandardPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 }

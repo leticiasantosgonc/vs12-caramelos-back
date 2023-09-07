@@ -2,29 +2,26 @@ package br.com.dbc.vemser.checkout.dtos;
 
 import br.com.dbc.vemser.checkout.enums.DietaProduto;
 import br.com.dbc.vemser.checkout.enums.TamanhoProduto;
-import br.com.dbc.vemser.checkout.enums.TipoProduto;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
-import java.sql.Clob;
 
 @Data
-public class LancheInDTO {
-
+@Valid
+public class AcompanhamentoInDTO {
     @NotBlank(message = "O campo nome não pode estar vazio")
     @Size(min = 1, max = 100)
-    @Schema(description = "Nome do lanche", example = "Cachorro-quente", required = true)
+    @Schema(description = "Nome do acompanhamento", example = "Batata Frita", required = true)
     private String nome;
 
     @NotBlank(message = "O campo descrição não pode estar vazio")
     @Size(min = 1, max = 300)
-    @Schema(description = "Descrição do lanche", example = "É definitivamente um cachorro quente", required = true)
+    @Schema(description = "Descrição do acompanhamento", example = "É definitivamente uma batata frita", required = true)
     private String descricao;
 
     @NotBlank(message = "O campo imagem não pode estar vazio")
@@ -33,12 +30,12 @@ public class LancheInDTO {
 
     @NotNull(message = "O campo quantidade não pode estar nulo")
     @Positive(message = "O número deve ser positivo")
-    @Schema(description = "Quantidade do lanche", example = "10", required = true)
+    @Schema(description = "Quantidade do acompanhamento", example = "10", required = true)
     private Integer quantidade;
 
     @NotNull(message = "O campo tamanho não pode ser nulo")
     @Enumerated(EnumType.STRING)
-    @Schema(description = "Tamanho do produto", example = "PEQUENO", required = true)
+    @Schema(description = "Tamanho do acompanhamento", example = "PEQUENO", required = true)
     private TamanhoProduto tamanhoProduto;
 
     @NotNull(message = "O campo dieta não pode estar vazio")
@@ -50,7 +47,6 @@ public class LancheInDTO {
     @DecimalMin(value = "0.01", inclusive = false, message = "O preço deve ser maior do que zero")
     @DecimalMax(value = "999.99", message = "O preço não pode ser maior do que 999.99")
     @Digits(integer = 3, fraction = 2, message = "O preço deve ter no máximo três dígitos inteiros e dois dígitos decimais")
-    @Schema(description = "Preço do lanche", example = "29.99", required = true)
+    @Schema(description = "Preço do acompanhamento", example = "29.99", required = true)
     private BigDecimal preco;
-
 }
