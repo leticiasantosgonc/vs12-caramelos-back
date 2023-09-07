@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.checkout.controller;
 
-
 import br.com.dbc.vemser.checkout.docs.ProdutoControllerDoc;
 import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Produto;

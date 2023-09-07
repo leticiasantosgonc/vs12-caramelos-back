@@ -4,7 +4,6 @@ import br.com.dbc.vemser.checkout.enums.MarcaProduto;
 import br.com.dbc.vemser.checkout.enums.TamanhoProduto;
 import br.com.dbc.vemser.checkout.enums.TipoProduto;
 import br.com.dbc.vemser.checkout.enums.DietaProduto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,8 +11,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Clob;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor

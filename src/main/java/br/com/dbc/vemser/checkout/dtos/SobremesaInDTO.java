@@ -1,15 +1,11 @@
 package br.com.dbc.vemser.checkout.dtos;
 
-import br.com.dbc.vemser.checkout.enums.TamanhoProduto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
-import java.sql.Clob;
 
 @Data
 @Valid
