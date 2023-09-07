@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -13,8 +14,8 @@ import java.util.List;
 @Valid
 public class PedidoInDTO {
 
-    private List<Integer> itens;
-    private List<Integer> quantidade_lanches;
+    @NotNull
+    private List<ItemInDTO> itens;
 
     @CPF
     @Pattern(regexp = "^(|\\d{11})$")

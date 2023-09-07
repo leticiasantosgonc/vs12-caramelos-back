@@ -2,6 +2,7 @@ package br.com.dbc.vemser.checkout.service;
 
 import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Combo;
+import br.com.dbc.vemser.checkout.entities.Pedido;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.repository.PedidoRepository;
@@ -9,6 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,78 +23,35 @@ public class PedidoService {
     private final ProdutoService produtoService;
     private final ObjectMapper objectMapper;
 
-    public ComboOutDTO createCombo(ComboInDTO comboInDTO) throws RegraDeNegocioException {
-        /*
-        List<LancheOutDTO> lanches = new ArrayList<>();
-        List<BebidaOutDTO> bebidas = new ArrayList<>();
-
-        Combo combo = new Combo();
-        combo.setNome(comboInDTO.getNome());
-        combo.setDescricao(comboInDTO.getDescricao());
-        combo.setImagem(comboInDTO.getImagem());
-        combo.setQuantidade(comboInDTO.getQuantidade());
-
-        List<Produto> produtosLanches = new ArrayList<>();
-        List<Produto> produtosBebidas = new ArrayList<>();
-
-        for (Integer id : comboInDTO.getIndexesLanches()) {
-            LancheOutDTO lancheOutDTO = produtoService.findLancheById(id);
-            lanches.add(objectMapper.convertValue(lancheOutDTO, LancheOutDTO.class));
-            Produto produto = objectMapper.convertValue(lancheOutDTO, Produto.class);
-            produtosLanches.add(produto);
+    public Pedido createPedido(PedidoInDTO pedidoInDTO) throws RegraDeNegocioException {
+        List<Produto> produtos = new ArrayList<>();
+        for (ItemInDTO item : pedidoInDTO.getItens()) {
+            Produto produto = produtoService.findById(item.getIdProduto());
+            if (produto.getQuantidade() < item.getQuantidadeProduto()) {
+                throw new RegraDeNegocioException("Quantidade indisponível");
+            }
+            if (!produto.getTipoProduto().equals(item.getTipoProduto())) {
+                throw new RegraDeNegocioException("Tipo diferente");
+            }
+            for (int i = 0; i < item.getQuantidadeProduto(); i++) {
+                produtos.add(produto);
+            }
         }
 
-        for (Integer id : comboInDTO.getIndexesBebidas()) {
-            BebidaOutDTO bebidaOutDTO = produtoService.findBebidaById(id);
-            bebidas.add(objectMapper.convertValue(bebidaOutDTO, BebidaOutDTO.class));
-            Produto produto = objectMapper.convertValue(bebidaOutDTO, Produto.class);
-            produtosBebidas.add(produto);
+        BigDecimal teste = BigDecimal.ZERO;
+
+        for (Produto produto : produtos) {
+            teste = teste.add(produto.getPreco());
         }
 
-        combo.setLanches(produtosLanches);
-        combo.setBebidas(produtosBebidas);
-        pedidoRepository.save(combo);
-
-        ComboOutDTO comboOutDTO = new ComboOutDTO();
-        comboOutDTO.setNome(combo.getNome());
-        comboOutDTO.setDescricao(combo.getDescricao());
-
-        // todo: refatorar
-        List<ComboProdutoOutDTO> lanchesProdutoOutDTOList = lanches.stream().map(lanche -> {
-            return objectMapper.convertValue(lanche, ComboProdutoOutDTO.class);
-        }).toList();
-
-        // todo: refatorar
-        List<ComboProdutoOutDTO> bebidasProdutoOutDTOList = bebidas.stream().map(bebida -> {
-            return objectMapper.convertValue(bebida, ComboProdutoOutDTO.class);
-        }).toList();
-
-        comboOutDTO.setLanches(lanchesProdutoOutDTOList);
-        comboOutDTO.setBebidas(bebidasProdutoOutDTOList);
-        comboOutDTO.setQuantidadeDisponivel(combo.getQuantidade());
-
-        return comboOutDTO;
-         */
-        return null;
-    }
-
-    public List<ComboOutDTO> findAllCombos() {
-        List<Combo> combosEncontados = pedidoRepository.findAll();
-        List<ComboOutDTO> comboOutDTOList = new ArrayList<>();
-
-        for (Combo combo : combosEncontados) {
-            comboOutDTOList.add(objectMapper.convertValue(combo, ComboOutDTO.class));
-        }
-
-        return comboOutDTOList;
-    }
-
-    public ComboOutDTO findComboById(Integer idCombo) throws RegraDeNegocioException {
-        Combo comboEncontrado = pedidoRepository
-                .findById(idCombo)
-                .orElseThrow(() -> new RegraDeNegocioException("Combo não encontrado"));
-
-        return objectMapper.convertValue(comboEncontrado, ComboOutDTO.class);
+        Pedido pedido = new Pedido();
+        pedido.setItens(produtos);
+        pedido.setQuantidade(produtos.size());
+        pedido.setDataPedido(LocalDate.now());
+        pedido.setCpf(pedidoInDTO.getCpf());
+        pedido.setObservacao(pedidoInDTO.getObservacao());
+        pedido.setPreco(teste);
+        return pedidoRepository.save(pedido);
     }
 
 }

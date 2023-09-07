@@ -160,16 +160,6 @@ public class ProdutoController implements ProdutoControllerDoc {
         return produtoService.findSobremesasOrdenadasPorPreco(pageable);
     }
 
-    @GetMapping("/listar/combos")
-    public ResponseEntity<List<ComboOutDTO>> findAllCombos() {
-        return new ResponseEntity<>(pedidoService.findAllCombos(), HttpStatus.OK);
-    }
-
-    @GetMapping("listar/combos/{idCombo}")
-    public ResponseEntity<ComboOutDTO> findComboById(@PathVariable Integer idCombo) throws RegraDeNegocioException {
-        return new ResponseEntity<>(pedidoService.findComboById(idCombo), HttpStatus.OK);
-    }
-
     @PutMapping("/disponibilidade/{idProduto}")
     public ResponseEntity<Integer> getQuantidadeProdutoPorId(@PathVariable @Positive Integer idProduto) throws RegraDeNegocioException {
         return new ResponseEntity<>(produtoService.getQuantidadeProduto(idProduto), HttpStatus.OK);

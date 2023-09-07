@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.checkout.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,18 +21,11 @@ public class Pedido {
     @Column(name = "ID_PEDIDO")
     private Integer idPedido;
 
-    @Column(name = "NOME")
-    private String nome;
-
     @Column(name = "CPF")
     private String cpf;
 
-    @Column(name = "DESCRICAO")
-    private String descricao;
-
-    @Lob
-    @Column(name = "IMAGEM")
-    private String imagem;
+    @Column(name = "OBSERVACAO")
+    private String observacao;
 
     @ManyToMany
     @JoinTable(
@@ -41,25 +33,7 @@ public class Pedido {
             joinColumns = @JoinColumn(name = "ID_PEDIDO"),
             inverseJoinColumns = @JoinColumn(name = "ID_PRODUTO")
     )
-    private List<Produto> lanches;
-
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "ITEM_PEDIDO",
-            joinColumns = @JoinColumn(name = "ID_PEDIDO"),
-            inverseJoinColumns = @JoinColumn(name = "ID_PRODUTO")
-    )
-    private List<Produto> bebidas;
-
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "ITEM_PEDIDO",
-            joinColumns = @JoinColumn(name = "ID_PEDIDO"),
-            inverseJoinColumns = @JoinColumn(name = "ID_PRODUTO")
-    )
-    private List<Produto> sobremesas;
+    private List<Produto> itens;
 
     @Column(name = "DATA")
     private LocalDate dataPedido;
