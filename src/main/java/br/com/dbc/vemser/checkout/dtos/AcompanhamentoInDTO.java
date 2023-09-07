@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 public class AcompanhamentoInDTO {
     @NotBlank(message = "O campo nome não pode estar vazio")
     @Size(min = 1, max = 100)
+    @Pattern(regexp = "^(?!\\d+$)[a-zA-Z\\d\\s]*$", message = "O campo nome não pode conter apenas números")
     @Schema(description = "Nome do acompanhamento", example = "Batata Frita", required = true)
     private String nome;
 
