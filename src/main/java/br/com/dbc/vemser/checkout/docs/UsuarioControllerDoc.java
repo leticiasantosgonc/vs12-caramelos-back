@@ -16,9 +16,11 @@ public interface UsuarioControllerDoc {
     @Operation(summary = "Buscar todos os usuários", description = "Deve buscar todos os usuários")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @GetMapping
@@ -27,9 +29,11 @@ public interface UsuarioControllerDoc {
     @Operation(summary = "Criar um administrador", description = "Deve criar um administrador")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @PostMapping("/cadastrar/admin")
@@ -39,8 +43,10 @@ public interface UsuarioControllerDoc {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "201", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @PutMapping("/alterar-senha/{idUsuario}")
@@ -49,9 +55,11 @@ public interface UsuarioControllerDoc {
     @Operation(summary = "Deletar uma administrador", description = "Deve deletar um administrador")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
     @DeleteMapping("/{idUsuario}")
