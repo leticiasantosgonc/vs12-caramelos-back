@@ -23,37 +23,6 @@ public class Combo {
     @Column(name = "ID_COMBO")
     private Integer idCombo;
 
-    @Column(name = "NOME")
-    private String nome;
 
-    @Column(name = "DESCRICAO")
-    private String descricao;
-
-    @Lob
-    @Column(name = "IMAGEM")
-    private String imagem;
-
-    @Column(name = "QUANTIDADE")
-    private Integer quantidade;
-
-    @ManyToMany
-    @JoinTable(
-            name = "COMBO_PRODUTO",
-            joinColumns = @JoinColumn(name = "ID_COMBO"),
-            inverseJoinColumns = @JoinColumn(name = "ID_PRODUTO")
-    )
-    private List<Produto> lanches;
-
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "COMBO_PRODUTO",
-            joinColumns = @JoinColumn(name = "ID_COMBO"),
-            inverseJoinColumns = @JoinColumn(name = "ID_PRODUTO")
-    )
-    private List<Produto> bebidas;
-
-    @Column(name = "PRECO")
-    private BigDecimal preco;
 
 }

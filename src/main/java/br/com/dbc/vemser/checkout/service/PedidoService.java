@@ -4,24 +4,24 @@ import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Combo;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
-import br.com.dbc.vemser.checkout.repository.ComboRepository;
+import br.com.dbc.vemser.checkout.repository.PedidoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ComboService {
+public class PedidoService {
 
-    private final ComboRepository comboRepository;
+    private final PedidoRepository pedidoRepository;
     private final ProdutoService produtoService;
     private final ObjectMapper objectMapper;
 
     public ComboOutDTO createCombo(ComboInDTO comboInDTO) throws RegraDeNegocioException {
+        /*
         List<LancheOutDTO> lanches = new ArrayList<>();
         List<BebidaOutDTO> bebidas = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class ComboService {
 
         combo.setLanches(produtosLanches);
         combo.setBebidas(produtosBebidas);
-        comboRepository.save(combo);
+        pedidoRepository.save(combo);
 
         ComboOutDTO comboOutDTO = new ComboOutDTO();
         comboOutDTO.setNome(combo.getNome());
@@ -71,10 +71,12 @@ public class ComboService {
         comboOutDTO.setQuantidadeDisponivel(combo.getQuantidade());
 
         return comboOutDTO;
+         */
+        return null;
     }
 
     public List<ComboOutDTO> findAllCombos() {
-        List<Combo> combosEncontados = comboRepository.findAll();
+        List<Combo> combosEncontados = pedidoRepository.findAll();
         List<ComboOutDTO> comboOutDTOList = new ArrayList<>();
 
         for (Combo combo : combosEncontados) {
@@ -85,7 +87,7 @@ public class ComboService {
     }
 
     public ComboOutDTO findComboById(Integer idCombo) throws RegraDeNegocioException {
-        Combo comboEncontrado = comboRepository
+        Combo comboEncontrado = pedidoRepository
                 .findById(idCombo)
                 .orElseThrow(() -> new RegraDeNegocioException("Combo não encontrado"));
 

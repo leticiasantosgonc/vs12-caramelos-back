@@ -5,7 +5,7 @@ import br.com.dbc.vemser.checkout.docs.ProdutoControllerDoc;
 import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
-import br.com.dbc.vemser.checkout.service.ComboService;
+import br.com.dbc.vemser.checkout.service.PedidoService;
 import br.com.dbc.vemser.checkout.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +29,7 @@ import java.util.List;
 public class ProdutoController implements ProdutoControllerDoc {
 
     private final ProdutoService produtoService;
-    private final ComboService comboService;
+    private final PedidoService pedidoService;
 
     @PostMapping("/criar/lanche")
     public ResponseEntity<LancheOutDTO> createLanche(@RequestBody @Valid LancheInDTO lancheInDTO) {
@@ -162,12 +162,12 @@ public class ProdutoController implements ProdutoControllerDoc {
 
     @GetMapping("/listar/combos")
     public ResponseEntity<List<ComboOutDTO>> findAllCombos() {
-        return new ResponseEntity<>(comboService.findAllCombos(), HttpStatus.OK);
+        return new ResponseEntity<>(pedidoService.findAllCombos(), HttpStatus.OK);
     }
 
     @GetMapping("listar/combos/{idCombo}")
     public ResponseEntity<ComboOutDTO> findComboById(@PathVariable Integer idCombo) throws RegraDeNegocioException {
-        return new ResponseEntity<>(comboService.findComboById(idCombo), HttpStatus.OK);
+        return new ResponseEntity<>(pedidoService.findComboById(idCombo), HttpStatus.OK);
     }
 
     @PutMapping("/disponibilidade/{idProduto}")
