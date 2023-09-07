@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 
 @Data
 @Valid
-public class ComboInDTO { // alterar o nome para comboInDTO
+public class ComboInDTO {
 
     @NotBlank(message = "O campo nome não pode estar vazio")
     @Size(min = 1, max = 100)

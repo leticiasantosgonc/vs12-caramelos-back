@@ -55,13 +55,4 @@ public class Produto {
     @Column(name = "PRECO")
     private BigDecimal preco;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "COMBO_PRODUTO",
-            joinColumns = @JoinColumn(name = "ID_PRODUTO"),
-            inverseJoinColumns = @JoinColumn(name = "ID_COMBO")
-    )
-    private List<Combo> combos;
-
 }
