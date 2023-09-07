@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.checkout.security;
 
-import br.com.dbc.vemser.checkout.entities.Role;
 import br.com.dbc.vemser.checkout.entities.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;

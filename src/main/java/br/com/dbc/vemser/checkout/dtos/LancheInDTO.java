@@ -1,18 +1,13 @@
 package br.com.dbc.vemser.checkout.dtos;
 
 import br.com.dbc.vemser.checkout.enums.DietaProduto;
-import br.com.dbc.vemser.checkout.enums.TamanhoProduto;
-import br.com.dbc.vemser.checkout.enums.TipoProduto;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
-import java.sql.Clob;
 
 @Data
 public class LancheInDTO {
@@ -36,10 +31,10 @@ public class LancheInDTO {
     @Schema(description = "Quantidade do lanche", example = "10", required = true)
     private Integer quantidade;
 
-    @NotNull(message = "O campo tamanho não pode ser nulo")
-    @Enumerated(EnumType.STRING)
-    @Schema(description = "Tamanho do produto", example = "PEQUENO", required = true)
-    private TamanhoProduto tamanhoProduto;
+//    @NotNull(message = "O campo tamanho não pode ser nulo")
+//    @Enumerated(EnumType.STRING)
+//    @Schema(description = "Tamanho do produto", example = "PEQUENO", required = true)
+//    private TamanhoProduto tamanhoProduto;
 
     @NotNull(message = "O campo dieta não pode estar vazio")
     @Enumerated(EnumType.STRING)

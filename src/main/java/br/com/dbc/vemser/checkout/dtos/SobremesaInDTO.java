@@ -1,15 +1,11 @@
 package br.com.dbc.vemser.checkout.dtos;
 
-import br.com.dbc.vemser.checkout.enums.TamanhoProduto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
-import java.sql.Clob;
 
 @Data
 @Valid
@@ -31,10 +27,10 @@ public class SobremesaInDTO {
     @Positive(message = "O campo deve ser positivo")
     private Integer quantidade;
 
-    @Schema(description = "Insirao tamanho do produto", example = "PEQUENO")
-    @NotNull(message = "O campo não deve ser nulo")
-    @Enumerated(EnumType.STRING)
-    private TamanhoProduto tamanhoProduto;
+//    @Schema(description = "Insirao tamanho do produto", example = "PEQUENO")
+//    @NotNull(message = "O campo não deve ser nulo")
+//    @Enumerated(EnumType.STRING)
+//    private TamanhoProduto tamanhoProduto;
 
     @Schema(description = "Insira o preco do produto", example = "15.90")
     @NotNull(message = "O campo preço não pode ser nulo")

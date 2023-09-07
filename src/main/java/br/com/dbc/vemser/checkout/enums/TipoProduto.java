@@ -8,5 +8,6 @@ public enum TipoProduto {
     LANCHE,
     BEBIDA,
     SOBREMESA,
-    ACOMPANHAMENTO;
+    ACOMPANHAMENTO,
+    COMBO;
 }

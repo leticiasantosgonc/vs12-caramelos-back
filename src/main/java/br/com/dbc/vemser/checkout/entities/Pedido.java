@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,18 +21,27 @@ public class Pedido {
     @Column(name = "ID_PEDIDO")
     private Integer idPedido;
 
-    @Column(name = "PRECO")
-    private BigDecimal preco;
+    @Column(name = "CPF")
+    private String cpf;
+
+    @Column(name = "OBSERVACAO")
+    private String observacao;
+
+    @ManyToMany
+    @JoinTable(
+            name = "ITEM_PEDIDO",
+            joinColumns = @JoinColumn(name = "ID_PEDIDO"),
+            inverseJoinColumns = @JoinColumn(name = "ID_PRODUTO")
+    )
+    private List<Produto> itens;
 
     @Column(name = "DATA")
     private LocalDate dataPedido;
 
-    @Column(name = "CPF")
-    private String cpf;
+    @Column(name = "QUANTIDADE")
+    private Integer quantidade;
 
-//    private List<Produto> produtos;
-//
-//    @OneToOne(mappedBy = "pedido")
-//    private Pagamento pagamento;
+    @Column(name = "PRECO")
+    private BigDecimal preco;
 
 }

@@ -1,9 +1,7 @@
 package br.com.dbc.vemser.checkout.service;
 
-
 import br.com.dbc.vemser.checkout.dtos.*;
 
-import br.com.dbc.vemser.checkout.entities.Combo;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.enums.TipoProduto;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
@@ -17,11 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.lang.module.ResolutionException;
+
 import javax.sql.rowset.serial.SerialClob;
 import java.sql.Clob;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import java.util.Optional;
@@ -33,6 +30,52 @@ public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
     private final ObjectMapper objectMapper;
+
+    public ComboOutDTO createCombo(ComboInDTO comboInDTO){
+        Produto produto = objectMapper.convertValue(comboInDTO, Produto.class);
+        produto.setTipoProduto(TipoProduto.COMBO);
+        Produto novoProduto = produtoRepository.save(produto);
+
+        ComboOutDTO comboOutDTO = objectMapper.convertValue(novoProduto, ComboOutDTO.class);
+        return comboOutDTO;
+    }
+
+    public List<ComboOutDTO> findAllCombo() {
+        return produtoRepository.findByTipoProduto(TipoProduto.COMBO)
+                .stream()
+                .map(produto -> objectMapper.convertValue(produto,ComboOutDTO.class))
+                .collect(Collectors.toList());
+    }
+    public ComboOutDTO updateCombo(Integer idCombo, ComboOutDTO comboEntrada) throws RegraDeNegocioException{
+        Produto comboRetornado = produtoRepository.findById(idCombo)
+                .orElseThrow(() -> new RegraDeNegocioException("Combo não encontrado"));
+
+        if(comboRetornado.getTipoProduto().equals(TipoProduto.COMBO)){
+            comboRetornado.setNome(comboEntrada.getNome());
+            comboRetornado.setDescricao(comboEntrada.getDescricao());
+            comboRetornado.setImagem(comboEntrada.getImagem());
+            comboRetornado.setQuantidade(comboEntrada.getQuantidade());
+            comboRetornado.setPreco(comboEntrada.getPreco());
+            comboRetornado.setDietaProduto(comboEntrada.getDietaProduto());
+            comboRetornado.setTipoProduto(TipoProduto.COMBO);
+            comboRetornado.setIdProduto(idCombo);
+
+            Produto produtoAtualizado = produtoRepository.save(comboRetornado);
+            ComboOutDTO comboOutDTO = objectMapper.convertValue(produtoAtualizado, ComboOutDTO.class);
+
+            return comboOutDTO;
+
+        } else {
+            throw new RegraDeNegocioException("O produto não é um combo");
+        }
+    }
+    public void deleteComboById(Integer idCombo){
+        Produto produtoRetornado = produtoRepository.findById(idCombo).get();
+
+        if (produtoRetornado.getTipoProduto().equals(TipoProduto.COMBO)){
+            produtoRepository.deleteById(idCombo);
+        }
+    }
 
     public AcompanhamentoOutDTO createAcompanhamento(AcompanhamentoInDTO acompanhamentoInDTO){
         Produto produto = objectMapper.convertValue(acompanhamentoInDTO, Produto.class);
@@ -202,7 +245,6 @@ public class ProdutoService {
             produtoParaPersistir.setDescricao(lancheInDTO.getDescricao());
             produtoParaPersistir.setImagem(lancheInDTO.getImagem());
             produtoParaPersistir.setQuantidade(lancheInDTO.getQuantidade());
-            produtoParaPersistir.setTamanhoProduto(lancheInDTO.getTamanhoProduto());
             produtoParaPersistir.setDietaProduto(lancheInDTO.getDietaProduto());
             produtoParaPersistir.setPreco(lancheInDTO.getPreco());
             Produto produtoPersistido = produtoRepository.save(produtoParaPersistir);

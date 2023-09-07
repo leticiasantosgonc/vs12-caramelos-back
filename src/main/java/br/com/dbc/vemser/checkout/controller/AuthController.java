@@ -4,7 +4,6 @@ import br.com.dbc.vemser.checkout.dtos.AdminInDTO;
 import br.com.dbc.vemser.checkout.entities.Usuario;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.security.TokenService;
-import br.com.dbc.vemser.checkout.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
