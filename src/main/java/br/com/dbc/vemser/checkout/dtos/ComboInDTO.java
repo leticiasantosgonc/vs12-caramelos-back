@@ -16,6 +16,7 @@ public class ComboInDTO {
 
     @NotBlank(message = "O campo nome não pode estar vazio")
     @Size(min = 1, max = 100)
+    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "O campo nome não pode conter apenas números")
     @Schema(description = "Nome do combo", example = "Vira-Lata Combão Tudo", required = true)
     private String nome;
 

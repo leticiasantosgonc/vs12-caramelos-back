@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/pedido")
 @RequiredArgsConstructor
@@ -21,6 +23,11 @@ public class PedidoController {
     @PostMapping("/criar")
     public ResponseEntity<Pedido> createPedido(@RequestBody PedidoInDTO pedidoInDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(pedidoService.createPedido(pedidoInDTO), HttpStatus.OK);
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<Pedido>> findAllPedidos() {
+        return new ResponseEntity<>(pedidoService.findAllPedidos(), HttpStatus.OK);
     }
 
 }
