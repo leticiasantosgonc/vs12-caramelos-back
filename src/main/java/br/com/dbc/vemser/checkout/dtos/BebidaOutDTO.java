@@ -6,7 +6,7 @@ import lombok.*;
 @Data
 public class BebidaOutDTO extends BebidaInDTO{
 
-    @Schema(description = "ID da bebida")
+    @Schema(description = "ID do produto", example = "1")
     private Integer idProduto;
 
 }
