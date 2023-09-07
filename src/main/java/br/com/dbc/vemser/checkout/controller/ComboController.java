@@ -22,7 +22,7 @@ public class ComboController {
     private final ComboService comboService;
 
     @PostMapping("/criar")
-    public ResponseEntity<ComboOutDTO> createCombo(@RequestBody @Positive ComboInDTO comboInDTO) throws RegraDeNegocioException {
+    public ResponseEntity<ComboOutDTO> createCombo(@RequestBody ComboInDTO comboInDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(comboService.createCombo(comboInDTO), HttpStatus.CREATED);
     }
 

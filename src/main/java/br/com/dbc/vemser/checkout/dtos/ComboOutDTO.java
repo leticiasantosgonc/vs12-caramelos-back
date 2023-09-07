@@ -9,23 +9,11 @@ import java.util.List;
 @Data
 public class ComboOutDTO {
 
+    private String nome;
+    private String descricao;
+    private List<ComboProdutoOutDTO> lanches = new ArrayList<>();
+    private List<ComboProdutoOutDTO> bebidas = new ArrayList<>();
     private Integer quantidadeDisponivel;
-    private List<LancheOutDTO> lanches = new ArrayList<>();
-    private List<BebidaOutDTO> bebidas = new ArrayList<>();
-    private BigDecimal precoTotal = calcularPreco();
-
-    private BigDecimal calcularPreco() {
-        BigDecimal valorTotal = BigDecimal.ZERO;
-
-        for (LancheOutDTO lanche : lanches) {
-            valorTotal.add(lanche.getPreco());
-        }
-
-        for (BebidaOutDTO bebida : bebidas) {
-            valorTotal.add(bebida.getPreco());
-        }
-
-        return valorTotal;
-    }
+    private BigDecimal precoTotal = null;
 
 }

@@ -32,10 +32,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authz) ->  authz
                         .antMatchers("/auth","/").permitAll()
                         .antMatchers(HttpMethod.GET,"/produto/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/combo/**").permitAll()
                         .antMatchers("/admin/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.DELETE, "/produto/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.PUT, "/produto/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.POST, "/produto/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.POST, "/combo/**").hasRole("ADMIN")
                         .anyRequest().denyAll()
                 );
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);

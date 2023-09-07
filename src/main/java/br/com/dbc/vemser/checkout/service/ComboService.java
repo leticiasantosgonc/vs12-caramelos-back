@@ -1,9 +1,6 @@
 package br.com.dbc.vemser.checkout.service;
 
-import br.com.dbc.vemser.checkout.dtos.BebidaOutDTO;
-import br.com.dbc.vemser.checkout.dtos.ComboInDTO;
-import br.com.dbc.vemser.checkout.dtos.ComboOutDTO;
-import br.com.dbc.vemser.checkout.dtos.LancheOutDTO;
+import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Combo;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
@@ -32,18 +29,21 @@ public class ComboService {
         combo.setNome(comboInDTO.getNome());
         combo.setDescricao(comboInDTO.getDescricao());
         combo.setImagem(comboInDTO.getImagem());
+        combo.setQuantidade(comboInDTO.getQuantidade());
 
         List<Produto> produtosLanches = new ArrayList<>();
         List<Produto> produtosBebidas = new ArrayList<>();
 
         for (Integer id : comboInDTO.getIndexesLanches()) {
             LancheOutDTO lancheOutDTO = produtoService.findLancheById(id);
+            lanches.add(objectMapper.convertValue(lancheOutDTO, LancheOutDTO.class));
             Produto produto = objectMapper.convertValue(lancheOutDTO, Produto.class);
             produtosLanches.add(produto);
         }
 
         for (Integer id : comboInDTO.getIndexesBebidas()) {
             BebidaOutDTO bebidaOutDTO = produtoService.findBebidaById(id);
+            bebidas.add(objectMapper.convertValue(bebidaOutDTO, BebidaOutDTO.class));
             Produto produto = objectMapper.convertValue(bebidaOutDTO, Produto.class);
             produtosBebidas.add(produto);
         }
@@ -53,9 +53,22 @@ public class ComboService {
         comboRepository.save(combo);
 
         ComboOutDTO comboOutDTO = new ComboOutDTO();
-        comboOutDTO.setLanches(lanches);
-        comboOutDTO.setBebidas(bebidas);
-        comboOutDTO.setQuantidadeDisponivel(10);
+        comboOutDTO.setNome(combo.getNome());
+        comboOutDTO.setDescricao(combo.getDescricao());
+
+        // todo: refatorar
+        List<ComboProdutoOutDTO> lanchesProdutoOutDTOList = lanches.stream().map(lanche -> {
+            return objectMapper.convertValue(lanche, ComboProdutoOutDTO.class);
+        }).toList();
+
+        // todo: refatorar
+        List<ComboProdutoOutDTO> bebidasProdutoOutDTOList = bebidas.stream().map(bebida -> {
+            return objectMapper.convertValue(bebida, ComboProdutoOutDTO.class);
+        }).toList();
+
+        comboOutDTO.setLanches(lanchesProdutoOutDTOList);
+        comboOutDTO.setBebidas(bebidasProdutoOutDTOList);
+        comboOutDTO.setQuantidadeDisponivel(combo.getQuantidade());
 
         return comboOutDTO;
     }

@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.checkout.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,15 +38,16 @@ public class Combo {
 
     @ManyToMany
     @JoinTable(
-            name = "COMBO_LANCHE",
+            name = "COMBO_PRODUTO",
             joinColumns = @JoinColumn(name = "ID_COMBO"),
             inverseJoinColumns = @JoinColumn(name = "ID_PRODUTO")
     )
     private List<Produto> lanches;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
-            name = "COMBO_BEBIDA",
+            name = "COMBO_PRODUTO",
             joinColumns = @JoinColumn(name = "ID_COMBO"),
             inverseJoinColumns = @JoinColumn(name = "ID_PRODUTO")
     )
