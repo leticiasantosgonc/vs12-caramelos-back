@@ -4,6 +4,7 @@ import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Combo;
 import br.com.dbc.vemser.checkout.entities.Pedido;
 import br.com.dbc.vemser.checkout.entities.Produto;
+import br.com.dbc.vemser.checkout.enums.StatusPedido;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.repository.PedidoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,20 +39,26 @@ public class PedidoService {
             }
         }
 
-        BigDecimal teste = BigDecimal.ZERO;
+        BigDecimal valorTotal = BigDecimal.ZERO;
 
         for (Produto produto : produtos) {
-            teste = teste.add(produto.getPreco());
+            valorTotal = valorTotal.add(produto.getPreco());
         }
 
         Pedido pedido = new Pedido();
-        pedido.setItens(produtos);
-        pedido.setQuantidade(produtos.size());
-        pedido.setDataPedido(LocalDate.now());
         pedido.setCpf(pedidoInDTO.getCpf());
         pedido.setObservacao(pedidoInDTO.getObservacao());
-        pedido.setPreco(teste);
+        pedido.setItens(produtos);
+        pedido.setStatus(StatusPedido.NAO_PAGO);
+        pedido.setDataPedido(LocalDate.now());
+        pedido.setQuantidade(produtos.size());
+        pedido.setPreco(valorTotal);
+
         return pedidoRepository.save(pedido);
+    }
+
+    public List<Pedido> findAllPedidos() {
+        return pedidoRepository.findAll();
     }
 
 }

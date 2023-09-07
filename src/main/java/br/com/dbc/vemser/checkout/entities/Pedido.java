@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.checkout.entities;
 
+import br.com.dbc.vemser.checkout.enums.StatusPedido;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,9 @@ public class Pedido {
             inverseJoinColumns = @JoinColumn(name = "ID_PRODUTO")
     )
     private List<Produto> itens;
+
+    @Column(name = "STATUS")
+    private StatusPedido status;
 
     @Column(name = "DATA")
     private LocalDate dataPedido;
