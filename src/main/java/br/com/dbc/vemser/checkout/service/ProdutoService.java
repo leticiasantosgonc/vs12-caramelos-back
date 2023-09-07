@@ -1,9 +1,7 @@
 package br.com.dbc.vemser.checkout.service;
 
-
 import br.com.dbc.vemser.checkout.dtos.*;
 
-import br.com.dbc.vemser.checkout.entities.Combo;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.enums.TipoProduto;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
@@ -17,11 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.lang.module.ResolutionException;
+
 import javax.sql.rowset.serial.SerialClob;
 import java.sql.Clob;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import java.util.Optional;
@@ -248,7 +245,6 @@ public class ProdutoService {
             produtoParaPersistir.setDescricao(lancheInDTO.getDescricao());
             produtoParaPersistir.setImagem(lancheInDTO.getImagem());
             produtoParaPersistir.setQuantidade(lancheInDTO.getQuantidade());
-//            produtoParaPersistir.setTamanhoProduto(lancheInDTO.getTamanhoProduto());
             produtoParaPersistir.setDietaProduto(lancheInDTO.getDietaProduto());
             produtoParaPersistir.setPreco(lancheInDTO.getPreco());
             Produto produtoPersistido = produtoRepository.save(produtoParaPersistir);

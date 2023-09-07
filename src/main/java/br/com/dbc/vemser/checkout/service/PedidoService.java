@@ -1,7 +1,6 @@
 package br.com.dbc.vemser.checkout.service;
 
 import br.com.dbc.vemser.checkout.dtos.*;
-import br.com.dbc.vemser.checkout.entities.Combo;
 import br.com.dbc.vemser.checkout.entities.Pedido;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;

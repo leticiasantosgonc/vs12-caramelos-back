@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.checkout.repository;
 
-import br.com.dbc.vemser.checkout.entities.Combo;
 import br.com.dbc.vemser.checkout.entities.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
