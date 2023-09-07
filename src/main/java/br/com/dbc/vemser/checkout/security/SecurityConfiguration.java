@@ -32,6 +32,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authz) ->  authz
                         .antMatchers("/auth","/").permitAll()
                         .antMatchers(HttpMethod.GET, "/combo/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/pedido/**").permitAll()
                         .antMatchers(HttpMethod.POST, "/pedido/**").permitAll()
                         .antMatchers(HttpMethod.GET,"/produto/**").permitAll()
                         .antMatchers("/admin/**").hasRole("ADMIN")
