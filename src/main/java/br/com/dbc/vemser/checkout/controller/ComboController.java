@@ -1,7 +1,5 @@
 package br.com.dbc.vemser.checkout.controller;
 
-import br.com.dbc.vemser.checkout.dtos.ComboInDTO;
-import br.com.dbc.vemser.checkout.dtos.ComboOutDTO;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.service.ComboService;
 import lombok.RequiredArgsConstructor;
@@ -21,19 +19,19 @@ public class ComboController {
 
     private final ComboService comboService;
 
-    @PostMapping("/criar")
-    public ResponseEntity<ComboOutDTO> createCombo(@RequestBody ComboInDTO comboInDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(comboService.createCombo(comboInDTO), HttpStatus.CREATED);
-    }
-
-    @GetMapping("/listar/combos")
-    public ResponseEntity<List<ComboOutDTO>> findAllCombos() {
-        return new ResponseEntity<>(comboService.findAllCombos(), HttpStatus.OK);
-    }
-
-    @GetMapping("/listar/{idCombo}")
-    public ResponseEntity<ComboOutDTO> findComboById(@PathVariable @Positive Integer idCombo) throws RegraDeNegocioException {
-        return new ResponseEntity<>(comboService.findComboById(idCombo), HttpStatus.OK);
-    }
+//    @PostMapping("/criar")
+//    public ResponseEntity<ComboOutDTO> createCombo(@RequestBody ComboInDTO comboInDTO) throws RegraDeNegocioException {
+//        return new ResponseEntity<>(comboService.createCombo(comboInDTO), HttpStatus.CREATED);
+//    }
+//
+//    @GetMapping("/listar/combos")
+//    public ResponseEntity<List<ComboOutDTO>> findAllCombos() {
+//        return new ResponseEntity<>(comboService.findAllCombos(), HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/listar/{idCombo}")
+//    public ResponseEntity<ComboOutDTO> findComboById(@PathVariable @Positive Integer idCombo) throws RegraDeNegocioException {
+//        return new ResponseEntity<>(comboService.findComboById(idCombo), HttpStatus.OK);
+//    }
 
 }

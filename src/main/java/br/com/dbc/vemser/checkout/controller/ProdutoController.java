@@ -29,7 +29,6 @@ import java.util.List;
 public class ProdutoController implements ProdutoControllerDoc {
 
     private final ProdutoService produtoService;
-    private final ComboService comboService;
 
     @PostMapping("/criar/lanche")
     public ResponseEntity<LancheOutDTO> createLanche(@RequestBody @Valid LancheInDTO lancheInDTO) {
@@ -160,16 +159,6 @@ public class ProdutoController implements ProdutoControllerDoc {
         return produtoService.findSobremesasOrdenadasPorPreco(pageable);
     }
 
-    @GetMapping("/listar/combos")
-    public ResponseEntity<List<ComboOutDTO>> findAllCombos() {
-        return new ResponseEntity<>(comboService.findAllCombos(), HttpStatus.OK);
-    }
-
-    @GetMapping("listar/combos/{idCombo}")
-    public ResponseEntity<ComboOutDTO> findComboById(@PathVariable Integer idCombo) throws RegraDeNegocioException {
-        return new ResponseEntity<>(comboService.findComboById(idCombo), HttpStatus.OK);
-    }
-
     @PutMapping("/disponibilidade/{idProduto}")
     public ResponseEntity<Integer> getQuantidadeProdutoPorId(@PathVariable @Positive Integer idProduto) throws RegraDeNegocioException {
         return new ResponseEntity<>(produtoService.getQuantidadeProduto(idProduto), HttpStatus.OK);
@@ -205,6 +194,28 @@ public class ProdutoController implements ProdutoControllerDoc {
     @DeleteMapping("/acompanhamento/{idAcompanhamento}")
     public ResponseEntity<Void> deleteAcompanhamentoById(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento){
         produtoService.deleteAcompanhamentoById(idAcompanhamento);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/criar/combo")
+    public ResponseEntity<ComboOutDTO> createCombo(@RequestBody @Valid ComboInDTO comboInDTO) {
+        ComboOutDTO comboOutDTO = produtoService.createCombo(comboInDTO);
+        return new ResponseEntity<>(comboOutDTO, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/listar/combo")
+    public List<ComboOutDTO> findAllCombos() {
+        return produtoService.findAllCombo();
+    }
+
+    @PutMapping("/combo/{idCombo}")
+    public ResponseEntity<ComboOutDTO> updateCombo(@PathVariable("idCombo") @Positive Integer idCombo, @RequestBody @Valid ComboOutDTO comboEntrada) throws RegraDeNegocioException {
+        return new ResponseEntity<>(produtoService.updateCombo(idCombo, comboEntrada), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/combo/{idCombo}")
+    public ResponseEntity<Void> deleteComboById(@PathVariable("idCombo") @Positive Integer idCombo){
+        produtoService.deleteComboById(idCombo);
         return ResponseEntity.ok().build();
     }
 
