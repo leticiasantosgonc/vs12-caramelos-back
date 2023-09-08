@@ -68,11 +68,16 @@ public class UsuarioService {
         return adminDTO;
     }
 
-    public void deleteAdmin(Integer idUsuario){
-        Optional<Usuario> usuario = usuarioRepository.findById(idUsuario);
-        if(usuario.isPresent()){
-            usuarioRepository.delete(usuario.get());
+    public void deleteAdmin(Integer idUsuario) throws RegraDeNegocioException{
+        Integer tamanho = findAll().size();
+
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(()->new RegraDeNegocioException("Usuario não encontrado"));
+
+        if(tamanho <= 1){
+            throw new RegraDeNegocioException("Impossivel realizar operação");
         }
+        usuarioRepository.delete(usuario);
     }
 
 }

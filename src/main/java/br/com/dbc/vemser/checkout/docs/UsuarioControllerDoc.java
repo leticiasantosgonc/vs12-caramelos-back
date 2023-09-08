@@ -63,5 +63,5 @@ public interface UsuarioControllerDoc {
             }
     )
     @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<Void> deleteAdmin(@PathVariable Integer idUsuario);
+    public ResponseEntity<Void> deleteAdmin(@PathVariable Integer idUsuario)throws RegraDeNegocioException;
 }
