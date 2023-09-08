@@ -36,6 +36,7 @@ public class PedidoService {
             for (int i = 0; i < item.getQuantidadeProduto(); i++) {
                 produtos.add(produto);
             }
+            produtoService.updateQuantidadeProduto(item.getIdProduto(), produto.getQuantidade()- item.getQuantidadeProduto());
         }
 
         BigDecimal valorTotal = BigDecimal.ZERO;
