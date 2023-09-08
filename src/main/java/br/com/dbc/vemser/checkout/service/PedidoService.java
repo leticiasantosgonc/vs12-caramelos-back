@@ -36,6 +36,7 @@ public class PedidoService {
             for (int i = 0; i < item.getQuantidadeProduto(); i++) {
                 produtos.add(produto);
             }
+            produtoService.updateQuantidadeProduto(item.getIdProduto(), produto.getQuantidade()- item.getQuantidadeProduto());
         }
 
         BigDecimal valorTotal = BigDecimal.ZERO;
@@ -58,6 +59,20 @@ public class PedidoService {
 
     public List<Pedido> findAllPedidos() {
         return pedidoRepository.findAll();
+    }
+
+    public RelatorioPedido relatorioItemPedido() throws RegraDeNegocioException{
+        Pedido pedidoAchado = pedidoRepository.findById(43).orElseThrow(()-> new RegraDeNegocioException("Pedido não existe"));
+
+        RelatorioPedido relatorio = new RelatorioPedido();
+        relatorio.setIdPedido(pedidoAchado.getIdPedido());
+        relatorio.setValorTotal(pedidoAchado.getPreco());
+        relatorio.setDataPedido(pedidoAchado.getDataPedido());
+        relatorio.setStatus(pedidoAchado.getStatus());
+        relatorio.setItens(pedidoRepository.findAllByIdPedido(43));
+        relatorio.setDataRelatorio(LocalDate.now());
+
+        return relatorio;
     }
 
 }
