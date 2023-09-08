@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.checkout.docs;
 
-import br.com.dbc.vemser.checkout.dtos.*;
+
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,9 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.List;
 
 public interface ProdutoControllerDoc {
 
