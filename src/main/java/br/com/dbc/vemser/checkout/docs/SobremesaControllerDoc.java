@@ -43,7 +43,7 @@ public interface SobremesaControllerDoc {
     @Operation(summary ="Criar uma sobremesa", description = "Deve criar uma sobremesa")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "201", description = "Sobremesa criada com sucesso"),
                     @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
                     @ApiResponse(responseCode = "404", description = "Não encontrado"),
