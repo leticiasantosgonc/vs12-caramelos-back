@@ -29,7 +29,7 @@ public interface UsuarioControllerDoc {
     @Operation(summary = "Criar um administrador", description = "Deve criar um administrador")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "201", description = "Administrador criado com sucesso"),
                     @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
                     @ApiResponse(responseCode = "404", description = "Não encontrado"),
@@ -42,7 +42,7 @@ public interface UsuarioControllerDoc {
     @Operation(summary = "Atualizar uma senha", description = "Deve atualizar uma senha")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
                     @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
                     @ApiResponse(responseCode = "404", description = "Não encontrado"),
@@ -63,5 +63,5 @@ public interface UsuarioControllerDoc {
             }
     )
     @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<Void> deleteAdmin(@PathVariable Integer idUsuario);
+    public ResponseEntity<Void> deleteAdmin(@PathVariable Integer idUsuario)throws RegraDeNegocioException;
 }

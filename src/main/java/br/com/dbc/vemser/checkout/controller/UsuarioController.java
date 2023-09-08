@@ -35,7 +35,7 @@ public class UsuarioController implements UsuarioControllerDoc {
         return new ResponseEntity<>(usuarioService.updateSenha(idUsuario, usuarioAtualizadado), HttpStatus.OK);
     }
     @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<Void> deleteAdmin(@PathVariable Integer idUsuario) {
+    public ResponseEntity<Void> deleteAdmin(@PathVariable Integer idUsuario) throws RegraDeNegocioException{
         usuarioService.deleteAdmin(idUsuario);
         return ResponseEntity.ok().build();
     }

@@ -17,7 +17,7 @@ public class BebidaInDTO {
 
     @NotBlank(message = "O campo nome não pode estar vazio")
     @Size(min = 1, max = 100)
-    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "O campo nome não pode conter apenas números")
+    @Pattern(regexp = "^[\\p{L}\\s]*$")
     @Schema(description = "Nome da bebida", required = true, example = "Pitchulinha")
     private String nome;
 
