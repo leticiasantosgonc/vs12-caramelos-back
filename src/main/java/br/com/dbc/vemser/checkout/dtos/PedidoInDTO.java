@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.checkout.dtos;
 
 import lombok.Data;
+import lombok.Getter;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.Valid;
@@ -15,6 +16,7 @@ import java.util.List;
 public class PedidoInDTO {
 
     @NotNull
+    @Getter
     private List<ItemInDTO> itens;
 
     @CPF

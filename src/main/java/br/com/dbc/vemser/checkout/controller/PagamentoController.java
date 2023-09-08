@@ -22,6 +22,7 @@ import java.util.Map;
 @CrossOrigin
 public class PagamentoController {
 
+    /*
     private final PagamentoService pagamentoService;
 
     @GetMapping("/criar-checkout")
@@ -32,5 +33,6 @@ public class PagamentoController {
 
         return ResponseEntity.ok(responseJson);
     }
+     */
 
 }

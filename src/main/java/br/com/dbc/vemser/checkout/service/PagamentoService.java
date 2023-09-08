@@ -1,6 +1,8 @@
 package br.com.dbc.vemser.checkout.service;
 
 import br.com.dbc.vemser.checkout.dtos.CheckoutItemDto;
+import br.com.dbc.vemser.checkout.dtos.ItemInDTO;
+import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
 import br.com.dbc.vemser.checkout.entities.Pedido;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.enums.StatusPedido;
@@ -19,12 +21,14 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RequiredArgsConstructor
 @Service
 public class PagamentoService {
 
     private final ProdutoService produtoService;
+    private final PedidoService pedidoService;
 
       @Value("${stripe.api.secretkey}")
       private String secretKey = "";
@@ -43,7 +47,7 @@ public class PagamentoService {
                 .build();
     }
 
-      public Session criarSessionCheckout () throws StripeException, RegraDeNegocioException {
+      public Session criarSessionCheckout (PedidoInDTO pedidoInDTO) throws StripeException, RegraDeNegocioException {
             Stripe.apiKey = secretKey;
 
             SessionCreateParams params =
@@ -51,10 +55,7 @@ public class PagamentoService {
                             .setMode(SessionCreateParams.Mode.PAYMENT)
                             .setSuccessUrl("https://mayra.dev")
                             .setCancelUrl("https://mayra.dev")
-
-                            // todo: inserir lista de pedidos aqui
-
-                            .addAllLineItem(criarItensParaTeste())
+                            .addAllLineItem(criarItensParaPagamento(pedidoInDTO))
 
                             /*
                             .addLineItem(
@@ -65,31 +66,33 @@ public class PagamentoService {
                                             .build())
 
                              */
+
                             .build();
             Session session = Session.create(params);
 
             return session;
     }
 
-    public List<SessionCreateParams.LineItem> criarItensParaTeste() throws RegraDeNegocioException {
-        List<SessionCreateParams.LineItem> itens = new ArrayList<>();
+    private List<SessionCreateParams.LineItem> criarItensParaPagamento(PedidoInDTO pedidoInDTO) throws RegraDeNegocioException {
+        List<SessionCreateParams.LineItem> itensParaPagamento = new ArrayList<>();
+        List<ItemInDTO> itensParaRequisicao = pedidoInDTO.getItens();
 
-        Pedido pedido = new Pedido();
-        pedido.setCpf("74686622077");
-        pedido.setObservacao("Observação");
+        for (ItemInDTO item : itensParaRequisicao) {
+            Pedido pedido = pedidoService.findAllPedidos().get(item.getIdProduto());
+            SessionCreateParams.LineItem produtoEspecifico = SessionCreateParams.LineItem.builder()
+                    .setQuantity((long) item.getQuantidadeProduto())
+                    .setPriceData(createPriceData(new CheckoutItemDto(
+                        pedido.getItens().get(0).getNome(),
+                            pedido.getQuantidade(),
+                            pedido.getPreco().doubleValue(),
+                            pedido.getItens().get(0).getIdProduto(),
+                            1
+                    )))
+                    .build();
+            itensParaPagamento.add(produtoEspecifico);
+        }
 
-
-        List<Produto> produtos = new ArrayList<>();
-        produtos.add(produtoService.findById(15));
-        produtos.add(produtoService.findById(79));
-
-        pedido.setItens(produtos);
-
-        pedido.setStatus(StatusPedido.NAO_PAGO);
-        pedido.setDataPedido(LocalDate.now());
-        pedido.setQuantidade(1);
-        pedido.setPreco(new BigDecimal("19.99"));
-
+        /*
         SessionCreateParams.LineItem item1 = SessionCreateParams.LineItem.builder()
                 .setQuantity(1L)
                 // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
@@ -111,11 +114,9 @@ public class PagamentoService {
                         pedido.getItens().get(1).getIdProduto(),
                         1)))
                 .build();
+         */
 
-        itens.add(item1);
-        itens.add(item2);
-
-        return itens;
+        return itensParaPagamento;
     }
 
 }

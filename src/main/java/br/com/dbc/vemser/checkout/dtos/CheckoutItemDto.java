@@ -1,5 +1,8 @@
 package br.com.dbc.vemser.checkout.dtos;
 
+import lombok.Getter;
+
+@Getter
 public class CheckoutItemDto {
 
   private String productName;
@@ -18,16 +21,8 @@ public class CheckoutItemDto {
     this.userId = userId;
   }
 
-  public String getProductName() {
-    return productName;
-  }
-
   public void setProductName(String productName) {
     this.productName = productName;
-  }
-
-  public int getQuantity() {
-    return quantity;
   }
 
   public void setQuantity(int quantity) {
@@ -38,24 +33,12 @@ public class CheckoutItemDto {
     this.price = price;
   }
 
-  public double getPrice(){return price;}
-
-  public int getUserId() {
-    return userId;
-  }
-
   public void setUserId(int userId) {
     this.userId = userId;
-  }
-
-  public long getProductId() {
-    return productId;
   }
 
   public void setProductId(long id) {
     this.productId = id;
   }
-
-
 
 }
