@@ -10,24 +10,24 @@ import java.io.IOException;
 @Service
 public class PDFService {
     public void export(HttpServletResponse response) throws IOException {
-        Document document = new Document(PageSize.A4);
-        PdfWriter.getInstance(document, response.getOutputStream());
-
-        document.open();
-        Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-        fontTitle.setSize(18);
-
-        Paragraph paragraph = new Paragraph("CUPOM FISCAL", fontTitle);
-        paragraph.setAlignment(Paragraph.ALIGN_CENTER);
-
-        Font fontParagraph = FontFactory.getFont(FontFactory.HELVETICA);
-        fontParagraph.setSize(12);
-
-        Paragraph paragraph2 = new Paragraph("LISTA DE ITENS", fontParagraph);
-        paragraph2.setAlignment(Paragraph.ALIGN_LEFT);
-
-        document.add(paragraph);
-        document.add(paragraph2);
-        document.close();
+//        Document document = new Document(PageSize.A4);
+//        PdfWriter.getInstance(document, response.getOutputStream());
+//
+//        document.open();
+//        Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+//        fontTitle.setSize(18);
+//
+//        Paragraph paragraph = new Paragraph("CUPOM FISCAL", fontTitle);
+//        paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+//
+//        Font fontParagraph = FontFactory.getFont(FontFactory.HELVETICA);
+//        fontParagraph.setSize(12);
+//
+//        Paragraph paragraph2 = new Paragraph("LISTA DE ITENS", fontParagraph);
+//        paragraph2.setAlignment(Paragraph.ALIGN_LEFT);
+//
+//        document.add(paragraph);
+//        document.add(paragraph2);
+//        document.close();
     }
 }
