@@ -14,7 +14,7 @@ public class LancheInDTO {
 
     @NotBlank(message = "O campo nome não pode estar vazio")
     @Size(min = 1, max = 100)
-    @Pattern(regexp = "^[a-zA-ZÀ-ÖØ-öø-ÿ-]*$")
+    @Pattern(regexp = "^[a-zA-ZÀ-ÖØ-öø-ÿ -]*$")
     @Schema(description = "Nome do lanche", example = "Cachorro-quente", required = true)
     private String nome;
 

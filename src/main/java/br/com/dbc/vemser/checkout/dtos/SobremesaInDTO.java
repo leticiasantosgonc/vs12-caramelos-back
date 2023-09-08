@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 public class SobremesaInDTO {
     @Schema(description = "Insira o nome do produto", example = "gelatina")
     @NotBlank(message = "O campo não dever ser vazio e/ou nulo e/ou branco")
-    @Pattern(regexp = "^[a-zA-ZÀ-ÖØ-öø-ÿ-]*$")
+    @Pattern(regexp = "^[a-zA-ZÀ-ÖØ-öø-ÿ -]*$")
     private String nome;
 
     @Schema(description = "Descrição sobre o produto", example = "Um produto produzido a base de derivado de leite")
