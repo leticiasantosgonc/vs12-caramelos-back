@@ -60,4 +60,18 @@ public class PedidoService {
         return pedidoRepository.findAll();
     }
 
+    public RelatorioPedido relatorioItemPedido() throws RegraDeNegocioException{
+        Pedido pedidoAchado = pedidoRepository.findById(43).orElseThrow(()-> new RegraDeNegocioException("Pedido não existe"));
+
+        RelatorioPedido relatorio = new RelatorioPedido();
+        relatorio.setIdPedido(pedidoAchado.getIdPedido());
+        relatorio.setValorTotal(pedidoAchado.getPreco());
+        relatorio.setDataPedido(pedidoAchado.getDataPedido());
+        relatorio.setStatus(pedidoAchado.getStatus());
+        relatorio.setItens(pedidoRepository.findAllByIdPedido(43));
+        relatorio.setDataRelatorio(LocalDate.now());
+
+        return relatorio;
+    }
+
 }
