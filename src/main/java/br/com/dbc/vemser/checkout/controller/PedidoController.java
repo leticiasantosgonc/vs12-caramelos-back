@@ -1,6 +1,8 @@
 package br.com.dbc.vemser.checkout.controller;
 
+import br.com.dbc.vemser.checkout.docs.PedidoControllerDoc;
 import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
+import br.com.dbc.vemser.checkout.dtos.PedidoOutDTO;
 import br.com.dbc.vemser.checkout.dtos.RelatorioPedido;
 import br.com.dbc.vemser.checkout.entities.Pedido;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
@@ -30,15 +32,15 @@ import java.util.Map;
 @RequestMapping("/pedido")
 @RequiredArgsConstructor
 @Validated
-public class PedidoController {
+public class PedidoController implements PedidoControllerDoc {
 
     private final PedidoService pedidoService;
     private final PDFService pdfService;
     private final PagamentoService pagamentoService;
 
     @PostMapping("/criar")
-    public ResponseEntity<Object> createPedido(@RequestBody PedidoInDTO pedidoInDTO) throws RegraDeNegocioException, IOException, StripeException {
-        Pedido pedido = pedidoService.createPedido(pedidoInDTO);
+    public ResponseEntity<Object> createPedido(@RequestBody PedidoInDTO pedidoInDTO) throws RegraDeNegocioException, StripeException {
+        PedidoOutDTO pedido = pedidoService.createPedido(pedidoInDTO);
         Session session = pagamentoService.criarSessionCheckout(pedidoInDTO, pedido.getIdPedido());
         pedidoService.updateSessionId(pedido.getIdPedido(), session.getId());
 
@@ -51,18 +53,13 @@ public class PedidoController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<Pedido>> findAllPedidos() {
+    public ResponseEntity<List<PedidoOutDTO>> findAllPedidos() {
         return new ResponseEntity<>(pedidoService.findAllPedidos(), HttpStatus.OK);
-    }
-
-    @GetMapping("/listar/itens")
-    public ResponseEntity<RelatorioPedido> findByPedido() throws RegraDeNegocioException{
-        return new ResponseEntity<>(pedidoService.relatorioItemPedido(), HttpStatus.OK);
     }
 
     @GetMapping("/nota/{idPedido}")
     public ResponseEntity<Void> gerarNota(@PathVariable Integer idPedido) throws RegraDeNegocioException, StripeException, IOException {
-        Pedido pedido = pedidoService.findById(idPedido);
+        Pedido pedido = pedidoService.findPedidoUtils(idPedido);
         boolean deveGerarNota = pedidoService.deveGerarNota(idPedido);
 
         if (deveGerarNota) {

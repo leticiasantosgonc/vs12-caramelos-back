@@ -1,6 +1,9 @@
 package br.com.dbc.vemser.checkout.service;
 
-import br.com.dbc.vemser.checkout.dtos.*;
+import br.com.dbc.vemser.checkout.dtos.ItemInDTO;
+import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
+import br.com.dbc.vemser.checkout.dtos.PedidoOutDTO;
+import br.com.dbc.vemser.checkout.dtos.RelatorioPedido;
 import br.com.dbc.vemser.checkout.entities.Pedido;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.enums.Game;
@@ -24,8 +27,9 @@ public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
     private final ProdutoService produtoService;
+    private final ObjectMapper objectMapper;
 
-    public Pedido createPedido(PedidoInDTO pedidoInDTO) throws RegraDeNegocioException {
+    public PedidoOutDTO createPedido(PedidoInDTO pedidoInDTO) throws RegraDeNegocioException {
         List<Produto> produtos = new ArrayList<>();
         for (ItemInDTO item : pedidoInDTO.getItens()) {
             Produto produto = produtoService.findById(item.getIdProduto());
@@ -65,31 +69,26 @@ public class PedidoService {
         pedido.setPreco(valorTotal);
         pedido.setGame(pedidoInDTO.getGame());
 
-        return pedidoRepository.save(pedido);
+        Pedido pedidoPersistido = pedidoRepository.save(pedido);
+        return objectMapper.convertValue(pedidoPersistido, PedidoOutDTO.class);
     }
 
-    public List<Pedido> findAllPedidos() {
-        return pedidoRepository.findAll();
-    }
-
-    public RelatorioPedido relatorioItemPedido() throws RegraDeNegocioException{
-        Pedido pedidoAchado = pedidoRepository.findById(43).orElseThrow(()-> new RegraDeNegocioException("Pedido não existe"));
-
-        RelatorioPedido relatorio = new RelatorioPedido();
-        relatorio.setIdPedido(pedidoAchado.getIdPedido());
-        relatorio.setValorTotal(pedidoAchado.getPreco());
-        relatorio.setDataPedido(pedidoAchado.getDataPedido());
-        relatorio.setStatus(pedidoAchado.getStatus());
-        relatorio.setItens(pedidoRepository.findAllByIdPedido(43));
-        relatorio.setDataRelatorio(LocalDate.now());
-
-        return relatorio;
-    }
-
-    public Pedido findById(Integer idPedido) throws RegraDeNegocioException{
+    public List<PedidoOutDTO> findAllPedidos() {
         return pedidoRepository
+                .findAll()
+                .stream()
+                .map(pedido -> {
+                    return objectMapper.convertValue(pedido, PedidoOutDTO.class);
+                })
+                .toList();
+    }
+
+    public PedidoOutDTO findById(Integer idPedido) throws RegraDeNegocioException{
+        Pedido pedidoEncontrado = pedidoRepository
                 .findById(idPedido)
                 .orElseThrow(()-> new RegraDeNegocioException("Pedido não encontrado"));
+
+        return objectMapper.convertValue(pedidoEncontrado, PedidoOutDTO.class);
     }
 
     public void updateSessionId(Integer idPedido, String sessionId) throws RegraDeNegocioException {
@@ -161,6 +160,12 @@ public class PedidoService {
         }
 
         throw new RegraDeNegocioException("CPF inválido");
+    }
+
+    public Pedido findPedidoUtils(Integer idPedido) throws RegraDeNegocioException {
+        return pedidoRepository
+                .findById(idPedido)
+                .orElseThrow(() -> new RegraDeNegocioException("Pedido não encontrado"));
     }
 
 }
