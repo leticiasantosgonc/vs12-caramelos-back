@@ -47,14 +47,13 @@ public class PedidoService {
             valorTotal = valorTotal.add(produto.getPreco());
         }
 
-        if(pedidoInDTO.getGame().equals(Game.WIN)){
+        if (pedidoInDTO.getGame().equals(Game.WIN)){
 
             Double valorComDescontoDouble = valorTotal.doubleValue() * 0.90;
 
             valorTotal = BigDecimal.valueOf(valorComDescontoDouble);
 
         }
-
 
         Pedido pedido = new Pedido();
         pedido.setCpf(validarCpf(pedidoInDTO.getCpf()));
