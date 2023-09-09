@@ -3,7 +3,6 @@ package br.com.dbc.vemser.checkout.dtos;
 import br.com.dbc.vemser.checkout.enums.Game;
 import lombok.Data;
 import lombok.Getter;
-import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -22,8 +21,7 @@ public class PedidoInDTO {
     @Getter
     private List<ItemInDTO> itens;
 
-    @CPF
-    @Pattern(regexp = "^(|\\d{11})$")
+    @Pattern(regexp = "^$|\\d{11}", message = "CPF inválido")
     private String cpf;
 
     @NotBlank
@@ -33,4 +31,5 @@ public class PedidoInDTO {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "o campo não deve ser nulo")
     private Game game;
+
 }

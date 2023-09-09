@@ -215,7 +215,6 @@ public class ProdutoService {
     public LancheOutDTO createLanche(LancheInDTO lancheInDTO) {
         Produto produtoParaPersistir = objectMapper.convertValue(lancheInDTO, Produto.class);
         produtoParaPersistir.setTipoProduto(TipoProduto.LANCHE);
-        //produtoParaPersistir.setImagem(stringToClob(lancheInDTO.getImagem()));
         Produto produtoPersistido = produtoRepository.save(produtoParaPersistir);
 
         return objectMapper.convertValue(produtoPersistido, LancheOutDTO.class);
@@ -424,18 +423,6 @@ public class ProdutoService {
 
     public SobremesaOutDTO converterProdutoParaSobremesaOutDTO(Produto produto) {
         return objectMapper.convertValue(produto, SobremesaOutDTO.class);
-    }
-
-    public static Clob stringToClob(String str) {
-        if (null == str) {
-            return null;
-        } else {
-            try {
-                return new SerialClob(str.toCharArray());
-            } catch (Exception e) {
-                return null;
-            }
-        }
     }
 
     public Integer getQuantidadeProduto(Integer idProduto) throws RegraDeNegocioException {

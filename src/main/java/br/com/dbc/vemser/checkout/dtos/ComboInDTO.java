@@ -45,4 +45,5 @@ public class ComboInDTO {
     @Digits(integer = 3, fraction = 2, message = "O preço deve ter no máximo três dígitos inteiros e dois dígitos decimais")
     @Schema(description = "Preço do acompanhamento", example = "29.99", required = true)
     private BigDecimal preco;
+
 }

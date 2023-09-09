@@ -1,10 +1,8 @@
 package br.com.dbc.vemser.checkout.controller;
 
 import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
-import br.com.dbc.vemser.checkout.dtos.RelatorioItemPedidoDTO;
 import br.com.dbc.vemser.checkout.dtos.RelatorioPedido;
 import br.com.dbc.vemser.checkout.entities.Pedido;
-import br.com.dbc.vemser.checkout.enums.StatusPedido;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.service.PDFService;
 import br.com.dbc.vemser.checkout.service.PagamentoService;
@@ -46,6 +44,7 @@ public class PedidoController {
 
         Map<String, Object> responseJson = new HashMap<>();
         responseJson.put("url", session.getUrl());
+        responseJson.put("idPedido", pedido.getIdPedido());
 
         System.out.println(session.getUrl());
         return ResponseEntity.ok(responseJson);
@@ -75,8 +74,11 @@ public class PedidoController {
             String headerKey = "Content-Disposition";
             String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
             response.setHeader(headerKey, headerValue);
+            response.setHeader("id-pedido", String.valueOf(idPedido));
+
             pdfService.generatePDF(response, pedido);
             pedidoService.atualizarStatusParaPago(idPedido);
+
             return ResponseEntity.ok().build();
         }
 
