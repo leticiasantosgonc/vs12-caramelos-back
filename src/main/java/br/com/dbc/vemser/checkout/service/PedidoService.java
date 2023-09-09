@@ -45,6 +45,8 @@ public class PedidoService {
             valorTotal = valorTotal.add(produto.getPreco());
         }
 
+
+
         Pedido pedido = new Pedido();
         pedido.setCpf(pedidoInDTO.getCpf());
         pedido.setObservacao(pedidoInDTO.getObservacao());

@@ -31,6 +31,7 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->  authz
                         .antMatchers("/auth","/").permitAll()
+                        .antMatchers("/img").permitAll()
                         .antMatchers("/pagamento/**").permitAll()
                         .antMatchers("/gerador/**").permitAll()
                         .antMatchers("/pedido/**").permitAll()
