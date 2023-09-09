@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -38,6 +39,13 @@ public class UsuarioController implements UsuarioControllerDoc {
     public ResponseEntity<Void> deleteAdmin(@PathVariable Integer idUsuario) throws RegraDeNegocioException{
         usuarioService.deleteAdmin(idUsuario);
         return ResponseEntity.ok().build();
+    }
+    @PostMapping("/enviar-email-alterar-senha")
+    public ResponseEntity<String> enviarEmailAlterarSenha(@RequestBody String email) throws MessagingException {
+        String linkRedefinirSenha = "https://www.google.com.br/?hl=pt-BR";
+        usuarioService.enviarEmailAlterarSenha(email, linkRedefinirSenha);
+
+        return ResponseEntity.ok("Email de redefinição de senha enviado com sucesso!");
     }
 
 }
