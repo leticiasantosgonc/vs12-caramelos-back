@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 @Data
 @Valid
 public class AcompanhamentoInDTO {
+
     @NotBlank(message = "O campo nome não pode estar vazio")
     @Size(min = 1, max = 100)
     @Pattern(regexp = "^[a-zA-ZÀ-ÖØ-öø-ÿ -]*$")
@@ -50,4 +51,5 @@ public class AcompanhamentoInDTO {
     @Digits(integer = 3, fraction = 2, message = "O preço deve ter no máximo três dígitos inteiros e dois dígitos decimais")
     @Schema(description = "Preço do acompanhamento", example = "29.99", required = true)
     private BigDecimal preco;
+
 }

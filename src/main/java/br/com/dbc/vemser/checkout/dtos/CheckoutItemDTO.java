@@ -3,7 +3,7 @@ package br.com.dbc.vemser.checkout.dtos;
 import lombok.Getter;
 
 @Getter
-public class CheckoutItemDto {
+public class CheckoutItemDTO {
 
   private String productName;
   private int  quantity;
@@ -11,9 +11,9 @@ public class CheckoutItemDto {
   private long productId;
   private int userId;
 
-  public CheckoutItemDto() {}
+  public CheckoutItemDTO() {}
 
-  public CheckoutItemDto(String productName, int quantity, double price, long productId, int userId) {
+  public CheckoutItemDTO(String productName, int quantity, double price, long productId, int userId) {
     this.productName = productName;
     this.quantity = quantity;
     this.price = price;
