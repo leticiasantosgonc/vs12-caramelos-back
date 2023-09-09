@@ -44,6 +44,7 @@ public class PedidoController {
 
         Map<String, Object> responseJson = new HashMap<>();
         responseJson.put("url", session.getUrl());
+        responseJson.put("idPedido", pedido.getIdPedido());
 
         System.out.println(session.getUrl());
         return ResponseEntity.ok(responseJson);
@@ -60,7 +61,7 @@ public class PedidoController {
     }
 
     @GetMapping("/nota/{idPedido}")
-    public ResponseEntity<Integer> gerarNota(@PathVariable Integer idPedido) throws RegraDeNegocioException, StripeException, IOException {
+    public ResponseEntity<Void> gerarNota(@PathVariable Integer idPedido) throws RegraDeNegocioException, StripeException, IOException {
         Pedido pedido = pedidoService.findById(idPedido);
         boolean deveGerarNota = pedidoService.deveGerarNota(idPedido);
 
@@ -73,10 +74,12 @@ public class PedidoController {
             String headerKey = "Content-Disposition";
             String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
             response.setHeader(headerKey, headerValue);
+            response.setHeader("id-pedido", String.valueOf(idPedido));
+
             pdfService.generatePDF(response, pedido);
             pedidoService.atualizarStatusParaPago(idPedido);
 
-            return ResponseEntity.ok(idPedido);
+            return ResponseEntity.ok().build();
         }
 
         return ResponseEntity.noContent().build();
