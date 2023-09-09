@@ -27,6 +27,7 @@ public class PDFService {
        for (Produto produto : pedido.getItens()) {
            document.add(new Paragraph(produto.getNome() + " - " + produto.getPreco(), font));
        }
+
        document.add(new Paragraph("Total: " + pedido.getPreco(), font));
        document.add(new Paragraph("Data do Pedido: " + pedido.getDataPedido(), font));
 
