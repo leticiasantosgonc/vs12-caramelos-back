@@ -15,6 +15,17 @@ import javax.validation.constraints.Positive;
 import java.util.List;
 
 public interface BebidaControllerDoc {
+
+    @Operation(summary = "Buscar uma bebida", description = "Buscar todas as bebidas")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
+            }
+    )
     @GetMapping("/listar/bebida")
     public List<BebidaOutDTO> findAllBebidas();
 

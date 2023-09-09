@@ -21,7 +21,9 @@ import java.util.List;
 @Validated
 @RequestMapping("/bebida")
 public class BebidaController implements BebidaControllerDoc {
+
     private final ProdutoService produtoService;
+
     @PostMapping("/criar/bebida")
     public ResponseEntity<BebidaOutDTO> createBebida(@RequestBody @Valid BebidaInDTO bebidaInDTO) {
         return new ResponseEntity<>(produtoService.createBebida(bebidaInDTO), HttpStatus.CREATED);
@@ -47,4 +49,5 @@ public class BebidaController implements BebidaControllerDoc {
         produtoService.deleteBebidaById(idBebida);
         return ResponseEntity.ok().build();
     }
+
 }

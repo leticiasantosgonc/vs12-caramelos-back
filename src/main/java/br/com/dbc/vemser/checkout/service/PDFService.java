@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.checkout.service;
 
+import br.com.dbc.vemser.checkout.dtos.PedidoOutDTO;
 import br.com.dbc.vemser.checkout.entities.Pedido;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import com.lowagie.text.*;
