@@ -9,6 +9,7 @@ import br.com.dbc.vemser.checkout.repository.ProdutoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.rowset.serial.SerialClob;
 import java.sql.Clob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,11 +71,15 @@ public class ProdutoService {
             throw new RegraDeNegocioException("O produto não é um combo");
         }
     }
-    public void deleteComboById(Integer idCombo) throws RegraDeNegocioException{
+    public void deleteComboById(Integer idCombo) throws RegraDeNegocioException,DataIntegrityViolationException{
         Produto produtoRetornado = findById(idCombo);
 
         if (produtoRetornado.getTipoProduto().equals(TipoProduto.COMBO)){
-            produtoRepository.deleteById(idCombo);
+            try{
+                produtoRepository.deleteById(idCombo);
+            }catch (DataIntegrityViolationException sql){
+                throw new DataIntegrityViolationException("Produto registrado em pedidos, Impossivel excluir");
+            }
         }
     }
 
@@ -130,11 +136,15 @@ public class ProdutoService {
         }
     }
 
-    public void deleteAcompanhamentoById(Integer idAcompanhamento)throws RegraDeNegocioException{
+    public void deleteAcompanhamentoById(Integer idAcompanhamento)throws RegraDeNegocioException, DataIntegrityViolationException{
         Produto produtoRetornado = findById(idAcompanhamento);
 
         if (produtoRetornado.getTipoProduto().equals(TipoProduto.ACOMPANHAMENTO)){
-            produtoRepository.deleteById(idAcompanhamento);
+            try{
+                produtoRepository.deleteById(idAcompanhamento);
+            }catch (DataIntegrityViolationException sql){
+                throw new DataIntegrityViolationException("Produto registrado em pedidos, Impossivel excluir");
+            }
         }
     }
     public BebidaOutDTO createBebida(BebidaInDTO bebidaInDTO){
@@ -190,11 +200,15 @@ public class ProdutoService {
         }
     }
 
-    public void deleteBebidaById(Integer idBebida) throws RegraDeNegocioException{
+    public void deleteBebidaById(Integer idBebida) throws RegraDeNegocioException, DataIntegrityViolationException{
         Produto produtoRetornado = findById(idBebida);
 
         if (produtoRetornado.getTipoProduto().equals(TipoProduto.BEBIDA)){
-            produtoRepository.deleteById(idBebida);
+            try{
+                produtoRepository.deleteById(idBebida);
+            }catch (DataIntegrityViolationException sql){
+                throw new DataIntegrityViolationException("Produto registrado em pedidos, Impossivel excluir");
+            }
         }
     }
 
@@ -259,7 +273,11 @@ public class ProdutoService {
         Produto produto = findById(idLanche);
 
         if (produto.getTipoProduto().equals(TipoProduto.LANCHE)) {
-            produtoRepository.deleteById(idLanche);
+            try{
+                produtoRepository.deleteById(idLanche);
+            }catch (DataIntegrityViolationException sql){
+                throw new DataIntegrityViolationException("Produto registrado em pedidos, Impossivel excluir");
+            }
         }
     }
 
@@ -298,7 +316,11 @@ public class ProdutoService {
         Produto produtoAchado = findById(idProduto);
 
         if (produtoAchado.getTipoProduto()==TipoProduto.SOBREMESA) {
-            produtoRepository.delete(produtoAchado);
+            try{
+                produtoRepository.delete(produtoAchado);
+            }catch (DataIntegrityViolationException sql){
+                throw new DataIntegrityViolationException("Produto registrado em pedidos, Impossivel excluir");
+            }
         }
     }
 

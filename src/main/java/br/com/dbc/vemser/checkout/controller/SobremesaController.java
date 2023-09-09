@@ -6,6 +6,7 @@ import br.com.dbc.vemser.checkout.dtos.SobremesaOutDTO;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -44,8 +46,10 @@ public class SobremesaController implements SobremesaControllerDoc {
     }
 
     @DeleteMapping("/sobremesa/{idSobremesa}")
-    public ResponseEntity<Void> deleteSobremesa(@PathVariable @Positive Integer idSobremesa) throws RegraDeNegocioException{
-        produtoService.delete(idSobremesa);
+    public ResponseEntity<Void> deleteSobremesa(@PathVariable @Positive Integer idSobremesa) throws RegraDeNegocioException, DataIntegrityViolationException{
+
+            produtoService.delete(idSobremesa);
+
         return ResponseEntity.ok().build();
     }
 }

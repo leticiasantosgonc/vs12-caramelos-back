@@ -6,6 +6,7 @@ import br.com.dbc.vemser.checkout.dtos.ComboOutDTO;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -40,7 +41,7 @@ public class ComboController implements ComboControllerDoc {
     }
 
     @DeleteMapping("/combo/{idCombo}")
-    public ResponseEntity<Void> deleteComboById(@PathVariable("idCombo") @Positive Integer idCombo) throws RegraDeNegocioException{
+    public ResponseEntity<Void> deleteComboById(@PathVariable("idCombo") @Positive Integer idCombo) throws RegraDeNegocioException, DataIntegrityViolationException {
         produtoService.deleteComboById(idCombo);
         return ResponseEntity.ok().build();
     }

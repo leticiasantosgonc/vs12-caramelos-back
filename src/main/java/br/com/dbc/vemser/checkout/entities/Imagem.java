@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity(name = "IMG_TESTE")
-public class ImgTeste {
+public class Imagem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IMG_SEQ")

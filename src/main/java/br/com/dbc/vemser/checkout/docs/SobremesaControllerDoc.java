@@ -6,11 +6,13 @@ import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface SobremesaControllerDoc {
@@ -78,5 +80,5 @@ public interface SobremesaControllerDoc {
             }
     )
     @DeleteMapping("/sobremesa/{idSobremesa}")
-    public ResponseEntity<Void> deleteSobremesa(@PathVariable @Positive Integer idSobremesa) throws RegraDeNegocioException;
+    public ResponseEntity<Void> deleteSobremesa(@PathVariable @Positive Integer idSobremesa) throws RegraDeNegocioException, DataIntegrityViolationException;
 }

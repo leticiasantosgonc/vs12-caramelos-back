@@ -6,6 +6,7 @@ import br.com.dbc.vemser.checkout.dtos.AcompanhamentoOutDTO;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -44,7 +45,7 @@ public class AcompanhamentoController implements AcompanhamentoControllerDoc {
     }
 
     @DeleteMapping("/acompanhamento/{idAcompanhamento}")
-    public ResponseEntity<Void> deleteAcompanhamentoById(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento) throws RegraDeNegocioException{
+    public ResponseEntity<Void> deleteAcompanhamentoById(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento) throws RegraDeNegocioException, DataIntegrityViolationException {
         produtoService.deleteAcompanhamentoById(idAcompanhamento);
         return ResponseEntity.ok().build();
     }
