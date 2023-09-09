@@ -31,6 +31,8 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->  authz
                         .antMatchers("/auth","/").permitAll()
+                        .antMatchers("/pagamento/**").permitAll()
+                        .antMatchers("/gerador/**").permitAll()
                         .antMatchers("/pedido/**").permitAll()
                         .antMatchers("/admin/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.POST, "/sobremesa/**").hasRole("ADMIN")

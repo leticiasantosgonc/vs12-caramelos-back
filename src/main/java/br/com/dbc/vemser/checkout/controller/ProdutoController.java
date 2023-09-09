@@ -70,7 +70,7 @@ public class ProdutoController implements ProdutoControllerDoc {
         return produtoService.findSobremesasOrdenadasPorPreco(pageable);
     }
 
-    @PutMapping("/disponibilidade/{idProduto}")
+    @GetMapping("/disponibilidade/{idProduto}")
     public ResponseEntity<Integer> getQuantidadeProdutoPorId(@PathVariable @Positive Integer idProduto) throws RegraDeNegocioException {
         return new ResponseEntity<>(produtoService.getQuantidadeProduto(idProduto), HttpStatus.OK);
     }
