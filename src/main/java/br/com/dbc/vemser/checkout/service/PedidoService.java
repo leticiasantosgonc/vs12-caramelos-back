@@ -23,8 +23,6 @@ public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
     private final ProdutoService produtoService;
-    private final PDFService pdfService;
-    private final ObjectMapper objectMapper;
 
     public Pedido createPedido(PedidoInDTO pedidoInDTO) throws RegraDeNegocioException {
         List<Produto> produtos = new ArrayList<>();
@@ -49,7 +47,7 @@ public class PedidoService {
         }
 
         Pedido pedido = new Pedido();
-        pedido.setCpf(pedidoInDTO.getCpf());
+        pedido.setCpf(validarCpf(pedidoInDTO.getCpf()));
         pedido.setObservacao(pedidoInDTO.getObservacao());
         pedido.setItens(produtos);
         pedido.setStatus(StatusPedido.NAO_PAGO);
@@ -77,8 +75,11 @@ public class PedidoService {
 
         return relatorio;
     }
+
     public Pedido findById(Integer idPedido) throws RegraDeNegocioException{
-        return pedidoRepository.findById(idPedido).orElseThrow(()-> new RegraDeNegocioException("Pedido não encontrado"));
+        return pedidoRepository
+                .findById(idPedido)
+                .orElseThrow(()-> new RegraDeNegocioException("Pedido não encontrado"));
     }
 
     public void updateSessionId(Integer idPedido, String sessionId) throws RegraDeNegocioException {
@@ -114,6 +115,42 @@ public class PedidoService {
                 .orElseThrow(() -> new RegraDeNegocioException("Erro ao atualizar status do pedido"));
         pedidoEncontrado.setStatus(StatusPedido.PAGO);
         pedidoRepository.save(pedidoEncontrado);
+    }
+
+    public String validarCpf(String cpf) throws RegraDeNegocioException {
+        if (cpf.equals("")) {
+            return "";
+        }
+
+        if (cpf.length() == 11) {
+            int sum1 = 0;
+            for (int i = 0; i < 9; i++) {
+                int digit = Character.getNumericValue(cpf.charAt(i));
+                sum1 += digit * (10 - i);
+            }
+
+            int digit1 = 11 - (sum1 % 11);
+            if (digit1 >= 10) {
+                digit1 = 0;
+            }
+
+            int sum2 = 0;
+            for (int i = 0; i < 10; i++) {
+                int digit = Character.getNumericValue(cpf.charAt(i));
+                sum2 += digit * (11 - i);
+            }
+
+            int digit2 = 11 - (sum2 % 11);
+            if (digit2 >= 10) {
+                digit2 = 0;
+            }
+
+            if (Character.getNumericValue(cpf.charAt(9)) == digit1 && Character.getNumericValue(cpf.charAt(10)) == digit2) {
+                return cpf;
+            }
+        }
+
+        throw new RegraDeNegocioException("CPF inválido");
     }
 
 }

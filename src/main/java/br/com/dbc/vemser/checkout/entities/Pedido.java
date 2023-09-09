@@ -4,6 +4,7 @@ import br.com.dbc.vemser.checkout.enums.StatusPedido;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

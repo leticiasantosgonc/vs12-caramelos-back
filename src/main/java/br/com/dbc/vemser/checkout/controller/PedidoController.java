@@ -1,10 +1,8 @@
 package br.com.dbc.vemser.checkout.controller;
 
 import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
-import br.com.dbc.vemser.checkout.dtos.RelatorioItemPedidoDTO;
 import br.com.dbc.vemser.checkout.dtos.RelatorioPedido;
 import br.com.dbc.vemser.checkout.entities.Pedido;
-import br.com.dbc.vemser.checkout.enums.StatusPedido;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.service.PDFService;
 import br.com.dbc.vemser.checkout.service.PagamentoService;
@@ -62,7 +60,7 @@ public class PedidoController {
     }
 
     @GetMapping("/nota/{idPedido}")
-    public ResponseEntity<Void> gerarNota(@PathVariable Integer idPedido) throws RegraDeNegocioException, StripeException, IOException {
+    public ResponseEntity<Integer> gerarNota(@PathVariable Integer idPedido) throws RegraDeNegocioException, StripeException, IOException {
         Pedido pedido = pedidoService.findById(idPedido);
         boolean deveGerarNota = pedidoService.deveGerarNota(idPedido);
 
@@ -77,7 +75,8 @@ public class PedidoController {
             response.setHeader(headerKey, headerValue);
             pdfService.generatePDF(response, pedido);
             pedidoService.atualizarStatusParaPago(idPedido);
-            return ResponseEntity.ok().build();
+
+            return ResponseEntity.ok(idPedido);
         }
 
         return ResponseEntity.noContent().build();
