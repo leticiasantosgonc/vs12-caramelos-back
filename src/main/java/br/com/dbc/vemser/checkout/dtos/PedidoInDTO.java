@@ -22,8 +22,8 @@ public class PedidoInDTO {
     @Getter
     private List<ItemInDTO> itens;
 
-    @CPF
-    @Pattern(regexp = "^(|\\d{11})$")
+    //@CPF
+    @Pattern(regexp = "^$|\\d{11}", message = "CPF inválido dto")
     private String cpf;
 
     @NotBlank
