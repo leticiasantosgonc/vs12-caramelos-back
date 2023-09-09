@@ -3,7 +3,6 @@ package br.com.dbc.vemser.checkout.service;
 import br.com.dbc.vemser.checkout.dtos.ItemInDTO;
 import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
 import br.com.dbc.vemser.checkout.dtos.PedidoOutDTO;
-import br.com.dbc.vemser.checkout.dtos.RelatorioPedido;
 import br.com.dbc.vemser.checkout.entities.Pedido;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.enums.Game;
@@ -161,6 +160,16 @@ public class PedidoService {
         valores.put("pagos", pedidoRepository.countByStatus(StatusPedido.PAGO));
         valores.put("naoPagos", pedidoRepository.countByStatus(StatusPedido.NAO_PAGO));
         return valores;
+    }
+
+    public List<PedidoOutDTO> listarPedidosPorData(LocalDate data) {
+        return pedidoRepository
+                .findByDataPedido(data)
+                .stream()
+                .map(pedido -> {
+                    return objectMapper.convertValue(pedido, PedidoOutDTO.class);
+                })
+                .toList();
     }
 
     public Pedido findPedidoUtils(Integer idPedido) throws RegraDeNegocioException {

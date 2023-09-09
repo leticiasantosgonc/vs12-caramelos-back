@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -22,5 +23,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
     List<RelatorioItemPedidoDTO> findAllByIdPedido(@Param("idPedido") Integer idPedido);
 
     Long countByStatus(StatusPedido status);
+
+    List<Pedido> findByDataPedido(LocalDate data);
 
 }

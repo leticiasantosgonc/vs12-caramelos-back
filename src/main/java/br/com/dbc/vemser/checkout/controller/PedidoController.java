@@ -12,6 +12,7 @@ import br.com.dbc.vemser.checkout.service.PedidoService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +62,12 @@ public class PedidoController implements PedidoControllerDoc {
     @GetMapping("/listar-por-status")
     public ResponseEntity<Map<String, Long>> listarPedidosPorStatus() {
         return new ResponseEntity<>(pedidoService.listarPedidosPorStatus(), HttpStatus.OK);
+    }
+
+    @GetMapping("/listar-por-data")
+    public ResponseEntity<List<PedidoOutDTO>> listarPedidosPorData(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        System.out.println(data);
+        return new ResponseEntity<>(pedidoService.listarPedidosPorData(data), HttpStatus.OK);
     }
 
     @GetMapping("/nota/{idPedido}")
