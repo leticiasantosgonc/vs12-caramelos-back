@@ -57,6 +57,11 @@ public class PedidoController implements PedidoControllerDoc {
         return new ResponseEntity<>(pedidoService.findAllPedidos(), HttpStatus.OK);
     }
 
+    @GetMapping("/listar-por-status")
+    public ResponseEntity<Map<String, Long>> listarPedidosPorStatus() {
+        return new ResponseEntity<>(pedidoService.listarPedidosPorStatus(), HttpStatus.OK);
+    }
+
     @GetMapping("/nota/{idPedido}")
     public ResponseEntity<Void> gerarNota(@PathVariable Integer idPedido) throws RegraDeNegocioException, StripeException, IOException {
         Pedido pedido = pedidoService.findPedidoUtils(idPedido);

@@ -2,6 +2,7 @@ package br.com.dbc.vemser.checkout.repository;
 
 import br.com.dbc.vemser.checkout.dtos.RelatorioItemPedidoDTO;
 import br.com.dbc.vemser.checkout.entities.Pedido;
+import br.com.dbc.vemser.checkout.enums.StatusPedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,11 +20,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
             "GROUP BY p.nome " +
             "ORDER BY p.nome ASC")
     List<RelatorioItemPedidoDTO> findAllByIdPedido(@Param("idPedido") Integer idPedido);
+
+    Long countByStatus(StatusPedido status);
+
 }
-//@Query("""
-//        SELECT NEW br.com.dbc.vemser.walletlife.dto.UsuarioComInvestimentoDTO
-//        (u.idUsuario, u.nome, i.idInvestimento, i.valor,i.descricao, i.corretora)
-//        FROM Usuario u
-//        JOIN u.investimentoEntities i
-//        WHERE (:corretora is null OR trim(upper(i.corretora)) = trim(upper(:corretora))) AND u.idUsuario=:idPessoa
-//    """)
