@@ -44,7 +44,7 @@ public class SobremesaController implements SobremesaControllerDoc {
     }
 
     @DeleteMapping("/sobremesa/{idSobremesa}")
-    public ResponseEntity<Void> deleteSobremesa(@PathVariable @Positive Integer idSobremesa) {
+    public ResponseEntity<Void> deleteSobremesa(@PathVariable @Positive Integer idSobremesa) throws RegraDeNegocioException{
         produtoService.delete(idSobremesa);
         return ResponseEntity.ok().build();
     }

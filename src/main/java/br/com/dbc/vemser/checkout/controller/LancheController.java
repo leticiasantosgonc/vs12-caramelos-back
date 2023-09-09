@@ -51,7 +51,7 @@ public class LancheController implements LancheControllerDoc {
     }
 
     @DeleteMapping("/lanche/{idLanche}")
-    public ResponseEntity<Void> deleteLancheById(@PathVariable @Positive Integer idLanche) {
+    public ResponseEntity<Void> deleteLancheById(@PathVariable @Positive Integer idLanche)  throws RegraDeNegocioException{
         produtoService.deleteLancheById(idLanche);
         return ResponseEntity.ok().build();
     }

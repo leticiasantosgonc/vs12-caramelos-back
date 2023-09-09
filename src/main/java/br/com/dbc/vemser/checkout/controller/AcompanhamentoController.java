@@ -44,7 +44,7 @@ public class AcompanhamentoController implements AcompanhamentoControllerDoc {
     }
 
     @DeleteMapping("/acompanhamento/{idAcompanhamento}")
-    public ResponseEntity<Void> deleteAcompanhamentoById(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento){
+    public ResponseEntity<Void> deleteAcompanhamentoById(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento) throws RegraDeNegocioException{
         produtoService.deleteAcompanhamentoById(idAcompanhamento);
         return ResponseEntity.ok().build();
     }

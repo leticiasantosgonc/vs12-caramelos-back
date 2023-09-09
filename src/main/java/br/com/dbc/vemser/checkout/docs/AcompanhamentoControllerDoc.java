@@ -76,6 +76,6 @@ public interface AcompanhamentoControllerDoc {
             }
     )
     @DeleteMapping("/acompanhamento/{idAcompanhamento}")
-    public ResponseEntity<Void> deleteAcompanhamentoById(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento);
+    public ResponseEntity<Void> deleteAcompanhamentoById(@PathVariable("idAcompanhamento") @Positive Integer idAcompanhamento) throws RegraDeNegocioException;
 
 }

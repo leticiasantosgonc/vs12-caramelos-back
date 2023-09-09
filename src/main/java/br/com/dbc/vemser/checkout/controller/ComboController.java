@@ -40,7 +40,7 @@ public class ComboController implements ComboControllerDoc {
     }
 
     @DeleteMapping("/combo/{idCombo}")
-    public ResponseEntity<Void> deleteComboById(@PathVariable("idCombo") @Positive Integer idCombo){
+    public ResponseEntity<Void> deleteComboById(@PathVariable("idCombo") @Positive Integer idCombo) throws RegraDeNegocioException{
         produtoService.deleteComboById(idCombo);
         return ResponseEntity.ok().build();
     }

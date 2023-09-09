@@ -78,5 +78,5 @@ public interface SobremesaControllerDoc {
             }
     )
     @DeleteMapping("/sobremesa/{idSobremesa}")
-    public ResponseEntity<Void> deleteSobremesa(@PathVariable @Positive Integer idSobremesa);
+    public ResponseEntity<Void> deleteSobremesa(@PathVariable @Positive Integer idSobremesa) throws RegraDeNegocioException;
 }

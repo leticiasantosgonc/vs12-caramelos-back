@@ -64,5 +64,5 @@ public interface ComboControllerDoc {
             }
     )
     @DeleteMapping("/combo/{idCombo}")
-    public ResponseEntity<Void> deleteComboById(@PathVariable("idCombo") @Positive Integer idCombo);
+    public ResponseEntity<Void> deleteComboById(@PathVariable("idCombo") @Positive Integer idCombo) throws RegraDeNegocioException;
 }

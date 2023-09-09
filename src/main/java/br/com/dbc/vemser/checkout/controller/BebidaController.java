@@ -42,7 +42,7 @@ public class BebidaController implements BebidaControllerDoc {
     }
 
     @DeleteMapping("/bebida/{idBebida}")
-    public ResponseEntity<Void> deleteBebidaById(@PathVariable("idBebida") @Positive Integer idBebida){
+    public ResponseEntity<Void> deleteBebidaById(@PathVariable("idBebida") @Positive Integer idBebida) throws RegraDeNegocioException{
         produtoService.deleteBebidaById(idBebida);
         return ResponseEntity.ok().build();
     }
