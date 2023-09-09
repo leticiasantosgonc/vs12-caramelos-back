@@ -69,8 +69,8 @@ public class ProdutoService {
             throw new RegraDeNegocioException("O produto não é um combo");
         }
     }
-    public void deleteComboById(Integer idCombo){
-        Produto produtoRetornado = produtoRepository.findById(idCombo).get();
+    public void deleteComboById(Integer idCombo) throws RegraDeNegocioException{
+        Produto produtoRetornado = findById(idCombo);
 
         if (produtoRetornado.getTipoProduto().equals(TipoProduto.COMBO)){
             produtoRepository.deleteById(idCombo);
@@ -130,8 +130,8 @@ public class ProdutoService {
         }
     }
 
-    public void deleteAcompanhamentoById(Integer idAcompanhamento){
-        Produto produtoRetornado = produtoRepository.findById(idAcompanhamento).get();
+    public void deleteAcompanhamentoById(Integer idAcompanhamento)throws RegraDeNegocioException{
+        Produto produtoRetornado = findById(idAcompanhamento);
 
         if (produtoRetornado.getTipoProduto().equals(TipoProduto.ACOMPANHAMENTO)){
             produtoRepository.deleteById(idAcompanhamento);
@@ -190,8 +190,8 @@ public class ProdutoService {
         }
     }
 
-    public void deleteBebidaById(Integer idBebida){
-        Produto produtoRetornado = produtoRepository.findById(idBebida).get();
+    public void deleteBebidaById(Integer idBebida) throws RegraDeNegocioException{
+        Produto produtoRetornado = findById(idBebida);
 
         if (produtoRetornado.getTipoProduto().equals(TipoProduto.BEBIDA)){
             produtoRepository.deleteById(idBebida);
@@ -255,8 +255,8 @@ public class ProdutoService {
         }
     }
 
-    public void deleteLancheById(Integer idLanche){
-        Produto produto = produtoRepository.findById(idLanche).get();
+    public void deleteLancheById(Integer idLanche) throws RegraDeNegocioException{
+        Produto produto = findById(idLanche);
 
         if (produto.getTipoProduto().equals(TipoProduto.LANCHE)) {
             produtoRepository.deleteById(idLanche);
@@ -294,12 +294,11 @@ public class ProdutoService {
         return sobremesaOutDTO;
     }
 
-    public void delete(Integer idProduto){
-        Optional<Produto> produtoAchado = produtoRepository.findById(idProduto);
-        Produto produtoConvertido = objectMapper.convertValue(produtoAchado,Produto.class);
+    public void delete(Integer idProduto) throws RegraDeNegocioException{
+        Produto produtoAchado = findById(idProduto);
 
-        if (produtoConvertido.getTipoProduto()==TipoProduto.SOBREMESA) {
-            produtoRepository.delete(produtoConvertido);
+        if (produtoAchado.getTipoProduto()==TipoProduto.SOBREMESA) {
+            produtoRepository.delete(produtoAchado);
         }
     }
 
