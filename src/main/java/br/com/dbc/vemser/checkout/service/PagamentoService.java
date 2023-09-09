@@ -47,13 +47,13 @@ public class PagamentoService {
                 .build();
     }
 
-      public Session criarSessionCheckout (PedidoInDTO pedidoInDTO,Integer idPedido) throws StripeException, RegraDeNegocioException {
+      public Session criarSessionCheckout (PedidoInDTO pedidoInDTO, Integer idPedido) throws StripeException, RegraDeNegocioException {
             Stripe.apiKey = secretKey;
 
             SessionCreateParams params =
                     SessionCreateParams.builder()
                             .setMode(SessionCreateParams.Mode.PAYMENT)
-                            .setSuccessUrl("https://google.com")
+                            .setSuccessUrl("https://google.com/")
                             .setCancelUrl("https://google.com")
                             .addAllLineItem(criarItensParaPagamento(pedidoInDTO, idPedido))
 
@@ -69,6 +69,8 @@ public class PagamentoService {
 
                             .build();
             Session session = Session.create(params);
+
+            buscarPedidoPeloIdDaSession(idPedido);
 
             return session;
     }
@@ -117,6 +119,16 @@ public class PagamentoService {
          */
 
         return itensParaPagamento;
+    }
+
+    public Session buscarPedidoPeloIdDaSession(Integer idPedido) throws RegraDeNegocioException, StripeException {
+        Pedido pedido = pedidoService.findById(idPedido);
+        Session session = Session.retrieve("cs_test_b1mWmiPGTlDwLe6exg2TVAsMyQ92YGuLqZ97WfjjKwhUIw6KFTLWVKpSRv");
+        System.out.println("Id session:");
+        System.out.println(session.getId());
+        System.out.println("Status session:");
+        System.out.println(session.getPaymentStatus());
+        return session;
     }
 
 }

@@ -48,4 +48,7 @@ public class Pedido {
     @Column(name = "PRECO")
     private BigDecimal preco;
 
+    @Column(name = "ID_SESSION")
+    private String idSession;
+
 }
