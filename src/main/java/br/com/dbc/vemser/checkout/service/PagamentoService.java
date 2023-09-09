@@ -5,6 +5,7 @@ import br.com.dbc.vemser.checkout.dtos.ItemInDTO;
 import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
 import br.com.dbc.vemser.checkout.entities.Pedido;
 import br.com.dbc.vemser.checkout.entities.Produto;
+import br.com.dbc.vemser.checkout.enums.Game;
 import br.com.dbc.vemser.checkout.enums.StatusPedido;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import com.stripe.Stripe;
@@ -79,19 +80,36 @@ public class PagamentoService {
         List<SessionCreateParams.LineItem> itensParaPagamento = new ArrayList<>();
         List<ItemInDTO> itensParaRequisicao = pedidoInDTO.getItens();
 
-        for (ItemInDTO item : itensParaRequisicao) {
-            Produto produto = produtoService.findById(item.getIdProduto());
-            SessionCreateParams.LineItem produtoEspecifico = SessionCreateParams.LineItem.builder()
-                    .setQuantity((long) item.getQuantidadeProduto())
-                    .setPriceData(createPriceData(new CheckoutItemDto(
-                        produto.getNome(),
-                            item.getQuantidadeProduto(),
-                            produto.getPreco().doubleValue(),
-                            produto.getIdProduto(),
-                            1
-                    )))
-                    .build();
-            itensParaPagamento.add(produtoEspecifico);
+        if(pedidoInDTO.getGame().equals(Game.LOSE)) {
+            for (ItemInDTO item : itensParaRequisicao) {
+                Produto produto = produtoService.findById(item.getIdProduto());
+                SessionCreateParams.LineItem produtoEspecifico = SessionCreateParams.LineItem.builder()
+                        .setQuantity((long) item.getQuantidadeProduto())
+                        .setPriceData(createPriceData(new CheckoutItemDto(
+                                produto.getNome(),
+                                item.getQuantidadeProduto(),
+                                produto.getPreco().doubleValue(),
+                                produto.getIdProduto(),
+                                1
+                        )))
+                        .build();
+                itensParaPagamento.add(produtoEspecifico);
+            }
+        }else {
+            for (ItemInDTO item : itensParaRequisicao) {
+                Produto produto = produtoService.findById(item.getIdProduto());
+                SessionCreateParams.LineItem produtoEspecifico = SessionCreateParams.LineItem.builder()
+                        .setQuantity((long) item.getQuantidadeProduto())
+                        .setPriceData(createPriceData(new CheckoutItemDto(
+                                produto.getNome(),
+                                item.getQuantidadeProduto(),
+                                produto.getPreco().doubleValue()*0.90,
+                                produto.getIdProduto(),
+                                1
+                        )))
+                        .build();
+                itensParaPagamento.add(produtoEspecifico);
+            }
         }
 
         /*

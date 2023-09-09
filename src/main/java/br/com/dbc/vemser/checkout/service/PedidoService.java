@@ -3,6 +3,7 @@ package br.com.dbc.vemser.checkout.service;
 import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Pedido;
 import br.com.dbc.vemser.checkout.entities.Produto;
+import br.com.dbc.vemser.checkout.enums.Game;
 import br.com.dbc.vemser.checkout.enums.StatusPedido;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.repository.PedidoRepository;
@@ -48,6 +49,15 @@ public class PedidoService {
             valorTotal = valorTotal.add(produto.getPreco());
         }
 
+        if(pedidoInDTO.getGame().equals(Game.WIN)){
+
+            Double valorComDescontoDouble = valorTotal.doubleValue() * 0.90;
+
+            valorTotal = BigDecimal.valueOf(valorComDescontoDouble);
+
+        }
+
+
         Pedido pedido = new Pedido();
         pedido.setCpf(pedidoInDTO.getCpf());
         pedido.setObservacao(pedidoInDTO.getObservacao());
@@ -56,6 +66,7 @@ public class PedidoService {
         pedido.setDataPedido(LocalDate.now());
         pedido.setQuantidade(produtos.size());
         pedido.setPreco(valorTotal);
+        pedido.setGame(pedidoInDTO.getGame());
 
         return pedidoRepository.save(pedido);
     }

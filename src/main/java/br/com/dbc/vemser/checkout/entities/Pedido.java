@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.checkout.entities;
 
+import br.com.dbc.vemser.checkout.enums.Game;
 import br.com.dbc.vemser.checkout.enums.StatusPedido;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,6 +49,10 @@ public class Pedido {
     @Column(name = "PRECO")
     private BigDecimal preco;
 
+    @Column(name = "GAME")
+    @Enumerated(EnumType.STRING)
+    private Game game;
+  
     @Column(name = "ID_SESSION")
     private String idSession;
 
