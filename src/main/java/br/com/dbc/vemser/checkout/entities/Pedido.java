@@ -52,5 +52,8 @@ public class Pedido {
     @Column(name = "GAME")
     @Enumerated(EnumType.STRING)
     private Game game;
+  
+    @Column(name = "ID_SESSION")
+    private String idSession;
 
 }

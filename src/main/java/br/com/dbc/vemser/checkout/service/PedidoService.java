@@ -8,6 +8,8 @@ import br.com.dbc.vemser.checkout.enums.StatusPedido;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.repository.PedidoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stripe.exception.StripeException;
+import com.stripe.model.checkout.Session;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
     private final ProdutoService produtoService;
+    private final PDFService pdfService;
     private final ObjectMapper objectMapper;
 
     public Pedido createPedido(PedidoInDTO pedidoInDTO) throws RegraDeNegocioException {
@@ -87,6 +90,41 @@ public class PedidoService {
     }
     public Pedido findById(Integer idPedido) throws RegraDeNegocioException{
         return pedidoRepository.findById(idPedido).orElseThrow(()-> new RegraDeNegocioException("Pedido não encontrado"));
+    }
+
+    public void updateSessionId(Integer idPedido, String sessionId) throws RegraDeNegocioException {
+        Pedido pedidoEncontrado = pedidoRepository
+                .findById(idPedido)
+                .orElseThrow(() -> new RegraDeNegocioException("Erro ao atualizar Session ID"));
+        pedidoEncontrado.setIdSession(sessionId);
+        pedidoRepository.save(pedidoEncontrado);
+    }
+
+    public boolean deveGerarNota(Integer idPedido) throws RegraDeNegocioException, StripeException {
+        Pedido pedido = pedidoRepository
+                .findById(idPedido)
+                .orElseThrow(() -> new RegraDeNegocioException("Erro ao gerar nota"));
+
+        String sessionId = pedido.getIdSession();
+        Session session = Session.retrieve(sessionId);
+
+        if (session.getPaymentStatus().equals("paid")) {
+            if (pedido.getStatus().equals(StatusPedido.NAO_PAGO)) {
+                return true;
+            } else {
+                throw new RegraDeNegocioException("Nota já emitida");
+            }
+        } else {
+            throw new RegraDeNegocioException("Pagamento não foi efetuado");
+        }
+    }
+
+    public void atualizarStatusParaPago(Integer idPedido) throws RegraDeNegocioException {
+        Pedido pedidoEncontrado = pedidoRepository
+                .findById(idPedido)
+                .orElseThrow(() -> new RegraDeNegocioException("Erro ao atualizar status do pedido"));
+        pedidoEncontrado.setStatus(StatusPedido.PAGO);
+        pedidoRepository.save(pedidoEncontrado);
     }
 
 }

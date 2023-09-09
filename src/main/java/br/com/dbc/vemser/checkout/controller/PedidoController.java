@@ -4,6 +4,7 @@ import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
 import br.com.dbc.vemser.checkout.dtos.RelatorioItemPedidoDTO;
 import br.com.dbc.vemser.checkout.dtos.RelatorioPedido;
 import br.com.dbc.vemser.checkout.entities.Pedido;
+import br.com.dbc.vemser.checkout.enums.StatusPedido;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.service.PDFService;
 import br.com.dbc.vemser.checkout.service.PagamentoService;
@@ -39,32 +40,47 @@ public class PedidoController {
 
     @PostMapping("/criar")
     public ResponseEntity<Object> createPedido(@RequestBody PedidoInDTO pedidoInDTO) throws RegraDeNegocioException, IOException, StripeException {
-//        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-//            response.setContentType("application/pdf");
-//            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
-//            String currentDateTime = dateFormatter.format(new Date());
-//
-//            String headerKey = "Content-Disposition";
-//            String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
-//            response.setHeader(headerKey, headerValue);
-            Pedido pedido = pedidoService.createPedido(pedidoInDTO);
+        Pedido pedido = pedidoService.createPedido(pedidoInDTO);
+        Session session = pagamentoService.criarSessionCheckout(pedidoInDTO, pedido.getIdPedido());
+        pedidoService.updateSessionId(pedido.getIdPedido(), session.getId());
 
-            Session session = pagamentoService.criarSessionCheckout(pedidoInDTO,pedido.getIdPedido());
-            Map<String, Object> responseJson = new HashMap<>();
-            responseJson.put("url", session.getUrl());
+        Map<String, Object> responseJson = new HashMap<>();
+        responseJson.put("url", session.getUrl());
 
-            //pdfService.generatePDF(response, pedido);
-            System.out.println(session.getUrl());
-            return ResponseEntity.ok(responseJson);
-            //return new ResponseEntity<>(pedidoService.createPedido(pedidoInDTO), HttpStatus.OK);
+        System.out.println(session.getUrl());
+        return ResponseEntity.ok(responseJson);
     }
 
     @GetMapping("/listar")
     public ResponseEntity<List<Pedido>> findAllPedidos() {
         return new ResponseEntity<>(pedidoService.findAllPedidos(), HttpStatus.OK);
     }
+
     @GetMapping("/listar/itens")
     public ResponseEntity<RelatorioPedido> findByPedido() throws RegraDeNegocioException{
         return new ResponseEntity<>(pedidoService.relatorioItemPedido(), HttpStatus.OK);
     }
+
+    @GetMapping("/nota/{idPedido}")
+    public ResponseEntity<Void> gerarNota(@PathVariable Integer idPedido) throws RegraDeNegocioException, StripeException, IOException {
+        Pedido pedido = pedidoService.findById(idPedido);
+        boolean deveGerarNota = pedidoService.deveGerarNota(idPedido);
+
+        if (deveGerarNota) {
+            HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+            response.setContentType("application/pdf");
+            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
+            String currentDateTime = dateFormatter.format(new Date());
+
+            String headerKey = "Content-Disposition";
+            String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
+            response.setHeader(headerKey, headerValue);
+            pdfService.generatePDF(response, pedido);
+            pedidoService.atualizarStatusParaPago(idPedido);
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
