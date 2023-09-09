@@ -32,11 +32,6 @@ public class LancheInDTO {
     @Schema(description = "Quantidade do lanche", example = "10", required = true)
     private Integer quantidade;
 
-//    @NotNull(message = "O campo tamanho não pode ser nulo")
-//    @Enumerated(EnumType.STRING)
-//    @Schema(description = "Tamanho do produto", example = "PEQUENO", required = true)
-//    private TamanhoProduto tamanhoProduto;
-
     @NotNull(message = "O campo dieta não pode estar vazio")
     @Enumerated(EnumType.STRING)
     @Schema(description = "Dieta do produto: vegetariano ou não", example = "LANCHE_VEGETARIANO", required = true)

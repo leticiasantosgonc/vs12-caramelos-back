@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @Data
 @Valid
 public class SobremesaInDTO {
+
     @Schema(description = "Insira o nome do produto", example = "gelatina")
     @NotBlank(message = "O campo não dever ser vazio e/ou nulo e/ou branco")
     @Pattern(regexp = "^[a-zA-ZÀ-ÖØ-öø-ÿ -]*$")
@@ -27,11 +28,6 @@ public class SobremesaInDTO {
     @Schema(description = "Quantidade a ser inserida do produto", example = "10")
     @Positive(message = "O campo deve ser positivo")
     private Integer quantidade;
-
-//    @Schema(description = "Insirao tamanho do produto", example = "PEQUENO")
-//    @NotNull(message = "O campo não deve ser nulo")
-//    @Enumerated(EnumType.STRING)
-//    private TamanhoProduto tamanhoProduto;
 
     @Schema(description = "Insira o preco do produto", example = "15.90")
     @NotNull(message = "O campo preço não pode ser nulo")

@@ -6,6 +6,7 @@ import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -78,6 +79,6 @@ public interface LancheControllerDoc {
             }
     )
     @DeleteMapping("/lanche/{idLanche}")
-    public ResponseEntity<Void> deleteLancheById(@PathVariable @Positive Integer idLanche) throws RegraDeNegocioException;
+    public ResponseEntity<Void> deleteLancheById(@PathVariable @Positive Integer idLanche) throws RegraDeNegocioException, DataIntegrityViolationException;
 
 }

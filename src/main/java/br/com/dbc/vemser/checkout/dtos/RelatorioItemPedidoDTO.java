@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RelatorioItemPedidoDTO {
+
     private String nome;
     private long quantidade;
+
 }

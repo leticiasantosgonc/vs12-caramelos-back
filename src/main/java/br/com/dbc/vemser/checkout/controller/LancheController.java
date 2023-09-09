@@ -6,6 +6,7 @@ import br.com.dbc.vemser.checkout.dtos.LancheOutDTO;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -51,7 +52,7 @@ public class LancheController implements LancheControllerDoc {
     }
 
     @DeleteMapping("/lanche/{idLanche}")
-    public ResponseEntity<Void> deleteLancheById(@PathVariable @Positive Integer idLanche)  throws RegraDeNegocioException{
+    public ResponseEntity<Void> deleteLancheById(@PathVariable @Positive Integer idLanche)  throws RegraDeNegocioException, DataIntegrityViolationException {
         produtoService.deleteLancheById(idLanche);
         return ResponseEntity.ok().build();
     }

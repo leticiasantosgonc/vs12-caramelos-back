@@ -1,8 +1,12 @@
 package br.com.dbc.vemser.checkout.service;
 
-import br.com.dbc.vemser.checkout.dtos.*;
+import br.com.dbc.vemser.checkout.dtos.ItemInDTO;
+import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
+import br.com.dbc.vemser.checkout.dtos.PedidoOutDTO;
+import br.com.dbc.vemser.checkout.dtos.RelatorioPedido;
 import br.com.dbc.vemser.checkout.entities.Pedido;
 import br.com.dbc.vemser.checkout.entities.Produto;
+import br.com.dbc.vemser.checkout.enums.Game;
 import br.com.dbc.vemser.checkout.enums.StatusPedido;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.repository.PedidoRepository;
@@ -23,10 +27,9 @@ public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
     private final ProdutoService produtoService;
-    private final PDFService pdfService;
     private final ObjectMapper objectMapper;
 
-    public Pedido createPedido(PedidoInDTO pedidoInDTO) throws RegraDeNegocioException {
+    public PedidoOutDTO createPedido(PedidoInDTO pedidoInDTO) throws RegraDeNegocioException {
         List<Produto> produtos = new ArrayList<>();
         for (ItemInDTO item : pedidoInDTO.getItens()) {
             Produto produto = produtoService.findById(item.getIdProduto());
@@ -48,37 +51,44 @@ public class PedidoService {
             valorTotal = valorTotal.add(produto.getPreco());
         }
 
+        if (pedidoInDTO.getGame().equals(Game.WIN)){
+
+            Double valorComDescontoDouble = valorTotal.doubleValue() * 0.90;
+
+            valorTotal = BigDecimal.valueOf(valorComDescontoDouble);
+
+        }
+
         Pedido pedido = new Pedido();
-        pedido.setCpf(pedidoInDTO.getCpf());
+        pedido.setCpf(validarCpf(pedidoInDTO.getCpf()));
         pedido.setObservacao(pedidoInDTO.getObservacao());
         pedido.setItens(produtos);
         pedido.setStatus(StatusPedido.NAO_PAGO);
         pedido.setDataPedido(LocalDate.now());
         pedido.setQuantidade(produtos.size());
         pedido.setPreco(valorTotal);
+        pedido.setGame(pedidoInDTO.getGame());
 
-        return pedidoRepository.save(pedido);
+        Pedido pedidoPersistido = pedidoRepository.save(pedido);
+        return objectMapper.convertValue(pedidoPersistido, PedidoOutDTO.class);
     }
 
-    public List<Pedido> findAllPedidos() {
-        return pedidoRepository.findAll();
+    public List<PedidoOutDTO> findAllPedidos() {
+        return pedidoRepository
+                .findAll()
+                .stream()
+                .map(pedido -> {
+                    return objectMapper.convertValue(pedido, PedidoOutDTO.class);
+                })
+                .toList();
     }
 
-    public RelatorioPedido relatorioItemPedido() throws RegraDeNegocioException{
-        Pedido pedidoAchado = pedidoRepository.findById(43).orElseThrow(()-> new RegraDeNegocioException("Pedido não existe"));
+    public PedidoOutDTO findById(Integer idPedido) throws RegraDeNegocioException{
+        Pedido pedidoEncontrado = pedidoRepository
+                .findById(idPedido)
+                .orElseThrow(()-> new RegraDeNegocioException("Pedido não encontrado"));
 
-        RelatorioPedido relatorio = new RelatorioPedido();
-        relatorio.setIdPedido(pedidoAchado.getIdPedido());
-        relatorio.setValorTotal(pedidoAchado.getPreco());
-        relatorio.setDataPedido(pedidoAchado.getDataPedido());
-        relatorio.setStatus(pedidoAchado.getStatus());
-        relatorio.setItens(pedidoRepository.findAllByIdPedido(43));
-        relatorio.setDataRelatorio(LocalDate.now());
-
-        return relatorio;
-    }
-    public Pedido findById(Integer idPedido) throws RegraDeNegocioException{
-        return pedidoRepository.findById(idPedido).orElseThrow(()-> new RegraDeNegocioException("Pedido não encontrado"));
+        return objectMapper.convertValue(pedidoEncontrado, PedidoOutDTO.class);
     }
 
     public void updateSessionId(Integer idPedido, String sessionId) throws RegraDeNegocioException {
@@ -114,6 +124,48 @@ public class PedidoService {
                 .orElseThrow(() -> new RegraDeNegocioException("Erro ao atualizar status do pedido"));
         pedidoEncontrado.setStatus(StatusPedido.PAGO);
         pedidoRepository.save(pedidoEncontrado);
+    }
+
+    public String validarCpf(String cpf) throws RegraDeNegocioException {
+        if (cpf.equals("")) {
+            return "";
+        }
+
+        if (cpf.length() == 11) {
+            int sum1 = 0;
+            for (int i = 0; i < 9; i++) {
+                int digit = Character.getNumericValue(cpf.charAt(i));
+                sum1 += digit * (10 - i);
+            }
+
+            int digit1 = 11 - (sum1 % 11);
+            if (digit1 >= 10) {
+                digit1 = 0;
+            }
+
+            int sum2 = 0;
+            for (int i = 0; i < 10; i++) {
+                int digit = Character.getNumericValue(cpf.charAt(i));
+                sum2 += digit * (11 - i);
+            }
+
+            int digit2 = 11 - (sum2 % 11);
+            if (digit2 >= 10) {
+                digit2 = 0;
+            }
+
+            if (Character.getNumericValue(cpf.charAt(9)) == digit1 && Character.getNumericValue(cpf.charAt(10)) == digit2) {
+                return cpf;
+            }
+        }
+
+        throw new RegraDeNegocioException("CPF inválido");
+    }
+
+    public Pedido findPedidoUtils(Integer idPedido) throws RegraDeNegocioException {
+        return pedidoRepository
+                .findById(idPedido)
+                .orElseThrow(() -> new RegraDeNegocioException("Pedido não encontrado"));
     }
 
 }

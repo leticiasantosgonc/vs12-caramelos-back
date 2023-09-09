@@ -6,6 +6,7 @@ import br.com.dbc.vemser.checkout.dtos.BebidaOutDTO;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +21,9 @@ import java.util.List;
 @Validated
 @RequestMapping("/bebida")
 public class BebidaController implements BebidaControllerDoc {
+
     private final ProdutoService produtoService;
+
     @PostMapping("/criar/bebida")
     public ResponseEntity<BebidaOutDTO> createBebida(@RequestBody @Valid BebidaInDTO bebidaInDTO) {
         return new ResponseEntity<>(produtoService.createBebida(bebidaInDTO), HttpStatus.CREATED);
@@ -42,8 +45,9 @@ public class BebidaController implements BebidaControllerDoc {
     }
 
     @DeleteMapping("/bebida/{idBebida}")
-    public ResponseEntity<Void> deleteBebidaById(@PathVariable("idBebida") @Positive Integer idBebida) throws RegraDeNegocioException{
+    public ResponseEntity<Void> deleteBebidaById(@PathVariable("idBebida") @Positive Integer idBebida) throws RegraDeNegocioException, DataIntegrityViolationException {
         produtoService.deleteBebidaById(idBebida);
         return ResponseEntity.ok().build();
     }
+
 }

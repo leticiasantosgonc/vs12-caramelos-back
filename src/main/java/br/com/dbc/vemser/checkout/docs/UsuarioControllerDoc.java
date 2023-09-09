@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -64,4 +65,18 @@ public interface UsuarioControllerDoc {
     )
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Void> deleteAdmin(@PathVariable Integer idUsuario)throws RegraDeNegocioException;
+
+
+    @Operation(summary = "Enviar Email", description = "Deve enviar um email para alteração de senha, inserir email no corpo.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Requisição realizada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
+            }
+    )
+    @PostMapping("/enviar-email-alterar-senha")
+    public ResponseEntity<String> enviarEmailAlterarSenha(@RequestBody String email) throws MessagingException;
 }
