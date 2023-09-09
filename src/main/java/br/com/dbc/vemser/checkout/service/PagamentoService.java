@@ -41,16 +41,13 @@ public class PagamentoService {
 
     public Session criarSessionCheckout (PedidoInDTO pedidoInDTO, Integer idPedido) throws StripeException, RegraDeNegocioException {
         Stripe.apiKey = secretKey;
-
         SessionCreateParams params = SessionCreateParams.builder()
                             .setMode(SessionCreateParams.Mode.PAYMENT)
                             .setSuccessUrl("https://google.com/")
                             .setCancelUrl("https://google.com")
                             .addAllLineItem(criarItensParaPagamento(pedidoInDTO, idPedido))
                             .build();
-        Session session = Session.create(params);
-        buscarPedidoPeloIdDaSession(idPedido);
-        return session;
+        return Session.create(params);
     }
 
     private List<SessionCreateParams.LineItem> criarItensParaPagamento(PedidoInDTO pedidoInDTO, Integer idPedido) throws RegraDeNegocioException {
@@ -90,11 +87,6 @@ public class PagamentoService {
         }
 
         return itensParaPagamento;
-    }
-
-    public Session buscarPedidoPeloIdDaSession(Integer idPedido) throws RegraDeNegocioException, StripeException {
-        Pedido pedido = pedidoService.findById(idPedido);
-        return Session.retrieve(pedido.getIdSession());
     }
 
 }
