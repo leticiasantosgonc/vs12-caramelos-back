@@ -9,9 +9,13 @@ import br.com.dbc.vemser.checkout.repository.RoleRepository;
 import br.com.dbc.vemser.checkout.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +28,7 @@ public class UsuarioService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final ObjectMapper objectMapper;
+    private final JavaMailSender javaMailSender;
 
     public List<AdminOutDTO> findAll(){
         List<Usuario> usuarios = usuarioRepository.findAll();
@@ -78,6 +83,16 @@ public class UsuarioService {
             throw new RegraDeNegocioException("Impossivel realizar operação");
         }
         usuarioRepository.delete(usuario);
+    }
+    public void enviarEmailAlterarSenha(String email, String linkRedefinirSenha) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setTo(email);
+        helper.setSubject("Redefinir Senha");
+        helper.setText("Olá\nClique no link abaixo para redefinir sua senha:\n" + linkRedefinirSenha +"\nEquipe Caramelos\n");
+
+        javaMailSender.send(message);
     }
 
 }
