@@ -38,22 +38,23 @@ public class PedidoController {
     private final PagamentoService pagamentoService;
 
     @PostMapping("/criar")
-    public ResponseEntity<Map<String, Object>> createPedido(@RequestBody PedidoInDTO pedidoInDTO) throws RegraDeNegocioException, IOException, StripeException {
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-            response.setContentType("application/pdf");
-            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
-            String currentDateTime = dateFormatter.format(new Date());
-
-            String headerKey = "Content-Disposition";
-            String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
-            response.setHeader(headerKey, headerValue);
+    public ResponseEntity<Object> createPedido(@RequestBody PedidoInDTO pedidoInDTO) throws RegraDeNegocioException, IOException, StripeException {
+//        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+//            response.setContentType("application/pdf");
+//            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
+//            String currentDateTime = dateFormatter.format(new Date());
+//
+//            String headerKey = "Content-Disposition";
+//            String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
+//            response.setHeader(headerKey, headerValue);
             Pedido pedido = pedidoService.createPedido(pedidoInDTO);
 
-            Session session = pagamentoService.criarSessionCheckout(pedidoInDTO);
+            Session session = pagamentoService.criarSessionCheckout(pedidoInDTO,pedido.getIdPedido());
             Map<String, Object> responseJson = new HashMap<>();
             responseJson.put("url", session.getUrl());
 
-            pdfService.generatePDF(response, pedido);
+            //pdfService.generatePDF(response, pedido);
+            System.out.println(session.getUrl());
             return ResponseEntity.ok(responseJson);
             //return new ResponseEntity<>(pedidoService.createPedido(pedidoInDTO), HttpStatus.OK);
     }

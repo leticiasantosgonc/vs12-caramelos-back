@@ -47,15 +47,15 @@ public class PagamentoService {
                 .build();
     }
 
-      public Session criarSessionCheckout (PedidoInDTO pedidoInDTO) throws StripeException, RegraDeNegocioException {
+      public Session criarSessionCheckout (PedidoInDTO pedidoInDTO,Integer idPedido) throws StripeException, RegraDeNegocioException {
             Stripe.apiKey = secretKey;
 
             SessionCreateParams params =
                     SessionCreateParams.builder()
                             .setMode(SessionCreateParams.Mode.PAYMENT)
-                            .setSuccessUrl("https://mayra.dev")
-                            .setCancelUrl("https://mayra.dev")
-                            .addAllLineItem(criarItensParaPagamento(pedidoInDTO))
+                            .setSuccessUrl("https://google.com")
+                            .setCancelUrl("https://google.com")
+                            .addAllLineItem(criarItensParaPagamento(pedidoInDTO, idPedido))
 
                             /*
                             .addLineItem(
@@ -73,19 +73,19 @@ public class PagamentoService {
             return session;
     }
 
-    private List<SessionCreateParams.LineItem> criarItensParaPagamento(PedidoInDTO pedidoInDTO) throws RegraDeNegocioException {
+    private List<SessionCreateParams.LineItem> criarItensParaPagamento(PedidoInDTO pedidoInDTO, Integer idPedido) throws RegraDeNegocioException {
         List<SessionCreateParams.LineItem> itensParaPagamento = new ArrayList<>();
         List<ItemInDTO> itensParaRequisicao = pedidoInDTO.getItens();
 
         for (ItemInDTO item : itensParaRequisicao) {
-            Pedido pedido = pedidoService.findAllPedidos().get(item.getIdProduto());
+            Produto produto = produtoService.findById(item.getIdProduto());
             SessionCreateParams.LineItem produtoEspecifico = SessionCreateParams.LineItem.builder()
                     .setQuantity((long) item.getQuantidadeProduto())
                     .setPriceData(createPriceData(new CheckoutItemDto(
-                        pedido.getItens().get(0).getNome(),
-                            pedido.getQuantidade(),
-                            pedido.getPreco().doubleValue(),
-                            pedido.getItens().get(0).getIdProduto(),
+                        produto.getNome(),
+                            item.getQuantidadeProduto(),
+                            produto.getPreco().doubleValue(),
+                            produto.getIdProduto(),
                             1
                     )))
                     .build();

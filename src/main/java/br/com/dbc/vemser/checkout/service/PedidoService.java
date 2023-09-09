@@ -74,5 +74,8 @@ public class PedidoService {
 
         return relatorio;
     }
+    public Pedido findById(Integer idPedido) throws RegraDeNegocioException{
+        return pedidoRepository.findById(idPedido).orElseThrow(()-> new RegraDeNegocioException("Pedido não encontrado"));
+    }
 
 }
