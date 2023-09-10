@@ -2,6 +2,7 @@ package br.com.dbc.vemser.checkout.service;
 
 import br.com.dbc.vemser.checkout.dtos.AdminInDTO;
 import br.com.dbc.vemser.checkout.dtos.AdminOutDTO;
+import br.com.dbc.vemser.checkout.dtos.RecuperacaoInDTO;
 import br.com.dbc.vemser.checkout.entities.Role;
 import br.com.dbc.vemser.checkout.entities.Usuario;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
@@ -58,19 +59,24 @@ public class UsuarioService {
             return objectMapper.convertValue(adminRetornado,AdminOutDTO.class);
     }
 
-    public AdminOutDTO updateSenha(Integer idUsuario, AdminInDTO usuarioAtualizado) throws RegraDeNegocioException{
-        Usuario usuarioAtualizar = usuarioRepository.findById(idUsuario)
+    public AdminOutDTO updateSenha(RecuperacaoInDTO usuarioAtualizado) throws RegraDeNegocioException{
+        Integer id = usuarioAtualizado.getIdUsuario();
+        Usuario usuarioAtualizar = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Usuario não existe"));
+        String login = usuarioAtualizado.getLogin();
+        if (login.equals(usuarioAtualizar.getLogin())){
+            usuarioAtualizar.setSenha(passwordEncoder.encode(usuarioAtualizado.getNovaSenha()));
+            usuarioAtualizar.setLogin(usuarioAtualizado.getLogin());
 
-        usuarioAtualizar.setSenha(passwordEncoder.encode(usuarioAtualizado.getSenha()));
-        usuarioAtualizar.setLogin(usuarioAtualizado.getLogin());
-
-        Usuario adminRetornar = usuarioRepository.save(usuarioAtualizar);
-        AdminOutDTO adminDTO= new AdminOutDTO();
-        adminDTO.setIdUsuario(adminRetornar.getIdUsuario());
-        adminDTO.setLogin(adminRetornar.getLogin());
-        adminDTO.setRole(adminRetornar.getRole());
-        return adminDTO;
+            Usuario adminRetornar = usuarioRepository.save(usuarioAtualizar);
+            AdminOutDTO adminDTO= new AdminOutDTO();
+            adminDTO.setIdUsuario(adminRetornar.getIdUsuario());
+            adminDTO.setLogin(adminRetornar.getLogin());
+            adminDTO.setRole(adminRetornar.getRole());
+            return adminDTO;
+        }else{
+            throw new RegraDeNegocioException("Operação inválida");
+        }
     }
 
     public void deleteAdmin(Integer idUsuario) throws RegraDeNegocioException{

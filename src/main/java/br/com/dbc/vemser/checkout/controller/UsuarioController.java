@@ -3,6 +3,7 @@ package br.com.dbc.vemser.checkout.controller;
 import br.com.dbc.vemser.checkout.docs.UsuarioControllerDoc;
 import br.com.dbc.vemser.checkout.dtos.AdminInDTO;
 import br.com.dbc.vemser.checkout.dtos.AdminOutDTO;
+import br.com.dbc.vemser.checkout.dtos.RecuperacaoInDTO;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-public class UsuarioController implements UsuarioControllerDoc {
+public class UsuarioController  {
 
     private final UsuarioService usuarioService;
 
@@ -30,10 +31,9 @@ public class UsuarioController implements UsuarioControllerDoc {
     public ResponseEntity<AdminOutDTO> createAdmin(@RequestBody AdminInDTO usuario) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.createAdmin(usuario), HttpStatus.OK);
     }
-    @PutMapping("/alterar-senha/{idUsuario}")
-    public ResponseEntity<AdminOutDTO> update(@PathVariable Integer idUsuario,
-                                                   @RequestBody @Valid AdminInDTO usuarioAtualizadado) throws RegraDeNegocioException {
-        return new ResponseEntity<>(usuarioService.updateSenha(idUsuario, usuarioAtualizadado), HttpStatus.OK);
+    @PutMapping("/alterar-senha")
+    public ResponseEntity<AdminOutDTO> update(@RequestBody @Valid RecuperacaoInDTO usuarioAtualizadado) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.updateSenha(usuarioAtualizadado), HttpStatus.OK);
     }
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Void> deleteAdmin(@PathVariable Integer idUsuario) throws RegraDeNegocioException{
@@ -45,7 +45,7 @@ public class UsuarioController implements UsuarioControllerDoc {
         String linkRedefinirSenha = "https://www.google.com.br/?hl=pt-BR";
         usuarioService.enviarEmailAlterarSenha(email, linkRedefinirSenha);
 
-        return ResponseEntity.ok("Email de redefinição de senha enviado com sucesso!");
+        return ResponseEntity.ok("Email enviado com sucesso!");
     }
 
 }
