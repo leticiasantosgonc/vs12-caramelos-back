@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.checkout.docs;
 
+import br.com.dbc.vemser.checkout.dtos.ListarPedidoPorDataOutDTO;
 import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
 import br.com.dbc.vemser.checkout.dtos.PedidoOutDTO;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
@@ -70,7 +71,7 @@ public interface PedidoControllerDoc {
             }
     )
     @GetMapping("/listar-por-data")
-    public ResponseEntity<List<PedidoOutDTO>> listarPedidosPorData(@RequestBody LocalDate data);
+    public ResponseEntity<List<ListarPedidoPorDataOutDTO>> listarPedidosPorData(@RequestBody LocalDate data);
 
     @Operation(summary = "Criar pedido", description = "Deve criar um pedido")
     @ApiResponses(

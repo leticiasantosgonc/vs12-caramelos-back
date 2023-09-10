@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.checkout.controller;
 
 import br.com.dbc.vemser.checkout.docs.PedidoControllerDoc;
+import br.com.dbc.vemser.checkout.dtos.ListarPedidoPorDataOutDTO;
 import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
 import br.com.dbc.vemser.checkout.dtos.PedidoOutDTO;
 import br.com.dbc.vemser.checkout.dtos.RelatorioPedido;
@@ -65,7 +66,7 @@ public class PedidoController implements PedidoControllerDoc {
     }
 
     @GetMapping("/listar-por-data")
-    public ResponseEntity<List<PedidoOutDTO>> listarPedidosPorData(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+    public ResponseEntity<List<ListarPedidoPorDataOutDTO>> listarPedidosPorData(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
         System.out.println(data);
         return new ResponseEntity<>(pedidoService.listarPedidosPorData(data), HttpStatus.OK);
     }
