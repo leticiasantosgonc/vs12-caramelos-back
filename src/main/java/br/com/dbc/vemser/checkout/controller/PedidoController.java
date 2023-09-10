@@ -21,9 +21,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -52,8 +54,12 @@ public class PedidoController implements PedidoControllerDoc {
         responseJson.put("url", session.getUrl());
         responseJson.put("idPedido", pedido.getIdPedido());
 
-        System.out.println(session.getUrl());
-        return ResponseEntity.ok(responseJson);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(pedido.getIdPedido())
+                .toUri();
+
+        return ResponseEntity.created(location).body(responseJson);
     }
 
     @GetMapping("/listar")

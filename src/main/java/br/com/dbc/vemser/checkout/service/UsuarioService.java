@@ -90,15 +90,20 @@ public class UsuarioService {
         }
         usuarioRepository.delete(usuario);
     }
-    public void enviarEmailAlterarSenha(String email, String linkRedefinirSenha) throws MessagingException {
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+    public void enviarEmailAlterarSenha(String email, String linkRedefinirSenha) throws MessagingException, RegraDeNegocioException {
+        Optional<Usuario> usuario = usuarioRepository.findByLogin(email);
 
-        helper.setTo(email);
-        helper.setSubject("Redefinir Senha");
-        helper.setText("Olá\nClique no link abaixo para redefinir sua senha:\n" + linkRedefinirSenha +"\nEquipe Caramelos\n");
+        if (usuario.isPresent()) {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        javaMailSender.send(message);
+            helper.setTo(email);
+            helper.setSubject("Redefinir Senha");
+            helper.setText("Olá\nClique no link abaixo para redefinir sua senha:\n" + linkRedefinirSenha + "\nEquipe Caramelos\n");
+
+            javaMailSender.send(message);
+        } else {
+            throw new RegraDeNegocioException("Operação inválida");
+        }
     }
-
 }
