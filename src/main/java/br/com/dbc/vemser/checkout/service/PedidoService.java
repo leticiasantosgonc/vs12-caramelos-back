@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.checkout.service;
 
 import br.com.dbc.vemser.checkout.dtos.ItemInDTO;
+import br.com.dbc.vemser.checkout.dtos.ListarPedidoPorDataOutDTO;
 import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
 import br.com.dbc.vemser.checkout.dtos.PedidoOutDTO;
 import br.com.dbc.vemser.checkout.entities.Pedido;
@@ -162,12 +163,12 @@ public class PedidoService {
         return valores;
     }
 
-    public List<PedidoOutDTO> listarPedidosPorData(LocalDate data) {
+    public List<ListarPedidoPorDataOutDTO> listarPedidosPorData(LocalDate data) {
         return pedidoRepository
                 .findByDataPedido(data)
                 .stream()
                 .map(pedido -> {
-                    return objectMapper.convertValue(pedido, PedidoOutDTO.class);
+                    return objectMapper.convertValue(pedido, ListarPedidoPorDataOutDTO.class);
                 })
                 .toList();
     }
