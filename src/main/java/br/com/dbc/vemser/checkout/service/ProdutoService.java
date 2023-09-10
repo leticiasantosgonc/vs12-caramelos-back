@@ -9,17 +9,17 @@ import br.com.dbc.vemser.checkout.repository.ProdutoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
-import javax.sql.rowset.serial.SerialClob;
-import java.sql.Clob;
-import java.sql.SQLException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +33,23 @@ public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final ObjectMapper objectMapper;
 
+
+    public Produto update(MultipartFile img, Integer idProduto) throws RegraDeNegocioException, IOException{
+        Produto produto = produtoRepository.findById(idProduto)
+                .orElseThrow(()-> new RegraDeNegocioException("produto não encontrado"));
+
+        String nomeDoArquivo = img.getContentType();
+        if(!nomeDoArquivo.endsWith("/png") && !nomeDoArquivo.endsWith("/jpeg") && !nomeDoArquivo.endsWith("/jpg")) {
+            throw new RegraDeNegocioException("Formato inválido");
+        }
+
+        produto.setDados_img(img.getBytes());
+        produto.setTipo_img(img.getContentType());
+
+        Produto produtoPersistido = produtoRepository.save(produto);
+
+        return produtoPersistido;
+    }
     public ComboOutDTO createCombo(ComboInDTO comboInDTO){
         Produto produto = objectMapper.convertValue(comboInDTO, Produto.class);
         produto.setTipoProduto(TipoProduto.COMBO);
@@ -303,7 +320,7 @@ public class ProdutoService {
         isSobremesa(produto);
         Produto produtoAtualizado = objectMapper.convertValue(sobremesaAtualizada,Produto.class);
         produtoAtualizado.setIdProduto(produto.getIdProduto());
-        produtoAtualizado.setImagem(sobremesaAtualizada.getImagem());
+        //produtoAtualizado.setImagem(sobremesaAtualizada.getImagem());
         produtoAtualizado.setTipoProduto(produto.getTipoProduto());
 
         SobremesaOutDTO sobremesaOutDTO = objectMapper.convertValue(produtoRepository.save(produtoAtualizado),SobremesaOutDTO.class);

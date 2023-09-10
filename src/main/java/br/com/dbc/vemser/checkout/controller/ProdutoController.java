@@ -13,11 +13,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 
 
 @RestController
@@ -27,6 +30,13 @@ import javax.validation.constraints.Positive;
 public class ProdutoController implements ProdutoControllerDoc {
 
     private final ProdutoService produtoService;
+
+    @PutMapping(value = "/update-imagem/{idProduto}",consumes =  {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Produto updateImg(@RequestParam ("img")MultipartFile img,
+                                  @PathVariable("idProduto") Integer idProduto) throws RegraDeNegocioException, IOException {
+        return produtoService.update(img,idProduto);
+    }
+
 
     @GetMapping("/listar/lanches-ordenados-por-nome")
     public Page<LancheOutDTO> findLanchesOrdenadosPorNome(@RequestParam(defaultValue= "0") Integer numeroDePaginas, @RequestParam(defaultValue= "10")  Integer quantidadeDeRegistrosPorPagina) {
