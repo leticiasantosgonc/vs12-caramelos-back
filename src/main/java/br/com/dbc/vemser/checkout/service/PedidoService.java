@@ -1,9 +1,6 @@
 package br.com.dbc.vemser.checkout.service;
 
-import br.com.dbc.vemser.checkout.dtos.ItemInDTO;
-import br.com.dbc.vemser.checkout.dtos.ListarPedidoPorDataOutDTO;
-import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
-import br.com.dbc.vemser.checkout.dtos.PedidoOutDTO;
+import br.com.dbc.vemser.checkout.dtos.*;
 import br.com.dbc.vemser.checkout.entities.Pedido;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.enums.Game;
@@ -166,13 +163,30 @@ public class PedidoService {
     }
 
     public List<ListarPedidoPorDataOutDTO> listarPedidosPorData(LocalDate data) {
-        return pedidoRepository
+        List<ListarPedidoPorDataOutDTO> listaDePedidos = pedidoRepository
                 .findByDataPedido(data)
                 .stream()
                 .map(pedido -> {
-                    return objectMapper.convertValue(pedido, ListarPedidoPorDataOutDTO.class);
+                    ListarPedidoPorDataOutDTO pedidoPorData = objectMapper.convertValue(pedido, ListarPedidoPorDataOutDTO.class);
+                    Map<Integer, ListarPedidoPorDataItensOutDTO> mapaItens = new HashMap<>();
+
+                    for (Produto item : pedido.getItens()) {
+                        Integer idProduto = item.getIdProduto();
+                        ListarPedidoPorDataItensOutDTO itemOutDTO = mapaItens.getOrDefault(idProduto, new ListarPedidoPorDataItensOutDTO());
+                        itemOutDTO.setIdProduto(idProduto);
+                        itemOutDTO.setQuantidade(item.getQuantidade() + item.getQuantidade());
+                        itemOutDTO.setValorDoPedido(item.getPreco().multiply(BigDecimal.valueOf(item.getQuantidade())));
+                        itemOutDTO.setTipoProduto(item.getTipoProduto());
+                        mapaItens.put(idProduto, itemOutDTO);
+                    }
+
+                    pedidoPorData.setItensPedido(new ArrayList<>(mapaItens.values()));
+                    pedidoPorData.setValorTotal(pedido.getPreco().multiply(BigDecimal.valueOf(pedido.getQuantidade())));
+                    return pedidoPorData;
                 })
                 .toList();
+
+        return listaDePedidos;
     }
 
     public Pedido findPedidoUtils(Integer idPedido) throws RegraDeNegocioException {
@@ -189,6 +203,10 @@ public class PedidoService {
             produtoService.updateQuantidadeProduto(p.getIdProduto(),quantidadeNova);
         }
 
+    }
+
+    private Pedido findByIdPedido(Integer idPedido) {
+        return pedidoRepository.findByIdPedido(idPedido);
     }
 
 }
