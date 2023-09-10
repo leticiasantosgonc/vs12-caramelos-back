@@ -84,6 +84,6 @@ public interface PedidoControllerDoc {
             }
     )
     @PostMapping("/criar")
-    public ResponseEntity<Object> createPedido(@RequestBody PedidoInDTO pedidoInDTO) throws RegraDeNegocioException, IOException, StripeException;
+    public ResponseEntity<Object> createPedido(@RequestBody PedidoInDTO pedidoInDTO) throws RegraDeNegocioException, IOException, StripeException, Exception;
 
 }

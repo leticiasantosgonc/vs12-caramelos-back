@@ -14,12 +14,14 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class PedidoService {
     private final ProdutoService produtoService;
     private final ObjectMapper objectMapper;
 
-    public PedidoOutDTO createPedido(PedidoInDTO pedidoInDTO) throws RegraDeNegocioException {
+    public PedidoOutDTO createPedido(PedidoInDTO pedidoInDTO) throws RegraDeNegocioException,Exception {
         List<Produto> produtos = new ArrayList<>();
         for (ItemInDTO item : pedidoInDTO.getItens()) {
             Produto produto = produtoService.findById(item.getIdProduto());
@@ -113,7 +115,7 @@ public class PedidoService {
         pedidoRepository.save(pedidoEncontrado);
     }
 
-    public String validarCpf(String cpf) throws RegraDeNegocioException {
+    public String validarCpf(String cpf) throws Exception {
         if (cpf.equals("")) {
             return "";
         }
@@ -150,7 +152,7 @@ public class PedidoService {
             }
         }
 
-        throw new RegraDeNegocioException("CPF inválido");
+        throw new Exception("cpf inválido");
     }
 
     public Map<String, Long> listarPedidosPorStatus() {
