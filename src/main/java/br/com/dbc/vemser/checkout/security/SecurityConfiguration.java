@@ -35,6 +35,8 @@ public class SecurityConfiguration {
                         .antMatchers("/pagamento/**").permitAll()
                         .antMatchers("/gerador/**").permitAll()
                         .antMatchers("/pedido/**").permitAll()
+                        .antMatchers("/admin/alterar-senha/**").permitAll()
+                        .antMatchers("/admin/enviar-email/**").permitAll()
                         .antMatchers("/admin/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.POST, "/sobremesa/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.POST, "/produto/**").hasRole("ADMIN")

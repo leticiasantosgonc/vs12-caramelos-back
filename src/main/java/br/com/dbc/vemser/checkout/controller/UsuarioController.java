@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-public class UsuarioController  {
+public class UsuarioController implements UsuarioControllerDoc {
 
     private final UsuarioService usuarioService;
 
@@ -40,7 +40,7 @@ public class UsuarioController  {
         usuarioService.deleteAdmin(idUsuario);
         return ResponseEntity.ok().build();
     }
-    @PostMapping("/enviar-email-alterar-senha")
+    @PostMapping("/enviar-email")
     public ResponseEntity<String> enviarEmailAlterarSenha(@RequestBody String email) throws MessagingException {
         String linkRedefinirSenha = "https://www.google.com.br/?hl=pt-BR";
         usuarioService.enviarEmailAlterarSenha(email, linkRedefinirSenha);
