@@ -121,7 +121,7 @@ public class PedidoService {
         }
 
         if (cpf.equals("11111111111")) {
-            throw new RegraDeNegocioException("CPF inválido");
+            throw new Exception("CPF inválido");
         }
 
         if (cpf.length() == 11) {
