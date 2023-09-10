@@ -6,6 +6,7 @@ import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
 import br.com.dbc.vemser.checkout.dtos.PedidoOutDTO;
 import br.com.dbc.vemser.checkout.dtos.RelatorioPedido;
 import br.com.dbc.vemser.checkout.entities.Pedido;
+import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.service.PDFService;
 import br.com.dbc.vemser.checkout.service.PagamentoService;
@@ -77,6 +78,7 @@ public class PedidoController implements PedidoControllerDoc {
         boolean deveGerarNota = pedidoService.deveGerarNota(idPedido);
 
         if (deveGerarNota) {
+            pedidoService.atualizarQuantidades(pedido);
             HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
             response.setContentType("application/pdf");
             DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");

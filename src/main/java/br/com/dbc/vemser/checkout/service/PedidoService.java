@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -44,7 +45,6 @@ public class PedidoService {
             for (int i = 0; i < item.getQuantidadeProduto(); i++) {
                 produtos.add(produto);
             }
-            produtoService.updateQuantidadeProduto(item.getIdProduto(), produto.getQuantidade()- item.getQuantidadeProduto());
         }
 
         BigDecimal valorTotal = BigDecimal.ZERO;
@@ -177,6 +177,16 @@ public class PedidoService {
         return pedidoRepository
                 .findById(idPedido)
                 .orElseThrow(() -> new RegraDeNegocioException("Pedido não encontrado"));
+    }
+    public void atualizarQuantidades(Pedido pedido) throws RegraDeNegocioException {
+        System.out.println("metodo atualizar quantidades chamado");
+        List<Produto> produtos = pedido.getItens();
+        System.out.println(produtos.size());
+        for (Produto p:produtos) {
+            Integer quantidadeNova = p.getQuantidade()-1;
+            produtoService.updateQuantidadeProduto(p.getIdProduto(),quantidadeNova);
+        }
+
     }
 
 }
