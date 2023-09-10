@@ -51,11 +51,8 @@ public class PedidoService {
         }
 
         if (pedidoInDTO.getGame().equals(Game.WIN)){
-
             Double valorComDescontoDouble = valorTotal.doubleValue() * 0.90;
-
             valorTotal = BigDecimal.valueOf(valorComDescontoDouble);
-
         }
 
         Pedido pedido = new Pedido();
@@ -67,7 +64,6 @@ public class PedidoService {
         pedido.setQuantidade(produtos.size());
         pedido.setPreco(valorTotal);
         pedido.setGame(pedidoInDTO.getGame());
-
         Pedido pedidoPersistido = pedidoRepository.save(pedido);
         return objectMapper.convertValue(pedidoPersistido, PedidoOutDTO.class);
     }
@@ -120,6 +116,10 @@ public class PedidoService {
     public String validarCpf(String cpf) throws RegraDeNegocioException {
         if (cpf.equals("")) {
             return "";
+        }
+
+        if (cpf.equals("11111111111")) {
+            throw new RegraDeNegocioException("CPF inválido");
         }
 
         if (cpf.length() == 11) {
@@ -201,10 +201,6 @@ public class PedidoService {
             produtoService.updateQuantidadeProduto(p.getIdProduto(),quantidadeNova);
         }
 
-    }
-
-    private Pedido findByIdPedido(Integer idPedido) {
-        return pedidoRepository.findByIdPedido(idPedido);
     }
 
 }
