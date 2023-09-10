@@ -6,6 +6,7 @@ import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
 import br.com.dbc.vemser.checkout.dtos.PedidoOutDTO;
 import br.com.dbc.vemser.checkout.dtos.RelatorioPedido;
 import br.com.dbc.vemser.checkout.entities.Pedido;
+import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.checkout.service.PDFService;
 import br.com.dbc.vemser.checkout.service.PagamentoService;
@@ -20,9 +21,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -42,7 +45,7 @@ public class PedidoController implements PedidoControllerDoc {
     private final PagamentoService pagamentoService;
 
     @PostMapping("/criar")
-    public ResponseEntity<Object> createPedido(@RequestBody PedidoInDTO pedidoInDTO) throws RegraDeNegocioException, StripeException {
+    public ResponseEntity<Object> createPedido(@RequestBody PedidoInDTO pedidoInDTO) throws Exception,RegraDeNegocioException,StripeException {
         PedidoOutDTO pedido = pedidoService.createPedido(pedidoInDTO);
         Session session = pagamentoService.criarSessionCheckout(pedidoInDTO, pedido.getIdPedido());
         pedidoService.updateSessionId(pedido.getIdPedido(), session.getId());
@@ -51,8 +54,12 @@ public class PedidoController implements PedidoControllerDoc {
         responseJson.put("url", session.getUrl());
         responseJson.put("idPedido", pedido.getIdPedido());
 
-        System.out.println(session.getUrl());
-        return ResponseEntity.ok(responseJson);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(pedido.getIdPedido())
+                .toUri();
+
+        return ResponseEntity.created(location).body(responseJson);
     }
 
     @GetMapping("/listar")
@@ -66,7 +73,7 @@ public class PedidoController implements PedidoControllerDoc {
     }
 
     @GetMapping("/listar-por-data")
-    public ResponseEntity<List<ListarPedidoPorDataOutDTO>> listarPedidosPorData(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+    public ResponseEntity<List<ListarPedidoPorDataOutDTO>> listarPedidosPorData(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) throws RegraDeNegocioException {
         System.out.println(data);
         return new ResponseEntity<>(pedidoService.listarPedidosPorData(data), HttpStatus.OK);
     }
@@ -77,6 +84,7 @@ public class PedidoController implements PedidoControllerDoc {
         boolean deveGerarNota = pedidoService.deveGerarNota(idPedido);
 
         if (deveGerarNota) {
+            pedidoService.atualizarQuantidades(pedido);
             HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
             response.setContentType("application/pdf");
             DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");

@@ -41,7 +41,7 @@ public class UsuarioController implements UsuarioControllerDoc {
         return ResponseEntity.ok().build();
     }
     @PostMapping("/enviar-email")
-    public ResponseEntity<String> enviarEmailAlterarSenha(@RequestBody String email) throws MessagingException {
+    public ResponseEntity<String> enviarEmailAlterarSenha(@RequestBody String email) throws MessagingException, RegraDeNegocioException {
         String linkRedefinirSenha = "http://vemser-dbc.dbccompany.com.br:39000/vemser/vs12-caramelos-front/redefinir-senha";
         usuarioService.enviarEmailAlterarSenha(email, linkRedefinirSenha);
 
