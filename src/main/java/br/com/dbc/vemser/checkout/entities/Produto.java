@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ public class Produto {
 
     @Column(name = "NOME")
     private String nome;
+
     @Column(name = "DESCRICAO")
     private String descricao;
     @Lob
@@ -39,17 +41,28 @@ public class Produto {
     @Column(name = "MARCA")
     @Enumerated(EnumType.STRING)
     private MarcaProduto marca;
+
     @Column(name = "TAMANHO")
     @Enumerated(EnumType.STRING)
     private TamanhoProduto tamanhoProduto;
+
     @Column(name = "TIPO")
     @Enumerated(EnumType.STRING)
     private TipoProduto tipoProduto;
+
     @Column(name = "VEGETARIANO")
     @Enumerated(EnumType.STRING)
     private DietaProduto dietaProduto;
 
     @Column(name = "PRECO")
     private BigDecimal preco;
+
+    @Column(name = "DADOS_IMG")
+    @Lob
+    @Type(type = "org.hibernate.type.BinaryType")
+    private byte[] dados_img;
+
+    @Column(name = "TIPO_IMG")
+    private String tipo_img;
 
 }
