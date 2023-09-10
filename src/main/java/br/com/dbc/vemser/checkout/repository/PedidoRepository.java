@@ -22,6 +22,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
             "ORDER BY p.nome ASC")
     List<RelatorioItemPedidoDTO> findAllByIdPedido(@Param("idPedido") Integer idPedido);
 
+    Pedido findByIdPedido(Integer id);
+
     Long countByStatus(StatusPedido status);
 
     List<Pedido> findByDataPedido(LocalDate data);

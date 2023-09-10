@@ -72,7 +72,7 @@ public class PedidoController implements PedidoControllerDoc {
     }
 
     @GetMapping("/listar-por-data")
-    public ResponseEntity<List<ListarPedidoPorDataOutDTO>> listarPedidosPorData(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+    public ResponseEntity<List<ListarPedidoPorDataOutDTO>> listarPedidosPorData(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) throws RegraDeNegocioException {
         System.out.println(data);
         return new ResponseEntity<>(pedidoService.listarPedidosPorData(data), HttpStatus.OK);
     }

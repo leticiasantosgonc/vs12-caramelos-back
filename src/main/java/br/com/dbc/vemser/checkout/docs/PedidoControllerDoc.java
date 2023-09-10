@@ -71,7 +71,7 @@ public interface PedidoControllerDoc {
             }
     )
     @GetMapping("/listar-por-data")
-    public ResponseEntity<List<ListarPedidoPorDataOutDTO>> listarPedidosPorData(@RequestBody LocalDate data);
+    public ResponseEntity<List<ListarPedidoPorDataOutDTO>> listarPedidosPorData(@RequestBody LocalDate data) throws RegraDeNegocioException;
 
     @Operation(summary = "Criar pedido", description = "Deve criar um pedido")
     @ApiResponses(

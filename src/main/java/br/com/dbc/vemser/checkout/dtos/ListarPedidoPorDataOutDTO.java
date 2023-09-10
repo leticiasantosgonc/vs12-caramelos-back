@@ -10,14 +10,17 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
 public class ListarPedidoPorDataOutDTO {
 
+    private Integer idPedido;
+
     @NotNull
     @Getter
-    private List<ListarPedidoPorDataItensOutDTO> itens;
+    private List<ListarPedidoPorDataItensOutDTO> itensPedido;
 
     @Pattern(regexp = "^$|\\d{11}", message = "CPF inválido")
     private String cpf;
@@ -33,5 +36,7 @@ public class ListarPedidoPorDataOutDTO {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "o campo não deve ser nulo")
     private Game game;
+
+    private BigDecimal valorTotal;
 
 }
