@@ -31,7 +31,7 @@ public class ProdutoController implements ProdutoControllerDoc {
 
     private final ProdutoService produtoService;
 
-    @PutMapping(value = "/update/{idProduto}",consumes =  {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PutMapping(value = "/update-imagem/{idProduto}",consumes =  {MediaType.MULTIPART_FORM_DATA_VALUE})
     public Produto updateImg(@RequestParam ("img")MultipartFile img,
                                   @PathVariable("idProduto") Integer idProduto) throws RegraDeNegocioException, IOException {
         return produtoService.update(img,idProduto);
