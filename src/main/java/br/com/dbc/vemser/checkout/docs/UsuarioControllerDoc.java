@@ -2,6 +2,7 @@ package br.com.dbc.vemser.checkout.docs;
 
 import br.com.dbc.vemser.checkout.dtos.AdminInDTO;
 import br.com.dbc.vemser.checkout.dtos.AdminOutDTO;
+import br.com.dbc.vemser.checkout.dtos.RecuperacaoInDTO;
 import br.com.dbc.vemser.checkout.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -50,8 +51,8 @@ public interface UsuarioControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
-    @PutMapping("/alterar-senha/{idUsuario}")
-    public ResponseEntity<AdminOutDTO> update(@PathVariable Integer idUsuario, @RequestBody @Valid AdminInDTO usuarioAtualizado) throws RegraDeNegocioException;
+    @PutMapping("/alterar-senha")
+    public ResponseEntity<AdminOutDTO> update(@RequestBody @Valid RecuperacaoInDTO usuarioAtualizadado) throws RegraDeNegocioException;
 
     @Operation(summary = "Deletar uma administrador", description = "Deve deletar um administrador")
     @ApiResponses(
@@ -77,6 +78,6 @@ public interface UsuarioControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Foi gerada um excessão")
             }
     )
-    @PostMapping("/enviar-email-alterar-senha")
+    @PostMapping("/enviar-email")
     public ResponseEntity<String> enviarEmailAlterarSenha(@RequestBody String email) throws MessagingException;
 }

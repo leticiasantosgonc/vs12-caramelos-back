@@ -43,8 +43,8 @@ public class PagamentoService {
         Stripe.apiKey = secretKey;
         SessionCreateParams params = SessionCreateParams.builder()
                             .setMode(SessionCreateParams.Mode.PAYMENT)
-                            .setSuccessUrl("https://google.com/")
-                            .setCancelUrl("https://google.com")
+                            .setSuccessUrl("http://vemser-hml.dbccompany.com.br:39000/vemser/vs12-caramelos-front/sucesso/"+idPedido)
+                            .setCancelUrl("http://vemser-hml.dbccompany.com.br:39000/vemser/vs12-caramelos-front")
                             .addAllLineItem(criarItensParaPagamento(pedidoInDTO, idPedido))
                             .build();
         return Session.create(params);

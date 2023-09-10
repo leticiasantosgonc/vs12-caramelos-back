@@ -3,7 +3,6 @@ package br.com.dbc.vemser.checkout.service;
 import br.com.dbc.vemser.checkout.dtos.ItemInDTO;
 import br.com.dbc.vemser.checkout.dtos.PedidoInDTO;
 import br.com.dbc.vemser.checkout.dtos.PedidoOutDTO;
-import br.com.dbc.vemser.checkout.dtos.RelatorioPedido;
 import br.com.dbc.vemser.checkout.entities.Pedido;
 import br.com.dbc.vemser.checkout.entities.Produto;
 import br.com.dbc.vemser.checkout.enums.Game;
@@ -19,7 +18,9 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -81,14 +82,6 @@ public class PedidoService {
                     return objectMapper.convertValue(pedido, PedidoOutDTO.class);
                 })
                 .toList();
-    }
-
-    public PedidoOutDTO findById(Integer idPedido) throws RegraDeNegocioException{
-        Pedido pedidoEncontrado = pedidoRepository
-                .findById(idPedido)
-                .orElseThrow(()-> new RegraDeNegocioException("Pedido não encontrado"));
-
-        return objectMapper.convertValue(pedidoEncontrado, PedidoOutDTO.class);
     }
 
     public void updateSessionId(Integer idPedido, String sessionId) throws RegraDeNegocioException {
@@ -160,6 +153,23 @@ public class PedidoService {
         }
 
         throw new RegraDeNegocioException("CPF inválido");
+    }
+
+    public Map<String, Long> listarPedidosPorStatus() {
+        Map<String, Long> valores = new HashMap<>();
+        valores.put("pagos", pedidoRepository.countByStatus(StatusPedido.PAGO));
+        valores.put("naoPagos", pedidoRepository.countByStatus(StatusPedido.NAO_PAGO));
+        return valores;
+    }
+
+    public List<PedidoOutDTO> listarPedidosPorData(LocalDate data) {
+        return pedidoRepository
+                .findByDataPedido(data)
+                .stream()
+                .map(pedido -> {
+                    return objectMapper.convertValue(pedido, PedidoOutDTO.class);
+                })
+                .toList();
     }
 
     public Pedido findPedidoUtils(Integer idPedido) throws RegraDeNegocioException {
