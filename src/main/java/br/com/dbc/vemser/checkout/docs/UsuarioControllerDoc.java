@@ -79,5 +79,5 @@ public interface UsuarioControllerDoc {
             }
     )
     @PostMapping("/enviar-email")
-    public ResponseEntity<String> enviarEmailAlterarSenha(@RequestBody String email) throws MessagingException;
+    public ResponseEntity<String> enviarEmailAlterarSenha(@RequestBody String email) throws MessagingException, RegraDeNegocioException;
 }
