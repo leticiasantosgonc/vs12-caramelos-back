@@ -45,7 +45,7 @@ public class PedidoController implements PedidoControllerDoc {
     private final PagamentoService pagamentoService;
 
     @PostMapping("/criar")
-    public ResponseEntity<Object> createPedido(@RequestBody PedidoInDTO pedidoInDTO) throws RegraDeNegocioException, StripeException {
+    public ResponseEntity<Object> createPedido(@RequestBody PedidoInDTO pedidoInDTO) throws Exception,RegraDeNegocioException,StripeException {
         PedidoOutDTO pedido = pedidoService.createPedido(pedidoInDTO);
         Session session = pagamentoService.criarSessionCheckout(pedidoInDTO, pedido.getIdPedido());
         pedidoService.updateSessionId(pedido.getIdPedido(), session.getId());
