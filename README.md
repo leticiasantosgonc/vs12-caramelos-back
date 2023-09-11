@@ -10,7 +10,7 @@
 Caramelos é um sistema de Checkout, criado durante a 12ª trilha de Back-end do programa Vem Ser, da empresa [DBC Company](https://www.dbccompany.com.br/)
 
 🔗 App Back-end: [Clique aqui](http://vemser-hml.dbccompany.com.br:39000/vemser/vs12-caramelos-back) <br>
-🔗 App Front-end: [Clique aqui](http://vemser-dbc.dbccompany.com.br:39000/vemser/vs12-caramelos-front)
+🔗 App Front-end: [Clique aqui](http://vemser-hml.dbccompany.com.br:39000/vemser/vs12-caramelos-front)
 
 ## Funcionalidades
 
